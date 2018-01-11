@@ -1,0 +1,6 @@
+[submodule "FPGA/Common_FPGA_Timestamp"]
+	path = FPGA/Common_FPGA_Timestamp
+	url = https://stash.lsstcorp.org/scm/ts/common_fpga_timestamp.git
+[submodule "FPGA/Common_FPGA_HealthAndStatus"]
+	path = FPGA/Common_FPGA_HealthAndStatus
+	url = https://stash.lsstcorp.org/scm/ts/common_fpga_healthandstatus.git

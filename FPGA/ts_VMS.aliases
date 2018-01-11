@@ -1,0 +1,12 @@
+[My Computer]
+My Computer = "140.252.33.110"
+
+[RT CompactRIO Target]
+RT CompactRIO Target = "0.0.0.0"
+
+[VMS_3]
+VMS_3 = "0.0.0.0"
+
+[VMS_6]
+VMS_6 = "0.0.0.0"
+
