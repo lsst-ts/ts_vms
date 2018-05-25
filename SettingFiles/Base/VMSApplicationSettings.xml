@@ -1,7 +1,7 @@
 <VMSApplicationSettings>
 <Subsystem>M1M3</Subsystem>
 <IsMaster>1</IsMaster>
-<NumberOfSensors>6</NumberOfSensors>
+<NumberOfSensors>3</NumberOfSensors>
 <XCoefficients>1.0,1.0,1.0</XCoefficients>
 <YCoefficients>1.0,1.0,1.0</YCoefficients>
 <ZCoefficients>1.0,1.0,1.0</ZCoefficients>

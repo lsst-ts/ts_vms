@@ -7,11 +7,13 @@
 
 #include <VMSPublisher.h>
 #include <SAL_vms.h>
+#include <Log.h>
 
 namespace LSST {
 namespace VMS {
 
 VMSPublisher::VMSPublisher(SAL_vms* vmsSAL) {
+	Log.Debug("VMSPublisher::VMSPublisher()");
 	this->vmsSAL = vmsSAL;
 
 	this->vmsSAL->salTelemetryPub((char*)"vms_M1M3");

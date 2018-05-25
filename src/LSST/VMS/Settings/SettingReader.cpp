@@ -6,15 +6,18 @@
  */
 
 #include <SettingReader.h>
+#include <Log.h>
 
 namespace LSST {
 namespace VMS {
 
 SettingReader::SettingReader(std::string basePath) {
+	Log.Info("SettingReader::SettingReader(%s)", basePath.c_str());
 	this->basePath = basePath;
 }
 
 VMSApplicationSettings* SettingReader::loadVMSApplicationSettings() {
+	Log.Debug("SettingReader: loadVMSApplicationSettings()");
 	this->vmsApplicationSettings.load(this->getBasePath("VMSApplicationSettings.xml").c_str());
 	return &this->vmsApplicationSettings;
 }
