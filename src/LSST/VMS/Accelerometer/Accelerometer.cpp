@@ -63,23 +63,23 @@ void Accelerometer::processM1M3() {
 	this->m1m3Data->Timestamp = Timestamp::fromRaw(this->u64Buffer[0]);
 	int32_t dataBufferIndex = 0;
 	for (int i = 0; i < MAX_SAMPLE_PER_PUBLISH; ++i) {
-		this->m1m3Data->Sensor1ZAcceleration[i] = this->sglBuffer[dataBufferIndex];
+		this->m1m3Data->Sensor1XAcceleration[i] = this->sglBuffer[dataBufferIndex];
 		dataBufferIndex++;
 		this->m1m3Data->Sensor1YAcceleration[i] = this->sglBuffer[dataBufferIndex];
 		dataBufferIndex++;
-		this->m1m3Data->Sensor1XAcceleration[i] = this->sglBuffer[dataBufferIndex];
-		dataBufferIndex++;
-		this->m1m3Data->Sensor2ZAcceleration[i] = this->sglBuffer[dataBufferIndex];
-		dataBufferIndex++;
-		this->m1m3Data->Sensor2YAcceleration[i] = this->sglBuffer[dataBufferIndex];
+		this->m1m3Data->Sensor1ZAcceleration[i] = this->sglBuffer[dataBufferIndex];
 		dataBufferIndex++;
 		this->m1m3Data->Sensor2XAcceleration[i] = this->sglBuffer[dataBufferIndex];
 		dataBufferIndex++;
-		this->m1m3Data->Sensor3ZAcceleration[i] = this->sglBuffer[dataBufferIndex];
+		this->m1m3Data->Sensor2YAcceleration[i] = this->sglBuffer[dataBufferIndex];
+		dataBufferIndex++;
+		this->m1m3Data->Sensor2ZAcceleration[i] = this->sglBuffer[dataBufferIndex];
+		dataBufferIndex++;
+		this->m1m3Data->Sensor3XAcceleration[i] = this->sglBuffer[dataBufferIndex];
 		dataBufferIndex++;
 		this->m1m3Data->Sensor3YAcceleration[i] = this->sglBuffer[dataBufferIndex];
 		dataBufferIndex++;
-		this->m1m3Data->Sensor3XAcceleration[i] = this->sglBuffer[dataBufferIndex];
+		this->m1m3Data->Sensor3ZAcceleration[i] = this->sglBuffer[dataBufferIndex];
 		dataBufferIndex++;
 	}
 	this->publisher->putM1M3();
