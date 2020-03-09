@@ -6,26 +6,26 @@
  */
 
 #include <VMSPublisher.h>
-#include <SAL_vms.h>
+#include <SAL_MTVMS.h>
 #include <Log.h>
 
 namespace LSST {
 namespace VMS {
 
-VMSPublisher::VMSPublisher(SAL_vms* vmsSAL) {
+VMSPublisher::VMSPublisher(SAL_MTVMS* vmsSAL) {
 	Log.Debug("VMSPublisher::VMSPublisher()");
 	this->vmsSAL = vmsSAL;
 
-	this->vmsSAL->salTelemetryPub((char*)"vms_M1M3");
-	this->vmsSAL->salTelemetryPub((char*)"vms_M2Ms");
-	this->vmsSAL->salTelemetryPub((char*)"vms_MTMount");
+	this->vmsSAL->salTelemetryPub((char*)"MTVMS_m1m3");
+	this->vmsSAL->salTelemetryPub((char*)"MTVMS_m2");
+	this->vmsSAL->salTelemetryPub((char*)"MTVMS_tma");
 }
 
 double VMSPublisher::getTimestamp() { return this->vmsSAL->getCurrentTime(); }
 
-void VMSPublisher::putM1M3() { this->vmsSAL->putSample_M1M3(&this->m1m3); }
-void VMSPublisher::putM2() { this->vmsSAL->putSample_M2(&this->m2ms); }
-void VMSPublisher::putTMA() { this->vmsSAL->putSample_TMA(&this->mtMount); }
+void VMSPublisher::putM1M3() { this->vmsSAL->putSample_m1m3(&this->m1m3); }
+void VMSPublisher::putM2() { this->vmsSAL->putSample_m2(&this->m2ms); }
+void VMSPublisher::putTMA() { this->vmsSAL->putSample_tma(&this->mtMount); }
 
 } /* namespace VMS */
 } /* namespace LSST */
