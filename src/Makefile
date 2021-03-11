@@ -23,7 +23,10 @@ M1M3_CPPFLAGS := -I. \
 	-I"LSST/VMS/FPGA" \
 	-I"LSST/VMS/Publisher" \
 	-I"LSST/VMS/Settings" \
-	-I"LSST/VMS/Utility"
+	-I"LSST/VMS/Utility" \
+	-I"NiFpga" \
+	-I"pugixml"
+
 
 libVMS.a: $(OBJS)
 	@echo '[AR ] $@'
