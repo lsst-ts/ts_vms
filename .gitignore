@@ -1,1 +1,4 @@
-/Debug
+*.o
+*.d
+ts_MTVMS
+*.a
