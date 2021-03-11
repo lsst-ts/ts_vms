@@ -12,7 +12,7 @@
 namespace LSST {
 namespace VMS {
 
-VMSPublisher::VMSPublisher(SAL_MTVMS* vmsSAL) {
+VMSPublisher::VMSPublisher(std::shared_ptr<SAL_MTVMS> vmsSAL) {
 	Log.Debug("VMSPublisher::VMSPublisher()");
 	this->vmsSAL = vmsSAL;
 

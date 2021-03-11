@@ -11,6 +11,8 @@
 #include <IPublisher.h>
 #include <SAL_MTVMSC.h>
 
+#include <memory>
+
 class SAL_MTVMS;
 
 namespace LSST {
@@ -18,14 +20,14 @@ namespace VMS {
 
 class VMSPublisher : public IPublisher {
 private:
-	SAL_MTVMS* vmsSAL;
+	std::shared_ptr<SAL_MTVMS> vmsSAL;
 
 	MTVMS_m1m3C m1m3;
 	MTVMS_m2C m2ms;
 	MTVMS_tmaC mtMount;
 
 public:
-	VMSPublisher(SAL_MTVMS* vmsSAL);
+	VMSPublisher(std::shared_ptr<SAL_MTVMS> vmsSAL);
 
 	MTVMS_m1m3C* getM1M3() { return &this->m1m3; }
 	MTVMS_m2C* getM2() { return &this->m2ms; }
