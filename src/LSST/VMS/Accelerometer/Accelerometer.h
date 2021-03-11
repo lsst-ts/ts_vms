@@ -10,10 +10,11 @@
 
 #include <IAccelerometer.h>
 #include <DataTypes.h>
+#include <SAL_MTVMSC.h>
 
-struct vms_M1M3C;
-struct vms_M2C;
-struct vms_TMAC;
+struct MTVMS_m1m3C;
+struct MTVMS_m2C;
+struct MTVMS_tmaC;
 
 namespace LSST {
 namespace VMS {
@@ -28,9 +29,9 @@ private:
 	IFPGA* fpga;
 	VMSApplicationSettings* vmsApplicationSettings;
 
-	vms_M1M3C* m1m3Data;
-	vms_M2C* m2Data;
-	vms_TMAC* tmaData;
+	MTVMS_m1m3C* m1m3Data;
+	MTVMS_m2C* m2Data;
+	MTVMS_tmaC* tmaData;
 
 	uint64_t u64Buffer[1024];
 	float sglBuffer[2048];

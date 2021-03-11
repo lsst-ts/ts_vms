@@ -12,9 +12,9 @@ namespace VMS {
 
 IPublisher::~IPublisher() { }
 
-vms_M1M3C* IPublisher::getM1M3() { return 0; }
-vms_M2C* IPublisher::getM2() { return 0; }
-vms_TMAC* IPublisher::getTMA() { return 0; }
+MTVMS_m1m3C* IPublisher::getM1M3() { return 0; }
+MTVMS_m2C* IPublisher::getM2() { return 0; }
+MTVMS_tmaC* IPublisher::getTMA() { return 0; }
 
 double IPublisher::getTimestamp() { return 0; }
 

@@ -1,5 +1,5 @@
 //============================================================================
-// Name        : ts_M1M3Support.cpp
+// Name        : ts_MTVMS.cpp
 // Author      : LSST
 // Version     :
 // Copyright   : LSST
@@ -7,7 +7,7 @@
 //============================================================================
 
 #include <SettingReader.h>
-#include <SAL_vms.h>
+#include <SAL_MTVMS.h>
 #include <VMSPublisher.h>
 #include <FPGA.h>
 #include <Accelerometer.h>
@@ -30,7 +30,7 @@ int main() {
 	Log.Info("\tIsMaster:        %d", vmsApplicationSettings->IsMaster);
 	Log.Info("\tNumberOfSensors: %d", vmsApplicationSettings->NumberOfSensors);
 	Log.Info("Main: Initializing VMS SAL");
-	SAL_vms vmsSAL = SAL_vms();
+	SAL_MTVMS vmsSAL = SAL_MTVMS();
 	vmsSAL.setDebugLevel(0);
 	Log.Info("Main: Creating publisher");
 	VMSPublisher publisher = VMSPublisher(&vmsSAL);
