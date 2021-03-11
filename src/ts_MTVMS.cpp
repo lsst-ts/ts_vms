@@ -23,6 +23,8 @@
 #include <getopt.h>
 #include <memory>
 
+#include <memory>
+
 using namespace std;
 using namespace LSST::VMS;
 
