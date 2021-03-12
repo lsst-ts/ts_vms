@@ -168,5 +168,5 @@ int main(int argc, char** argv) {
 
     SPDLOG_INFO("Main: Shutdown complete");
 
-	return 0;
+    return 0;
 }
