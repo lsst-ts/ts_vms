@@ -10,12 +10,12 @@
 namespace LSST {
 namespace VMS {
 
-IAccelerometer::~IAccelerometer() { }
+IAccelerometer::~IAccelerometer() {}
 
-void IAccelerometer::enableAccelerometers() { }
-void IAccelerometer::disableAccelerometers() { }
+void IAccelerometer::enableAccelerometers() {}
+void IAccelerometer::disableAccelerometers() {}
 
-void IAccelerometer::sampleData() { }
+void IAccelerometer::sampleData() {}
 
 } /* namespace VMS */
 } /* namespace LSST */

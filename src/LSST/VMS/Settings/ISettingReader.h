@@ -20,13 +20,13 @@ class VMSApplicationSettings;
  */
 class ISettingReader {
 public:
-	virtual ~ISettingReader();
+    virtual ~ISettingReader();
 
-	/*!
-	 * Load the VMS application settings.
-	 * @return The VMS application settings
-	 */
-	virtual VMSApplicationSettings* loadVMSApplicationSettings();
+    /*!
+     * Load the VMS application settings.
+     * @return The VMS application settings
+     */
+    virtual VMSApplicationSettings *loadVMSApplicationSettings();
 };
 
 } /* namespace VMS */
