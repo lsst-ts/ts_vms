@@ -1,7 +1,7 @@
 //============================================================================
-// Name        : ts_MTVMS.cpp
-// Author      : LSST
-// Version     :
+// Name    : ts_MTVMS.cpp
+// Author    : LSST
+// Version   :
 // Copyright   : LSST
 // Description : Hello World in C++, Ansi-style
 //============================================================================
