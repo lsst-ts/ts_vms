@@ -5,7 +5,7 @@
  *      Author: ccontaxis
  */
 
-#include <Log.h>
+#include <spdlog/spdlog.h>
 #include <SAL_MTVMS.h>
 #include <VMSPublisher.h>
 
@@ -13,7 +13,7 @@ namespace LSST {
 namespace VMS {
 
 VMSPublisher::VMSPublisher(std::shared_ptr<SAL_MTVMS> vmsSAL) {
-    Log.Debug("VMSPublisher::VMSPublisher()");
+    SPDLOG_DEBUG("VMSPublisher::VMSPublisher()");
     this->vmsSAL = vmsSAL;
 
     this->vmsSAL->salTelemetryPub((char *)"MTVMS_m1m3");

@@ -9,7 +9,7 @@
 #include <FPGAAddresses.h>
 #include <IFPGA.h>
 #include <IPublisher.h>
-#include <Log.h>
+#include <spdlog/spdlog.h>
 #include <SAL_MTVMSC.h>
 #include <Timestamp.h>
 #include <VMSApplicationSettings.h>
@@ -22,7 +22,7 @@ namespace VMS {
 
 Accelerometer::Accelerometer(IPublisher *publisher, IFPGA *fpga,
                              VMSApplicationSettings *vmsApplicationSettings) {
-    Log.Debug("Accelerometer::Accelerometer()");
+    SPDLOG_DEBUG("Accelerometer::Accelerometer()");
     this->publisher = publisher;
     this->fpga = fpga;
     this->vmsApplicationSettings = vmsApplicationSettings;
@@ -32,19 +32,19 @@ Accelerometer::Accelerometer(IPublisher *publisher, IFPGA *fpga,
 }
 
 void Accelerometer::enableAccelerometers() {
-    Log.Info("Accelerometer: enableAccelerometers()");
+    SPDLOG_INFO("Accelerometer: enableAccelerometers()");
     uint16_t buffer[2] = {FPGAAddresses::Accelerometers, true};
     this->fpga->writeCommandFIFO(buffer, 2, 20);
 }
 
 void Accelerometer::disableAccelerometers() {
-    Log.Info("Accelerometer: disableAccelerometers()");
+    SPDLOG_INFO("Accelerometer: disableAccelerometers()");
     uint16_t buffer[2] = {FPGAAddresses::Accelerometers, false};
     this->fpga->writeCommandFIFO(buffer, 2, 20);
 }
 
 void Accelerometer::sampleData() {
-    Log.Trace("Accelerometer: sampleData()");
+    SPDLOG_TRACE("Accelerometer: sampleData()");
     this->fpga->writeRequestFIFO(FPGAAddresses::Accelerometers, 0);
     this->fpga->readU64ResponseFIFO(this->u64Buffer, MAX_SAMPLE_PER_PUBLISH, 15);
     this->fpga->readSGLResponseFIFO(
@@ -60,7 +60,7 @@ void Accelerometer::sampleData() {
 }
 
 void Accelerometer::processM1M3() {
-    Log.Trace("Accelerometer: processM1M3()");
+    SPDLOG_TRACE("Accelerometer: processM1M3()");
     this->m1m3Data->timestamp = Timestamp::fromRaw(this->u64Buffer[0]);
     int32_t dataBufferIndex = 0;
     for (int i = 0; i < MAX_SAMPLE_PER_PUBLISH; ++i) {
@@ -87,14 +87,14 @@ void Accelerometer::processM1M3() {
 }
 
 void Accelerometer::processM2() {
-    Log.Info("Accelerometer: processM2()");
+    SPDLOG_INFO("Accelerometer: processM2()");
     this->m2Data->timestamp = Timestamp::fromRaw(this->u64Buffer[0]);
     // TODO: Populate M2
     this->publisher->putM2();
 }
 
 void Accelerometer::processTMA() {
-    Log.Info("Accelerometer: processTMA()");
+    SPDLOG_INFO("Accelerometer: processTMA()");
     this->tmaData->timestamp = Timestamp::fromRaw(this->u64Buffer[0]);
     // TODO: Populate TMA
     this->publisher->putTMA();
