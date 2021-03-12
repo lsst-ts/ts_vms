@@ -12,9 +12,7 @@ namespace VMS {
 
 ISettingReader::~ISettingReader() {}
 
-VMSApplicationSettings *ISettingReader::loadVMSApplicationSettings() {
-  return 0;
-}
+VMSApplicationSettings *ISettingReader::loadVMSApplicationSettings() { return 0; }
 
 } /* namespace VMS */
 } /* namespace LSST */

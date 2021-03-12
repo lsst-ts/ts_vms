@@ -17,17 +17,17 @@ namespace VMS {
 
 class SettingReader : public ISettingReader {
 private:
-  VMSApplicationSettings vmsApplicationSettings;
+    VMSApplicationSettings vmsApplicationSettings;
 
-  std::string basePath;
+    std::string basePath;
 
 public:
-  SettingReader(std::string basePath);
+    SettingReader(std::string basePath);
 
-  VMSApplicationSettings *loadVMSApplicationSettings();
+    VMSApplicationSettings *loadVMSApplicationSettings();
 
 private:
-  std::string getBasePath(std::string file);
+    std::string getBasePath(std::string file);
 };
 
 } /* namespace VMS */

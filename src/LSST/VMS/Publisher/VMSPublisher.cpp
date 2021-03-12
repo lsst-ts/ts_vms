@@ -13,12 +13,12 @@ namespace LSST {
 namespace VMS {
 
 VMSPublisher::VMSPublisher(std::shared_ptr<SAL_MTVMS> vmsSAL) {
-  Log.Debug("VMSPublisher::VMSPublisher()");
-  this->vmsSAL = vmsSAL;
+    Log.Debug("VMSPublisher::VMSPublisher()");
+    this->vmsSAL = vmsSAL;
 
-  this->vmsSAL->salTelemetryPub((char *)"MTVMS_m1m3");
-  this->vmsSAL->salTelemetryPub((char *)"MTVMS_m2");
-  this->vmsSAL->salTelemetryPub((char *)"MTVMS_tma");
+    this->vmsSAL->salTelemetryPub((char *)"MTVMS_m1m3");
+    this->vmsSAL->salTelemetryPub((char *)"MTVMS_m2");
+    this->vmsSAL->salTelemetryPub((char *)"MTVMS_tma");
 }
 
 double VMSPublisher::getTimestamp() { return this->vmsSAL->getCurrentTime(); }

@@ -1,7 +1,7 @@
 //============================================================================
-// Name        : ts_MTVMS.cpp
-// Author      : LSST
-// Version     :
+// Name    : ts_MTVMS.cpp
+// Author    : LSST
+// Version   :
 // Copyright   : LSST
 // Description : Hello World in C++, Ansi-style
 //============================================================================
@@ -28,8 +28,8 @@ int main() {
     SettingReader settingReader = SettingReader("/usr/ts_VMS/SettingFiles/Base/");
     Log.Info("Main: Loading VMS application settings");
     VMSApplicationSettings* vmsApplicationSettings = settingReader.loadVMSApplicationSettings();
-    Log.Info("\tSubsystem:       %s", vmsApplicationSettings->Subsystem.c_str());
-    Log.Info("\tIsMaster:        %d", vmsApplicationSettings->IsMaster);
+    Log.Info("\tSubsystem:     %s", vmsApplicationSettings->Subsystem.c_str());
+    Log.Info("\tIsMaster:    %d", vmsApplicationSettings->IsMaster);
     Log.Info("\tNumberOfSensors: %d", vmsApplicationSettings->NumberOfSensors);
     Log.Info("Main: Initializing VMS SAL");
     std::shared_ptr<SAL_MTVMS> vmsSAL = std::make_shared<SAL_MTVMS>();

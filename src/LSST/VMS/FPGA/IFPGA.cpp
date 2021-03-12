@@ -24,25 +24,11 @@ int32_t IFPGA::setTimestamp(double timestamp) { return 0; }
 int32_t IFPGA::waitForOuterLoopClock(int32_t timeout) { return 0; }
 int32_t IFPGA::ackOuterLoopClock() { return 0; }
 
-int32_t IFPGA::writeCommandFIFO(uint16_t *data, int32_t length,
-                                int32_t timeoutInMs) {
-  return 0;
-}
-int32_t IFPGA::writeRequestFIFO(uint16_t *data, int32_t length,
-                                int32_t timeoutInMs) {
-  return 0;
-}
-int32_t IFPGA::writeRequestFIFO(uint16_t data, int32_t timeoutInMs) {
-  return 0;
-}
-int32_t IFPGA::readU64ResponseFIFO(uint64_t *data, int32_t length,
-                                   int32_t timeoutInMs) {
-  return 0;
-}
-int32_t IFPGA::readSGLResponseFIFO(float *data, int32_t length,
-                                   int32_t timeoutInMs) {
-  return 0;
-}
+int32_t IFPGA::writeCommandFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs) { return 0; }
+int32_t IFPGA::writeRequestFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs) { return 0; }
+int32_t IFPGA::writeRequestFIFO(uint16_t data, int32_t timeoutInMs) { return 0; }
+int32_t IFPGA::readU64ResponseFIFO(uint64_t *data, int32_t length, int32_t timeoutInMs) { return 0; }
+int32_t IFPGA::readSGLResponseFIFO(float *data, int32_t length, int32_t timeoutInMs) { return 0; }
 
 } /* namespace VMS */
 } /* namespace LSST */
