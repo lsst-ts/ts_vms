@@ -20,24 +20,24 @@ namespace VMS {
 
 class VMSPublisher : public IPublisher {
 private:
-	std::shared_ptr<SAL_MTVMS> vmsSAL;
+  std::shared_ptr<SAL_MTVMS> vmsSAL;
 
-	MTVMS_m1m3C m1m3;
-	MTVMS_m2C m2ms;
-	MTVMS_tmaC mtMount;
+  MTVMS_m1m3C m1m3;
+  MTVMS_m2C m2ms;
+  MTVMS_tmaC mtMount;
 
 public:
-	VMSPublisher(std::shared_ptr<SAL_MTVMS> vmsSAL);
+  VMSPublisher(std::shared_ptr<SAL_MTVMS> vmsSAL);
 
-	MTVMS_m1m3C* getM1M3() { return &this->m1m3; }
-	MTVMS_m2C* getM2() { return &this->m2ms; }
-	MTVMS_tmaC* getTMA() { return &this->mtMount; }
+  MTVMS_m1m3C *getM1M3() { return &this->m1m3; }
+  MTVMS_m2C *getM2() { return &this->m2ms; }
+  MTVMS_tmaC *getTMA() { return &this->mtMount; }
 
-	double getTimestamp();
+  double getTimestamp();
 
-	void putM1M3();
-	void putM2();
-	void putTMA();
+  void putM1M3();
+  void putM2();
+  void putTMA();
 };
 
 } /* namespace VMS */

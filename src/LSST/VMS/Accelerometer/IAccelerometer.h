@@ -16,21 +16,21 @@ namespace VMS {
  */
 class IAccelerometer {
 public:
-	virtual ~IAccelerometer();
+  virtual ~IAccelerometer();
 
-	/*!
-	 * Enable collecting data from the accelerometers.
-	 */
-	virtual void enableAccelerometers();
-	/*!
-	 * Disable collecting data from the accelerometers.
-	 */
-	virtual void disableAccelerometers();
+  /*!
+   * Enable collecting data from the accelerometers.
+   */
+  virtual void enableAccelerometers();
+  /*!
+   * Disable collecting data from the accelerometers.
+   */
+  virtual void disableAccelerometers();
 
-	/*!
-	 * Sample the accelerometers.
-	 */
-	virtual void sampleData();
+  /*!
+   * Sample the accelerometers.
+   */
+  virtual void sampleData();
 };
 
 } /* namespace VMS */
