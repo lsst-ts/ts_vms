@@ -23,6 +23,12 @@
 #include <getopt.h>
 #include <memory>
 
+#include <spdlog/spdlog.h>
+#include <spdlog/async.h>
+#include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/sinks/daily_file_sink.h"
+
+#include <getopt.h>
 #include <memory>
 
 using namespace std;
