@@ -13,6 +13,8 @@
 #include <Accelerometer.h>
 #include <FPGAAddresses.h>
 
+#include <cRIO/SALSink.h>
+
 #include <spdlog/spdlog.h>
 #include <spdlog/async.h>
 #include "spdlog/sinks/stdout_color_sinks.h"
@@ -23,6 +25,8 @@
 
 using namespace std;
 using namespace LSST::VMS;
+
+SALSinkMacro(MTVMS);
 
 void printHelp() {
     std::cout << "VMS controller. Runs on cRIO, reads out accelerometers signals." << std::endl
@@ -99,18 +103,31 @@ int main(int argc, char** argv) {
     processArgs(argc, argv, configRoot);
 
     SPDLOG_INFO("Starting ts_VMS");
+
     SPDLOG_INFO("Main: Creating setting reader");
     SettingReader settingReader = SettingReader(configRoot);
     SPDLOG_INFO("Main: Loading VMS application settings");
     VMSApplicationSettings* vmsApplicationSettings = settingReader.loadVMSApplicationSettings();
-    SPDLOG_INFO("\tSubsystem:     %s", vmsApplicationSettings->Subsystem.c_str());
-    SPDLOG_INFO("\tIsMaster:    %d", vmsApplicationSettings->IsMaster);
-    SPDLOG_INFO("\tNumberOfSensors: %d", vmsApplicationSettings->NumberOfSensors);
+    SPDLOG_INFO("Subsystem: {}, IsMaster: {}, NumberOfSensors: {}", vmsApplicationSettings->Subsystem.c_str(),
+                vmsApplicationSettings->IsMaster, vmsApplicationSettings->NumberOfSensors);
+
     SPDLOG_INFO("Main: Initializing VMS SAL");
     std::shared_ptr<SAL_MTVMS> vmsSAL = std::make_shared<SAL_MTVMS>();
     vmsSAL->setDebugLevel(0);
+
+    sinks.push_back(std::make_shared<SALSink_mt>(vmsSAL));
+    auto logger = std::make_shared<spdlog::async_logger>("VMS " + vmsApplicationSettings->Subsystem,
+                                                         sinks.begin(), sinks.end(), spdlog::thread_pool(),
+                                                         spdlog::async_overflow_policy::block);
+    spdlog::set_default_logger(logger);
+    spdlog::level::level_enum logLevel =
+            (debugLevel == 0 ? spdlog::level::info
+                             : (debugLevel == 1 ? spdlog::level::debug : spdlog::level::trace));
+    spdlog::set_level(logLevel);
+
     SPDLOG_INFO("Main: Creating publisher");
     VMSPublisher publisher = VMSPublisher(vmsSAL);
+
     SPDLOG_INFO("Main: Creating fpga");
     FPGA fpga = FPGA(vmsApplicationSettings);
     if (fpga.isErrorCode(fpga.initialize())) {

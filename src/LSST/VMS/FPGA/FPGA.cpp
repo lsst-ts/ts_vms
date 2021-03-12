@@ -76,12 +76,12 @@ int32_t FPGA::finalize() {
 }
 
 bool FPGA::isErrorCode(int32_t status) {
-    SPDLOG_DEBUG("FPGA: isErrorCode(%d)", status);
+    SPDLOG_DEBUG("FPGA: isErrorCode({})", status);
     return NiFpga_IsError(status);
 }
 
 int32_t FPGA::setTimestamp(double timestamp) {
-    SPDLOG_TRACE("FPGA: setTimestamp(%f)", timestamp);
+    SPDLOG_TRACE("FPGA: setTimestamp({})", timestamp);
     uint64_t raw = Timestamp::toRaw(timestamp);
     uint16_t buffer[5];
     buffer[0] = FPGAAddresses::Timestamp;
@@ -93,7 +93,7 @@ int32_t FPGA::setTimestamp(double timestamp) {
 }
 
 int32_t FPGA::waitForOuterLoopClock(int32_t timeout) {
-    SPDLOG_TRACE("FPGA: waitForOuterLoopClock(%d)", timeout);
+    SPDLOG_TRACE("FPGA: waitForOuterLoopClock({})", timeout);
     uint32_t assertedIRQs = 0;
     uint8_t timedOut = false;
     int32_t result = NiFpga_WaitOnIrqs(this->session, this->outerLoopIRQContext, NiFpga_Irq_0, timeout,
@@ -107,29 +107,29 @@ int32_t FPGA::ackOuterLoopClock() {
 }
 
 int32_t FPGA::writeCommandFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: writeCommandFIFO(%d)", length);
+    SPDLOG_TRACE("FPGA: writeCommandFIFO({})", length);
     return NiFpga_WriteFifoU16(this->session, this->commandFIFO, data, length, timeoutInMs, &this->remaining);
 }
 
 int32_t FPGA::writeRequestFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: writeRequestFIFO(Length = %d)", length);
+    SPDLOG_TRACE("FPGA: writeRequestFIFO(Length = {})", length);
     return NiFpga_WriteFifoU16(this->session, this->requestFIFO, data, length, timeoutInMs, &this->remaining);
 }
 
 int32_t FPGA::writeRequestFIFO(uint16_t data, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: writeRequestFIFO(Data = %d)", data);
+    SPDLOG_TRACE("FPGA: writeRequestFIFO(Data = {})", data);
     this->buffer[0] = data;
     return this->writeRequestFIFO(this->buffer, 1, timeoutInMs);
 }
 
 int32_t FPGA::readU64ResponseFIFO(uint64_t *data, int32_t length, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: readU64ResponseFIFO(%d)", length);
+    SPDLOG_TRACE("FPGA: readU64ResponseFIFO({})", length);
     return NiFpga_ReadFifoU64(this->session, this->u64ResponseFIFO, data, length, timeoutInMs,
                               &this->remaining);
 }
 
 int32_t FPGA::readSGLResponseFIFO(float *data, int32_t length, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: readSGLResponseFIFO(%d)", length);
+    SPDLOG_TRACE("FPGA: readSGLResponseFIFO({})", length);
     return NiFpga_ReadFifoSgl(this->session, this->sglResponseFIFO, data, length, timeoutInMs,
                               &this->remaining);
 }

@@ -12,7 +12,7 @@ namespace LSST {
 namespace VMS {
 
 SettingReader::SettingReader(std::string basePath) {
-    SPDLOG_INFO("SettingReader::SettingReader(%s)", basePath.c_str());
+    SPDLOG_INFO("SettingReader::SettingReader({})", basePath.c_str());
     this->basePath = basePath;
 }
 
