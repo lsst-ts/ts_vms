@@ -8,9 +8,9 @@
 #ifndef IPUBLISHER_H_
 #define IPUBLISHER_H_
 
-struct vms_M1M3C;
-struct vms_M2C;
-struct vms_TMAC;
+struct MTVMS_m1m3C;
+struct MTVMS_m2C;
+struct MTVMS_tmaC;
 
 namespace LSST {
 namespace VMS {
@@ -26,17 +26,17 @@ public:
 	 * Get the M1M3 data structure.
 	 * @return M1M3 data structure
 	 */
-	virtual vms_M1M3C* getM1M3();
+	virtual MTVMS_m1m3C* getM1M3();
 	/*!
 	 * Get the M2 data structure.
 	 * @return M2 data structure
 	 */
-	virtual vms_M2C* getM2();
+	virtual MTVMS_m2C* getM2();
 	/*!
 	 * Get the TMA data structure.
 	 * @return TMA data structure
 	 */
-	virtual vms_TMAC* getTMA();
+	virtual MTVMS_tmaC* getTMA();
 
 	/*!
 	 * Get the current time.

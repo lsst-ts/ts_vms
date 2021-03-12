@@ -11,7 +11,7 @@
 #include <FPGAAddresses.h>
 #include <VMSApplicationSettings.h>
 #include <Timestamp.h>
-#include <SAL_vmsC.h>
+#include <SAL_MTVMSC.h>
 #include <Log.h>
 
 #define AXES_PER_SENSOR 3
@@ -60,26 +60,26 @@ void Accelerometer::sampleData() {
 
 void Accelerometer::processM1M3() {
 	Log.Trace("Accelerometer: processM1M3()");
-	this->m1m3Data->Timestamp = Timestamp::fromRaw(this->u64Buffer[0]);
+	this->m1m3Data->timestamp = Timestamp::fromRaw(this->u64Buffer[0]);
 	int32_t dataBufferIndex = 0;
 	for (int i = 0; i < MAX_SAMPLE_PER_PUBLISH; ++i) {
-		this->m1m3Data->Sensor1XAcceleration[i] = this->sglBuffer[dataBufferIndex];
+		this->m1m3Data->sensor1XAcceleration[i] = this->sglBuffer[dataBufferIndex];
 		dataBufferIndex++;
-		this->m1m3Data->Sensor1YAcceleration[i] = this->sglBuffer[dataBufferIndex];
+		this->m1m3Data->sensor1YAcceleration[i] = this->sglBuffer[dataBufferIndex];
 		dataBufferIndex++;
-		this->m1m3Data->Sensor1ZAcceleration[i] = this->sglBuffer[dataBufferIndex];
+		this->m1m3Data->sensor1ZAcceleration[i] = this->sglBuffer[dataBufferIndex];
 		dataBufferIndex++;
-		this->m1m3Data->Sensor2XAcceleration[i] = this->sglBuffer[dataBufferIndex];
+		this->m1m3Data->sensor2XAcceleration[i] = this->sglBuffer[dataBufferIndex];
 		dataBufferIndex++;
-		this->m1m3Data->Sensor2YAcceleration[i] = this->sglBuffer[dataBufferIndex];
+		this->m1m3Data->sensor2YAcceleration[i] = this->sglBuffer[dataBufferIndex];
 		dataBufferIndex++;
-		this->m1m3Data->Sensor2ZAcceleration[i] = this->sglBuffer[dataBufferIndex];
+		this->m1m3Data->sensor2ZAcceleration[i] = this->sglBuffer[dataBufferIndex];
 		dataBufferIndex++;
-		this->m1m3Data->Sensor3XAcceleration[i] = this->sglBuffer[dataBufferIndex];
+		this->m1m3Data->sensor3XAcceleration[i] = this->sglBuffer[dataBufferIndex];
 		dataBufferIndex++;
-		this->m1m3Data->Sensor3YAcceleration[i] = this->sglBuffer[dataBufferIndex];
+		this->m1m3Data->sensor3YAcceleration[i] = this->sglBuffer[dataBufferIndex];
 		dataBufferIndex++;
-		this->m1m3Data->Sensor3ZAcceleration[i] = this->sglBuffer[dataBufferIndex];
+		this->m1m3Data->sensor3ZAcceleration[i] = this->sglBuffer[dataBufferIndex];
 		dataBufferIndex++;
 	}
 	this->publisher->putM1M3();
@@ -87,14 +87,14 @@ void Accelerometer::processM1M3() {
 
 void Accelerometer::processM2() {
 	Log.Info("Accelerometer: processM2()");
-	this->m2Data->Timestamp = Timestamp::fromRaw(this->u64Buffer[0]);
+	this->m2Data->timestamp = Timestamp::fromRaw(this->u64Buffer[0]);
 	// TODO: Populate M2
 	this->publisher->putM2();
 }
 
 void Accelerometer::processTMA() {
 	Log.Info("Accelerometer: processTMA()");
-	this->tmaData->Timestamp = Timestamp::fromRaw(this->u64Buffer[0]);
+	this->tmaData->timestamp = Timestamp::fromRaw(this->u64Buffer[0]);
 	// TODO: Populate TMA
 	this->publisher->putTMA();
 }

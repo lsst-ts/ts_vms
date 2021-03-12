@@ -1,5 +1,5 @@
 //============================================================================
-// Name        : ts_M1M3Support.cpp
+// Name        : ts_MTVMS.cpp
 // Author      : LSST
 // Version     :
 // Copyright   : LSST
@@ -7,12 +7,14 @@
 //============================================================================
 
 #include <SettingReader.h>
-#include <SAL_vms.h>
+#include <SAL_MTVMS.h>
 #include <VMSPublisher.h>
 #include <FPGA.h>
 #include <Accelerometer.h>
 #include <FPGAAddresses.h>
 #include <Log.h>
+
+#include <memory>
 
 using namespace std;
 using namespace LSST::VMS;
@@ -30,20 +32,20 @@ int main() {
 	Log.Info("\tIsMaster:        %d", vmsApplicationSettings->IsMaster);
 	Log.Info("\tNumberOfSensors: %d", vmsApplicationSettings->NumberOfSensors);
 	Log.Info("Main: Initializing VMS SAL");
-	SAL_vms vmsSAL = SAL_vms();
-	vmsSAL.setDebugLevel(0);
+	std::shared_ptr<SAL_MTVMS> vmsSAL = std::make_shared<SAL_MTVMS>();
+	vmsSAL->setDebugLevel(0);
 	Log.Info("Main: Creating publisher");
-	VMSPublisher publisher = VMSPublisher(&vmsSAL);
+	VMSPublisher publisher = VMSPublisher(vmsSAL);
 	Log.Info("Main: Creating fpga");
 	FPGA fpga = FPGA(vmsApplicationSettings);
 	if (fpga.isErrorCode(fpga.initialize())) {
 		Log.Fatal("Main: Error initializing FPGA");
-		vmsSAL.salShutdown();
+		vmsSAL->salShutdown();
 		return -1;
 	}
 	if (fpga.isErrorCode(fpga.open())) {
 		Log.Fatal("Main: Error opening FPGA");
-		vmsSAL.salShutdown();
+		vmsSAL->salShutdown();
 		return -1;
 	}
 	Log.Info("Main: Creating accelerometer");
@@ -68,7 +70,7 @@ int main() {
 	}
 
 	Log.Info("Main: Shutting down VMS SAL");
-	vmsSAL.salShutdown();
+	vmsSAL->salShutdown();
 
 	Log.Info("Main: Shutdown complete");
 
