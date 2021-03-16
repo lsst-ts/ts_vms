@@ -10,6 +10,7 @@
 
 #include <DataTypes.h>
 #include <IAccelerometer.h>
+#include <FPGA.h>
 #include <SAL_MTVMSC.h>
 
 struct MTVMS_m1m3C;
@@ -24,7 +25,7 @@ class VMSApplicationSettings;
 
 class Accelerometer : public IAccelerometer {
 public:
-    Accelerometer(IFPGA *_fpga, VMSApplicationSettings *vmsApplicationSettings);
+    Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplicationSettings);
 
     void enableAccelerometers();
     void disableAccelerometers();
@@ -36,7 +37,7 @@ private:
     void processM2();
     void processTMA();
 
-    IFPGA *fpga;
+    FPGA *fpga;
     VMSApplicationSettings *vmsApplicationSettings;
 
     MTVMS_m1m3C *m1m3Data;

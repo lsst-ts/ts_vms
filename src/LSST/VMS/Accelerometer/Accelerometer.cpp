@@ -7,7 +7,6 @@
 
 #include <Accelerometer.h>
 #include <FPGAAddresses.h>
-#include <IFPGA.h>
 #include <VMSPublisher.h>
 #include <spdlog/spdlog.h>
 #include <SAL_MTVMSC.h>
@@ -20,7 +19,7 @@
 namespace LSST {
 namespace VMS {
 
-Accelerometer::Accelerometer(IFPGA *_fpga, VMSApplicationSettings *_vmsApplicationSettings) {
+Accelerometer::Accelerometer(FPGA *_fpga, VMSApplicationSettings *_vmsApplicationSettings) {
     SPDLOG_DEBUG("Accelerometer::Accelerometer()");
     fpga = _fpga;
     vmsApplicationSettings = _vmsApplicationSettings;

@@ -8,7 +8,7 @@
 #ifndef FPGA_H_
 #define FPGA_H_
 
-#include <IFPGA.h>
+#include <NiFpga.h>
 
 namespace LSST {
 namespace VMS {
@@ -18,7 +18,7 @@ class VMSApplicationSettings;
 /*!
  * The class used to communicate with the FPGA.
  */
-class FPGA : public IFPGA {
+class FPGA {
 private:
     VMSApplicationSettings *vmsApplicationSettings;
     uint32_t session;
@@ -51,8 +51,8 @@ public:
     int32_t writeCommandFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs);
     int32_t writeRequestFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs);
     int32_t writeRequestFIFO(uint16_t data, int32_t timeoutInMs);
-    int32_t readU64ResponseFIFO(uint64_t *data, int32_t length, int32_t timeoutInMs);
-    int32_t readSGLResponseFIFO(float *data, int32_t length, int32_t timeoutInMs);
+    int32_t readU64ResponseFIFO(uint64_t *data, size_t length, int32_t timeoutInMs);
+    int32_t readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInMs);
 
 private:
     char *getBitFile();
