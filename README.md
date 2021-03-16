@@ -22,4 +22,10 @@ available, build is trivial call to make:
 make
 ```
 
+if you would like to build a software simulator (runs without hardware), just do:
+
+```bash
+make clean && make SIMULATOR=1
+```
+
 *make deploy* target would install the binaries and Bitfiles on summit cRIOs.

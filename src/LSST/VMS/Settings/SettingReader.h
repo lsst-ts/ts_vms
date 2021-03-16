@@ -8,21 +8,20 @@
 #ifndef SETTINGREADER_H_
 #define SETTINGREADER_H_
 
-#include <ISettingReader.h>
 #include <VMSApplicationSettings.h>
 #include <string>
 
 namespace LSST {
 namespace VMS {
 
-class SettingReader : public ISettingReader {
+class SettingReader {
 private:
     VMSApplicationSettings vmsApplicationSettings;
 
     std::string basePath;
 
 public:
-    SettingReader(std::string basePath);
+    SettingReader(std::string _basePath);
 
     VMSApplicationSettings *loadVMSApplicationSettings();
 

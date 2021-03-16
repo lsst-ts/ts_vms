@@ -179,8 +179,9 @@ int32_t FPGA::readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInM
 #ifndef SIMULATOR
     return NiFpga_ReadFifoSgl(session, sglResponseFIFO, data, length, timeoutInMs, &remaining);
 #else
-    for (int i = 0; i < length; i++) {
+    for (size_t i = 0; i < length; i++) {
         data[i] = (20.0 * static_cast<double>(random()) / RAND_MAX) - 10.0;
+        usleep(60);
     }
     return length;
 #endif
