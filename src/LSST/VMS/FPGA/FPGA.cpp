@@ -14,7 +14,9 @@
 #include <NiFpga_VMS_6_Slave.h>
 #include <Timestamp.h>
 #include <VMSApplicationSettings.h>
+#include <VMSPublisher.h>
 #include <unistd.h>
+#include <endian.h>
 
 namespace LSST {
 namespace VMS {
@@ -85,6 +87,11 @@ int32_t FPGA::setTimestamp(double timestamp) {
     uint64_t raw = Timestamp::toRaw(timestamp);
     uint16_t buffer[5];
     buffer[0] = FPGAAddresses::Timestamp;
+    // TODO this isn't low or big endian, this is mess. Should be rewritten to
+    // probably big endian (network standard), but need changes in FPGA
+    // When done, the code can be simplified to:
+    // raw = htobe64(raw);
+    // memcpy(buffer + 1, &raw, 8);
     buffer[1] = (raw >> 48) & 0xFFFF;
     buffer[2] = (raw >> 32) & 0xFFFF;
     buffer[3] = (raw >> 16) & 0xFFFF;
@@ -108,12 +115,20 @@ int32_t FPGA::ackOuterLoopClock() {
 
 int32_t FPGA::writeCommandFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs) {
     SPDLOG_TRACE("FPGA: writeCommandFIFO({})", length);
+#ifndef SIMULATOR
     return NiFpga_WriteFifoU16(session, commandFIFO, data, length, timeoutInMs, &remaining);
+#else
+    return length;
+#endif
 }
 
 int32_t FPGA::writeRequestFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs) {
     SPDLOG_TRACE("FPGA: writeRequestFIFO(Length = {})", length);
+#ifndef SIMULATOR
     return NiFpga_WriteFifoU16(session, requestFIFO, data, length, timeoutInMs, &remaining);
+#else
+    return length;
+#endif
 }
 
 int32_t FPGA::writeRequestFIFO(uint16_t data, int32_t timeoutInMs) {
@@ -124,7 +139,11 @@ int32_t FPGA::writeRequestFIFO(uint16_t data, int32_t timeoutInMs) {
 
 int32_t FPGA::readU64ResponseFIFO(uint64_t *data, int32_t length, int32_t timeoutInMs) {
     SPDLOG_TRACE("FPGA: readU64ResponseFIFO({})", length);
+#ifndef SIMULATOR
     return NiFpga_ReadFifoU64(session, u64ResponseFIFO, data, length, timeoutInMs, &remaining);
+#else
+    *data = Timestamp::toRaw(VMSPublisher::instance().getTimestamp());
+#endif
 }
 
 int32_t FPGA::readSGLResponseFIFO(float *data, int32_t length, int32_t timeoutInMs) {

@@ -110,7 +110,11 @@ int main(int argc, char** argv) {
 
     processArgs(argc, argv, configRoot);
 
+#ifdef SIMULATOR
+    SPDLOG_WARN("Starting ts_VMS simulator");
+#else
     SPDLOG_INFO("Starting ts_VMS");
+#endif
 
     SPDLOG_INFO("Main: Creating setting reader from {}", configRoot);
     SettingReader settingReader = SettingReader(configRoot);
@@ -133,8 +137,8 @@ int main(int argc, char** argv) {
                              : (debugLevel == 1 ? spdlog::level::debug : spdlog::level::trace));
     spdlog::set_level(logLevel);
 
-    SPDLOG_INFO("Main: Creating publisher");
-    VMSPublisher publisher = VMSPublisher(vmsSAL);
+    SPDLOG_INFO("Main: Setting publisher");
+    VMSPublisher::instance().setSAL(vmsSAL);
 
     SPDLOG_INFO("Main: Creating fpga");
     FPGA fpga = FPGA(vmsApplicationSettings);
@@ -149,7 +153,7 @@ int main(int argc, char** argv) {
         return -1;
     }
     SPDLOG_INFO("Main: Creating accelerometer");
-    Accelerometer accelerometer = Accelerometer(&publisher, &fpga, vmsApplicationSettings);
+    Accelerometer accelerometer = Accelerometer(&fpga, vmsApplicationSettings);
 
     // TODO: This is a non-commandable component so there isn't really a way to cleanly shutdown the software
     SPDLOG_INFO("Main: Sample loop start");
@@ -157,7 +161,7 @@ int main(int argc, char** argv) {
         fpga.waitForOuterLoopClock(105);
         SPDLOG_TRACE("Main: Outer loop iteration start");
         accelerometer.sampleData();
-        fpga.setTimestamp(publisher.getTimestamp());
+        fpga.setTimestamp(VMSPublisher::instance().getTimestamp());
         fpga.ackOuterLoopClock();
     }
 

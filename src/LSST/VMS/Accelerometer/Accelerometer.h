@@ -19,25 +19,12 @@ struct MTVMS_tmaC;
 namespace LSST {
 namespace VMS {
 
-class IPublisher;
 class IFPGA;
 class VMSApplicationSettings;
 
 class Accelerometer : public IAccelerometer {
-private:
-    IPublisher *publisher;
-    IFPGA *fpga;
-    VMSApplicationSettings *vmsApplicationSettings;
-
-    MTVMS_m1m3C *m1m3Data;
-    MTVMS_m2C *m2Data;
-    MTVMS_tmaC *tmaData;
-
-    uint64_t u64Buffer[1024];
-    float sglBuffer[2048];
-
 public:
-    Accelerometer(IPublisher *publisher, IFPGA *fpga, VMSApplicationSettings *vmsApplicationSettings);
+    Accelerometer(IFPGA *_fpga, VMSApplicationSettings *vmsApplicationSettings);
 
     void enableAccelerometers();
     void disableAccelerometers();
@@ -48,6 +35,16 @@ private:
     void processM1M3();
     void processM2();
     void processTMA();
+
+    IFPGA *fpga;
+    VMSApplicationSettings *vmsApplicationSettings;
+
+    MTVMS_m1m3C *m1m3Data;
+    MTVMS_m2C *m2Data;
+    MTVMS_tmaC *tmaData;
+
+    uint64_t u64Buffer[1024];
+    float sglBuffer[2048];
 };
 
 } /* namespace VMS */

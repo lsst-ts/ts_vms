@@ -18,7 +18,7 @@ ts_MTVMS: src/ts_MTVMS.cpp.o src/libVMS.a
 
 # Other Targets
 clean:
-	@$(foreach file,ts_VMS src/ts_VMS.cpp.o doc, echo '[RM ] ${file}'; $(RM) -r $(file);)
+	@$(foreach file,ts_MTVMS src/ts_MTVMS.cpp.o doc, echo '[RM ] ${file}'; $(RM) -r $(file);)
 	@$(foreach dir,src tests,$(MAKE) -C ${dir} $@;)
 
 # file targets
