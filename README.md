@@ -22,4 +22,4 @@ available, build is trivial call to make:
 make
 ```
 
-*make deploy* target will install the binaries on cRIOs.
+*make deploy* target would install the binaries and Bitfiles on summit cRIOs.

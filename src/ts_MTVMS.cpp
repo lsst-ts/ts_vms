@@ -50,7 +50,7 @@ void processArgs(int argc, char* const argv[], const char*& configRoot) {
     int enabledSinks = 0x3;
 
     int opt;
-    while ((opt = getopt(argc, argv, "bc:fhsv")) != -1) {
+    while ((opt = getopt(argc, argv, "bc:dfhsv")) != -1) {
         switch (opt) {
             case 'b':
                 enabledSinks &= ~0x01;
@@ -74,7 +74,7 @@ void processArgs(int argc, char* const argv[], const char*& configRoot) {
                 std::cout << VERSION << std::endl;
                 exit(EXIT_SUCCESS);
             default:
-                std::cerr << "Unknow option " << opt << std::endl;
+                std::cerr << "Unknown option " << opt << std::endl;
                 printHelp();
                 exit(EXIT_FAILURE);
         }
@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
 
     SPDLOG_INFO("Starting ts_VMS");
 
-    SPDLOG_INFO("Main: Creating setting reader");
+    SPDLOG_INFO("Main: Creating setting reader from {}", configRoot);
     SettingReader settingReader = SettingReader(configRoot);
     SPDLOG_INFO("Main: Loading VMS application settings");
     VMSApplicationSettings* vmsApplicationSettings = settingReader.loadVMSApplicationSettings();
