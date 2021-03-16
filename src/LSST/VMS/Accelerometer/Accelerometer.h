@@ -9,7 +9,6 @@
 #define ACCELEROMETER_H_
 
 #include <DataTypes.h>
-#include <IAccelerometer.h>
 #include <FPGA.h>
 #include <SAL_MTVMSC.h>
 
@@ -20,10 +19,9 @@ struct MTVMS_tmaC;
 namespace LSST {
 namespace VMS {
 
-class IFPGA;
 class VMSApplicationSettings;
 
-class Accelerometer : public IAccelerometer {
+class Accelerometer {
 public:
     Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplicationSettings);
 
