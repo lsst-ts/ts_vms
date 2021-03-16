@@ -17,6 +17,7 @@ ifneq ($(MAKECMDGOALS),clean)
 endif
 
 M1M3_CPPFLAGS := -I. \
+	-I"../$(CRIOCPP)/include" \
 	-I"LSST/VMS/Accelerometer" \
 	-I"LSST/VMS/Include" \
 	-I"LSST/VMS/Logging" \
@@ -25,7 +26,8 @@ M1M3_CPPFLAGS := -I. \
 	-I"LSST/VMS/Settings" \
 	-I"LSST/VMS/Utility" \
 	-I"NiFpga" \
-	-I"pugixml"
+	-I"pugixml" \
+	-DVERSION="\"$(VERSION)\""
 
 
 libVMS.a: $(OBJS)

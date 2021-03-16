@@ -5,19 +5,19 @@
  *      Author: ccontaxis
  */
 
-#include <Log.h>
+#include <spdlog/spdlog.h>
 #include <SettingReader.h>
 
 namespace LSST {
 namespace VMS {
 
 SettingReader::SettingReader(std::string basePath) {
-    Log.Info("SettingReader::SettingReader(%s)", basePath.c_str());
+    SPDLOG_INFO("SettingReader::SettingReader({})", basePath.c_str());
     this->basePath = basePath;
 }
 
 VMSApplicationSettings *SettingReader::loadVMSApplicationSettings() {
-    Log.Debug("SettingReader: loadVMSApplicationSettings()");
+    SPDLOG_DEBUG("SettingReader: loadVMSApplicationSettings()");
     this->vmsApplicationSettings.load(this->getBasePath("VMSApplicationSettings.xml").c_str());
     return &this->vmsApplicationSettings;
 }
