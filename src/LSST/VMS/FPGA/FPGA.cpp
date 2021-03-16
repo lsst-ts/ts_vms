@@ -21,30 +21,30 @@ namespace VMS {
 
 FPGA::FPGA(VMSApplicationSettings *vmsApplicationSettings) {
     SPDLOG_DEBUG("FPGA::FPGA()");
-    this->vmsApplicationSettings = vmsApplicationSettings;
-    this->session = 0;
-    this->remaining = 0;
-    this->outerLoopIRQContext = 0;
-    if (this->vmsApplicationSettings->IsMaster) {
-        if (this->vmsApplicationSettings->NumberOfSensors == 3) {
-            this->mode = 0;
+    vmsApplicationSettings = vmsApplicationSettings;
+    session = 0;
+    remaining = 0;
+    outerLoopIRQContext = 0;
+    if (vmsApplicationSettings->IsMaster) {
+        if (vmsApplicationSettings->NumberOfSensors == 3) {
+            mode = 0;
         } else {
-            this->mode = 2;
+            mode = 2;
         }
     } else {
-        if (this->vmsApplicationSettings->NumberOfSensors == 3) {
-            this->mode = 1;
+        if (vmsApplicationSettings->NumberOfSensors == 3) {
+            mode = 1;
         } else {
-            this->mode = 3;
+            mode = 3;
         }
     }
-    this->bitFile = this->getBitFile();
-    this->signature = this->getSignature();
-    this->commandFIFO = this->getCommandFIFO();
-    this->requestFIFO = this->getRequestFIFO();
-    this->u64ResponseFIFO = this->getU64ResponseFIFO();
-    this->sglResponseFIFO = this->getSGLResponseFIFO();
-    this->buffer[0] = 0;
+    bitFile = getBitFile();
+    signature = getSignature();
+    commandFIFO = getCommandFIFO();
+    requestFIFO = getRequestFIFO();
+    u64ResponseFIFO = getU64ResponseFIFO();
+    sglResponseFIFO = getSGLResponseFIFO();
+    buffer[0] = 0;
 }
 
 int32_t FPGA::initialize() {
@@ -54,20 +54,20 @@ int32_t FPGA::initialize() {
 
 int32_t FPGA::open() {
     SPDLOG_DEBUG("FPGA: open()");
-    int32_t status = NiFpga_Open(this->bitFile, this->signature, "RIO0", 0, &(this->session));
-    status = NiFpga_Abort(this->session);
-    status = NiFpga_Download(this->session);
-    status = NiFpga_Reset(this->session);
-    status = NiFpga_Run(this->session, 0);
+    int32_t status = NiFpga_Open(bitFile, signature, "RIO0", 0, &(session));
+    status = NiFpga_Abort(session);
+    status = NiFpga_Download(session);
+    status = NiFpga_Reset(session);
+    status = NiFpga_Run(session, 0);
     usleep(1000000);
-    NiFpga_ReserveIrqContext(this->session, &this->outerLoopIRQContext);
+    NiFpga_ReserveIrqContext(session, &outerLoopIRQContext);
     return status;
 }
 
 int32_t FPGA::close() {
     SPDLOG_DEBUG("FPGA: close()");
-    NiFpga_UnreserveIrqContext(this->session, this->outerLoopIRQContext);
-    return NiFpga_Close(this->session, 0);
+    NiFpga_UnreserveIrqContext(session, outerLoopIRQContext);
+    return NiFpga_Close(session, 0);
 }
 
 int32_t FPGA::finalize() {
@@ -89,53 +89,51 @@ int32_t FPGA::setTimestamp(double timestamp) {
     buffer[2] = (raw >> 32) & 0xFFFF;
     buffer[3] = (raw >> 16) & 0xFFFF;
     buffer[4] = (raw >> 0) & 0xFFFF;
-    return this->writeCommandFIFO(buffer, 5, 0);
+    return writeCommandFIFO(buffer, 5, 0);
 }
 
 int32_t FPGA::waitForOuterLoopClock(int32_t timeout) {
     SPDLOG_TRACE("FPGA: waitForOuterLoopClock({})", timeout);
     uint32_t assertedIRQs = 0;
     uint8_t timedOut = false;
-    int32_t result = NiFpga_WaitOnIrqs(this->session, this->outerLoopIRQContext, NiFpga_Irq_0, timeout,
-                                       &assertedIRQs, &timedOut);
+    int32_t result =
+            NiFpga_WaitOnIrqs(session, outerLoopIRQContext, NiFpga_Irq_0, timeout, &assertedIRQs, &timedOut);
     return result;
 }
 
 int32_t FPGA::ackOuterLoopClock() {
     SPDLOG_TRACE("FPGA: ackOuterLoopClock()");
-    return NiFpga_AcknowledgeIrqs(this->session, NiFpga_Irq_0);
+    return NiFpga_AcknowledgeIrqs(session, NiFpga_Irq_0);
 }
 
 int32_t FPGA::writeCommandFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs) {
     SPDLOG_TRACE("FPGA: writeCommandFIFO({})", length);
-    return NiFpga_WriteFifoU16(this->session, this->commandFIFO, data, length, timeoutInMs, &this->remaining);
+    return NiFpga_WriteFifoU16(session, commandFIFO, data, length, timeoutInMs, &remaining);
 }
 
 int32_t FPGA::writeRequestFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs) {
     SPDLOG_TRACE("FPGA: writeRequestFIFO(Length = {})", length);
-    return NiFpga_WriteFifoU16(this->session, this->requestFIFO, data, length, timeoutInMs, &this->remaining);
+    return NiFpga_WriteFifoU16(session, requestFIFO, data, length, timeoutInMs, &remaining);
 }
 
 int32_t FPGA::writeRequestFIFO(uint16_t data, int32_t timeoutInMs) {
     SPDLOG_TRACE("FPGA: writeRequestFIFO(Data = {})", data);
-    this->buffer[0] = data;
-    return this->writeRequestFIFO(this->buffer, 1, timeoutInMs);
+    buffer[0] = data;
+    return writeRequestFIFO(buffer, 1, timeoutInMs);
 }
 
 int32_t FPGA::readU64ResponseFIFO(uint64_t *data, int32_t length, int32_t timeoutInMs) {
     SPDLOG_TRACE("FPGA: readU64ResponseFIFO({})", length);
-    return NiFpga_ReadFifoU64(this->session, this->u64ResponseFIFO, data, length, timeoutInMs,
-                              &this->remaining);
+    return NiFpga_ReadFifoU64(session, u64ResponseFIFO, data, length, timeoutInMs, &remaining);
 }
 
 int32_t FPGA::readSGLResponseFIFO(float *data, int32_t length, int32_t timeoutInMs) {
     SPDLOG_TRACE("FPGA: readSGLResponseFIFO({})", length);
-    return NiFpga_ReadFifoSgl(this->session, this->sglResponseFIFO, data, length, timeoutInMs,
-                              &this->remaining);
+    return NiFpga_ReadFifoSgl(session, sglResponseFIFO, data, length, timeoutInMs, &remaining);
 }
 
 char *FPGA::getBitFile() {
-    switch (this->mode) {
+    switch (mode) {
         case 1:
             return (char *)"/usr/ts_VMS/" NiFpga_VMS_3_Slave_Bitfile;
         case 2:
@@ -148,7 +146,7 @@ char *FPGA::getBitFile() {
 }
 
 const char *FPGA::getSignature() {
-    switch (this->mode) {
+    switch (mode) {
         case 1:
             return NiFpga_VMS_3_Slave_Signature;
         case 2:
@@ -161,7 +159,7 @@ const char *FPGA::getSignature() {
 }
 
 uint32_t FPGA::getCommandFIFO() {
-    switch (this->mode) {
+    switch (mode) {
         case 1:
             return NiFpga_VMS_3_Slave_HostToTargetFifoU16_CommandFIFO;
         case 2:
@@ -174,7 +172,7 @@ uint32_t FPGA::getCommandFIFO() {
 }
 
 uint32_t FPGA::getRequestFIFO() {
-    switch (this->mode) {
+    switch (mode) {
         case 1:
             return NiFpga_VMS_3_Slave_HostToTargetFifoU16_RequestFIFO;
         case 2:
@@ -187,7 +185,7 @@ uint32_t FPGA::getRequestFIFO() {
 }
 
 uint32_t FPGA::getU64ResponseFIFO() {
-    switch (this->mode) {
+    switch (mode) {
         case 1:
             return NiFpga_VMS_3_Slave_TargetToHostFifoU64_U64ResponseFIFO;
         case 2:
@@ -200,7 +198,7 @@ uint32_t FPGA::getU64ResponseFIFO() {
 }
 
 uint32_t FPGA::getSGLResponseFIFO() {
-    switch (this->mode) {
+    switch (mode) {
         case 1:
             return NiFpga_VMS_3_Slave_TargetToHostFifoSgl_SGLResponseFIFO;
         case 2:
