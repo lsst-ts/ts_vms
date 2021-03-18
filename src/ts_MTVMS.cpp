@@ -22,6 +22,7 @@
 
 #include <getopt.h>
 #include <memory>
+#include <signal.h>
 
 using namespace std;
 using namespace LSST::VMS;
@@ -44,7 +45,23 @@ void printHelp() {
 int debugLevel = 0;
 int debugLevelSAL = 0;
 
+bool runLoop = true;
+
+void sigKill(int signal) {
+    SPDLOG_DEBUG("Kill/int signal received");
+    runLoop = false;
+}
+
 std::vector<spdlog::sink_ptr> sinks;
+
+void setSinks() {
+    auto logger = std::make_shared<spdlog::async_logger>("MTM1M3", sinks.begin(), sinks.end(),
+                                                         spdlog::thread_pool(),
+                                                         spdlog::async_overflow_policy::block);
+    spdlog::set_default_logger(logger);
+    spdlog::set_level((debugLevel == 0 ? spdlog::level::info
+                                       : (debugLevel == 1 ? spdlog::level::debug : spdlog::level::trace)));
+}
 
 void processArgs(int argc, char* const argv[], const char*& configRoot) {
     int enabledSinks = 0x3;
@@ -89,12 +106,8 @@ void processArgs(int argc, char* const argv[], const char*& configRoot) {
         auto daily_sink = std::make_shared<spdlog::sinks::daily_file_sink_mt>("MTM1M3", 0, 0);
         sinks.push_back(daily_sink);
     }
-    auto logger = std::make_shared<spdlog::async_logger>("MTM1M3", sinks.begin(), sinks.end(),
-                                                         spdlog::thread_pool(),
-                                                         spdlog::async_overflow_policy::block);
-    spdlog::set_default_logger(logger);
-    spdlog::set_level((debugLevel == 0 ? spdlog::level::info
-                                       : (debugLevel == 1 ? spdlog::level::debug : spdlog::level::trace)));
+
+    setSinks();
 }
 
 int main(int argc, char** argv) {
@@ -102,7 +115,11 @@ int main(int argc, char** argv) {
 
     processArgs(argc, argv, configRoot);
 
+#ifdef SIMULATOR
+    SPDLOG_WARN("Starting ts_VMS simulator");
+#else
     SPDLOG_INFO("Starting ts_VMS");
+#endif
 
     SPDLOG_INFO("Main: Creating setting reader from {}", configRoot);
     SettingReader settingReader = SettingReader(configRoot);
@@ -116,17 +133,10 @@ int main(int argc, char** argv) {
     vmsSAL->setDebugLevel(0);
 
     sinks.push_back(std::make_shared<SALSink_mt>(vmsSAL));
-    auto logger = std::make_shared<spdlog::async_logger>("VMS " + vmsApplicationSettings->Subsystem,
-                                                         sinks.begin(), sinks.end(), spdlog::thread_pool(),
-                                                         spdlog::async_overflow_policy::block);
-    spdlog::set_default_logger(logger);
-    spdlog::level::level_enum logLevel =
-            (debugLevel == 0 ? spdlog::level::info
-                             : (debugLevel == 1 ? spdlog::level::debug : spdlog::level::trace));
-    spdlog::set_level(logLevel);
+    setSinks();
 
-    SPDLOG_INFO("Main: Creating publisher");
-    VMSPublisher publisher = VMSPublisher(vmsSAL);
+    SPDLOG_INFO("Main: Setting publisher");
+    VMSPublisher::instance().setSAL(vmsSAL);
 
     SPDLOG_INFO("Main: Creating fpga");
     FPGA fpga = FPGA(vmsApplicationSettings);
@@ -141,15 +151,17 @@ int main(int argc, char** argv) {
         return -1;
     }
     SPDLOG_INFO("Main: Creating accelerometer");
-    Accelerometer accelerometer = Accelerometer(&publisher, &fpga, vmsApplicationSettings);
+    Accelerometer accelerometer = Accelerometer(&fpga, vmsApplicationSettings);
 
+    signal(SIGKILL, sigKill);
+    signal(SIGINT, sigKill);
     // TODO: This is a non-commandable component so there isn't really a way to cleanly shutdown the software
     SPDLOG_INFO("Main: Sample loop start");
-    while (true) {
+    while (runLoop) {
         fpga.waitForOuterLoopClock(105);
         SPDLOG_TRACE("Main: Outer loop iteration start");
         accelerometer.sampleData();
-        fpga.setTimestamp(publisher.getTimestamp());
+        fpga.setTimestamp(VMSPublisher::instance().getTimestamp());
         fpga.ackOuterLoopClock();
     }
 
@@ -162,6 +174,9 @@ int main(int argc, char** argv) {
     }
 
     SPDLOG_INFO("Main: Shutting down VMS SAL");
+    sinks.pop_back();
+    setSinks();
+    usleep(1000);
     vmsSAL->salShutdown();
 
     SPDLOG_INFO("Main: Shutdown complete");

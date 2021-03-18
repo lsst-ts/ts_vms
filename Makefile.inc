@@ -9,8 +9,13 @@ else
   c_opts := -O3
 endif
 
-C := gcc -Wall -fmessage-length=0 ${c_opts}
-CPP := g++ -std=c++14 -Wall -fmessage-length=0 ${c_opts}
+ifdef SIMULATOR
+  C := gcc -Wall ${c_opts}
+  CPP := g++ -std=c++14 -pedantic -Wall -fmessage-length=0 ${c_opts} -DSIMULATOR
+else
+  C := gcc -Wall -fmessage-length=0 ${c_opts}
+  CPP := g++ -std=c++14 -Wall -fmessage-length=0 ${c_opts}
+endif
 
 CRIOCPP := ../ts_cRIOcpp/
 

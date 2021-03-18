@@ -11,14 +11,14 @@
 namespace LSST {
 namespace VMS {
 
-SettingReader::SettingReader(std::string basePath) {
-    SPDLOG_INFO("SettingReader::SettingReader({})", basePath.c_str());
-    this->basePath = basePath;
+SettingReader::SettingReader(std::string _basePath) {
+    SPDLOG_INFO("SettingReader::SettingReader(\"{}\")", _basePath);
+    basePath = _basePath;
 }
 
 VMSApplicationSettings *SettingReader::loadVMSApplicationSettings() {
     SPDLOG_DEBUG("SettingReader: loadVMSApplicationSettings()");
-    this->vmsApplicationSettings.load(this->getBasePath("VMSApplicationSettings.xml").c_str());
+    vmsApplicationSettings.load(getBasePath("VMSApplicationSettings.xml").c_str());
     return &this->vmsApplicationSettings;
 }
 
