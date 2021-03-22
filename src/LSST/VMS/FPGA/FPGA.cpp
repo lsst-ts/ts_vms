@@ -17,6 +17,10 @@
 #include <VMSPublisher.h>
 #include <unistd.h>
 
+#ifdef SIMULATOR
+#include <math.h>
+#endif
+
 namespace LSST {
 namespace VMS {
 
@@ -179,9 +183,14 @@ int32_t FPGA::readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInM
 #ifndef SIMULATOR
     return NiFpga_ReadFifoSgl(session, sglResponseFIFO, data, length, timeoutInMs, &remaining);
 #else
-    for (size_t i = 0; i < length; i++) {
-        data[i] = (20.0 * static_cast<double>(random()) / RAND_MAX) - 10.0;
-        usleep(60);
+    static long count = 0;
+    for (size_t i = 0; i < length; i += 9) {
+        double cv = M_PI * static_cast<double>(count++);
+        double pv = 2 * sin(cv / 10.0) + 4 * sin(cv / 20.0) + 3 * cos(cv / 40.0);
+        for (size_t ch = i; ch < i + 9; ch++) {
+            data[ch] = ((50.0 * static_cast<double>(random()) / RAND_MAX) - 25.0) + pv;
+        }
+        usleep(1000);
     }
     return length;
 #endif
