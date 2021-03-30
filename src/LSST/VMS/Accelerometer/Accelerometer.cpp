@@ -148,18 +148,18 @@ void Accelerometer::processM1M3() {
 }
 
 void Accelerometer::processM2() {
-    SPDLOG_INFO("Accelerometer: processM2()");
+    SPDLOG_TRACE("Accelerometer: processM2()");
     SAMPLES_TO_SAL_6(m2Data);
     VMSPublisher::instance().putM2();
 }
 
 void Accelerometer::processCameraRotator() {
-    SPDLOG_INFO("Accelerometer: processCameraRotator()");
+    SPDLOG_TRACE("Accelerometer: processCameraRotator()");
     SAMPLES_TO_SAL_3(cameraRotatorData);
     VMSPublisher::instance().putM2();
 }
 
-void Accelerometer::processTMA() { 
+void Accelerometer::processTMA() {
     SPDLOG_ERROR("Accelerometer: processTMA()");
     // SAMPLES_TO_SAL_3(tmaData);
     // VMSPublisher::instance().putTMA();

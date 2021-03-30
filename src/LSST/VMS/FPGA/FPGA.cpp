@@ -186,7 +186,8 @@ int32_t FPGA::readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInM
 #else
     static long count = 0;
     static auto start = std::chrono::steady_clock::now();
-    for (size_t i = 0; i < length; i += 9) {
+    int channels = (mode < 2 ? 9 : 18);
+    for (size_t i = 0; i < length; i += channels) {
         double cv = M_PI * static_cast<double>(count++);
         // data are produced at ~1kHz (see sleep_for(1000))
         // converts frequency into period and then sin/cos argument
@@ -196,7 +197,7 @@ int32_t FPGA::readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInM
         double pv = 2.7 * sin(frequency_to_period(400)) + 6 * sin(frequency_to_period(200)) +
                     1.5 * cos(frequency_to_period(100)) + 2 * sin(frequency_to_period(50)) +
                     4 * sin(frequency_to_period(25)) + 3 * cos(frequency_to_period(12.5));
-        for (size_t ch = i; ch < i + 9; ch++) {
+        for (size_t ch = i; ch < i + channels; ch++) {
             data[ch] = ((50.0 * static_cast<double>(random()) / RAND_MAX) - 25.0) + pv;
         }
         start += std::chrono::microseconds(1000);
