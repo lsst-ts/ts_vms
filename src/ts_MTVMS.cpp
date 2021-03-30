@@ -125,8 +125,8 @@ int main(int argc, char** argv) {
     SettingReader settingReader = SettingReader(configRoot);
     SPDLOG_INFO("Main: Loading VMS application settings");
     VMSApplicationSettings* vmsApplicationSettings = settingReader.loadVMSApplicationSettings();
-    SPDLOG_INFO("Subsystem: {}, IsMaster: {}, NumberOfSensors: {}", vmsApplicationSettings->Subsystem.c_str(),
-                vmsApplicationSettings->IsMaster, vmsApplicationSettings->NumberOfSensors);
+    SPDLOG_INFO("Subsystem: {}, IsMaster: {}", vmsApplicationSettings->Subsystem.c_str(),
+                vmsApplicationSettings->IsMaster);
 
     SPDLOG_INFO("Main: Initializing VMS SAL");
     std::shared_ptr<SAL_MTVMS> vmsSAL = std::make_shared<SAL_MTVMS>();

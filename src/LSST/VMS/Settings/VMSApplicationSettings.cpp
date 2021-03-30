@@ -20,8 +20,6 @@ void VMSApplicationSettings::load(const std::string &filename) {
     this->Subsystem = doc.select_node("//VMSApplicationSettings/Subsystem").node().child_value();
     this->IsMaster = boost::lexical_cast<int>(
                              doc.select_node("//VMSApplicationSettings/IsMaster").node().child_value()) != 0;
-    this->NumberOfSensors = boost::lexical_cast<int>(
-            doc.select_node("//VMSApplicationSettings/NumberOfSensors").node().child_value());
     this->loadVector(&this->XCoefficients,
                      doc.select_node("//VMSApplicationSettings/XCoefficients").node().child_value());
     this->loadVector(&this->YCoefficients,
