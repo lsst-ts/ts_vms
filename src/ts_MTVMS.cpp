@@ -56,8 +56,8 @@ void sigKill(int signal) {
 
 std::vector<spdlog::sink_ptr> sinks;
 
-void setSinks() {
-    auto logger = std::make_shared<spdlog::async_logger>("MTM1M3", sinks.begin(), sinks.end(),
+void setSinks(std::string subsystem) {
+    auto logger = std::make_shared<spdlog::async_logger>("MTVMS " + subsystem, sinks.begin(), sinks.end(),
                                                          spdlog::thread_pool(),
                                                          spdlog::async_overflow_policy::block);
     spdlog::set_default_logger(logger);
@@ -109,7 +109,7 @@ void processArgs(int argc, char* const argv[], const char*& configRoot) {
         sinks.push_back(daily_sink);
     }
 
-    setSinks();
+    setSinks("init");
 }
 
 int main(int argc, char** argv) {
@@ -135,7 +135,7 @@ int main(int argc, char** argv) {
     vmsSAL->setDebugLevel(0);
 
     sinks.push_back(std::make_shared<SALSink_mt>(vmsSAL));
-    setSinks();
+    setSinks(vmsApplicationSettings->Subsystem);
 
     SPDLOG_INFO("Main: Setting publisher");
     VMSPublisher::instance().setSAL(vmsSAL);
@@ -173,7 +173,7 @@ int main(int argc, char** argv) {
 
     SPDLOG_INFO("Main: Shutting down VMS SAL");
     sinks.pop_back();
-    setSinks();
+    setSinks("done");
     usleep(1000);
     vmsSAL->salShutdown();
 
