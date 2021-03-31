@@ -60,7 +60,7 @@ void Accelerometer::sampleData() {
     SPDLOG_TRACE("Accelerometer: sampleData()");
     fpga->writeRequestFIFO(FPGAAddresses::Accelerometers, 0);
     fpga->readU64ResponseFIFO(u64Buffer, MAX_SAMPLE_PER_PUBLISH, 15);
-    fpga->readSGLResponseFIFO(sglBuffer, numberOfSensors * AXES_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH, 100);
+    fpga->readSGLResponseFIFO(sglBuffer, numberOfSensors * AXES_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH, 1000);
     switch (subsystem) {
         case M1M3:
             processM1M3();

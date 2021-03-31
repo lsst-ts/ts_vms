@@ -13,6 +13,7 @@
 #include <Accelerometer.h>
 #include <FPGAAddresses.h>
 
+#include <cRIO/NiError.h>
 #include <cRIO/SALSink.h>
 
 #include <spdlog/spdlog.h>
@@ -25,6 +26,7 @@
 #include <signal.h>
 
 using namespace std;
+using namespace LSST;
 using namespace LSST::VMS;
 
 SALSinkMacro(MTVMS);
@@ -140,37 +142,33 @@ int main(int argc, char** argv) {
 
     SPDLOG_INFO("Main: Creating fpga");
     FPGA fpga = FPGA(vmsApplicationSettings);
-    if (fpga.isErrorCode(fpga.initialize())) {
-        SPDLOG_CRITICAL("Main: Error initializing FPGA");
+
+    try {
+        fpga.initialize();
+        fpga.open();
+        SPDLOG_INFO("Main: Creating accelerometer");
+        Accelerometer accelerometer = Accelerometer(&fpga, vmsApplicationSettings);
+
+        signal(SIGKILL, sigKill);
+        signal(SIGINT, sigKill);
+        // TODO: This is a non-commandable component so there isn't really a way to cleanly shutdown the
+        // software
+        SPDLOG_INFO("Main: Sample loop start");
+        while (runLoop) {
+            fpga.waitForOuterLoopClock(105);
+            SPDLOG_TRACE("Main: Outer loop iteration start");
+            accelerometer.sampleData();
+            fpga.setTimestamp(VMSPublisher::instance().getTimestamp());
+            fpga.ackOuterLoopClock();
+        }
+
+        fpga.close();
+        fpga.finalize();
+    } catch (cRIO::NiError& nie) {
+        SPDLOG_CRITICAL("Error starting or stopping FPG: {}", nie.what());
+        fpga.finalize();
         vmsSAL->salShutdown();
         return -1;
-    }
-    if (fpga.isErrorCode(fpga.open())) {
-        SPDLOG_CRITICAL("Main: Error opening FPGA");
-        vmsSAL->salShutdown();
-        return -1;
-    }
-    SPDLOG_INFO("Main: Creating accelerometer");
-    Accelerometer accelerometer = Accelerometer(&fpga, vmsApplicationSettings);
-
-    signal(SIGKILL, sigKill);
-    signal(SIGINT, sigKill);
-    // TODO: This is a non-commandable component so there isn't really a way to cleanly shutdown the software
-    SPDLOG_INFO("Main: Sample loop start");
-    while (runLoop) {
-        fpga.waitForOuterLoopClock(105);
-        SPDLOG_TRACE("Main: Outer loop iteration start");
-        accelerometer.sampleData();
-        fpga.setTimestamp(VMSPublisher::instance().getTimestamp());
-        fpga.ackOuterLoopClock();
-    }
-
-    if (fpga.isErrorCode(fpga.close())) {
-        SPDLOG_ERROR("Main: Error closing fpga");
-    }
-
-    if (fpga.isErrorCode(fpga.finalize())) {
-        SPDLOG_ERROR("Main: Error finalizing fpga");
     }
 
     SPDLOG_INFO("Main: Shutting down VMS SAL");

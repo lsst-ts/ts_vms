@@ -36,23 +36,21 @@ private:
 public:
     FPGA(VMSApplicationSettings *vmsApplicationSettings);
 
-    int32_t initialize();
-    int32_t open();
-    int32_t close();
-    int32_t finalize();
+    void initialize();
+    void open();
+    void close();
+    void finalize();
 
-    bool isErrorCode(int32_t status);
+    void setTimestamp(double timestamp);
 
-    int32_t setTimestamp(double timestamp);
+    void waitForOuterLoopClock(int32_t timeout);
+    void ackOuterLoopClock();
 
-    int32_t waitForOuterLoopClock(int32_t timeout);
-    int32_t ackOuterLoopClock();
-
-    int32_t writeCommandFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs);
-    int32_t writeRequestFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs);
-    int32_t writeRequestFIFO(uint16_t data, int32_t timeoutInMs);
-    int32_t readU64ResponseFIFO(uint64_t *data, size_t length, int32_t timeoutInMs);
-    int32_t readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInMs);
+    void writeCommandFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs);
+    void writeRequestFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs);
+    void writeRequestFIFO(uint16_t data, int32_t timeoutInMs);
+    void readU64ResponseFIFO(uint64_t *data, size_t length, int32_t timeoutInMs);
+    void readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInMs);
 
 private:
     char *getBitFile();
