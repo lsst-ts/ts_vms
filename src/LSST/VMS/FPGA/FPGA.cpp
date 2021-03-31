@@ -32,13 +32,13 @@ FPGA::FPGA(VMSApplicationSettings *vmsApplicationSettings) {
     remaining = 0;
     outerLoopIRQContext = 0;
     if (vmsApplicationSettings->IsMaster) {
-        if (vmsApplicationSettings->Subsystem != "M1M3") {
+        if (vmsApplicationSettings->Subsystem == "M1M3") {
             mode = 0;
         } else {
             mode = 2;
         }
     } else {
-        if (vmsApplicationSettings->Subsystem != "M1M3") {
+        if (vmsApplicationSettings->Subsystem == "M1M3") {
             mode = 1;
         } else {
             mode = 3;
