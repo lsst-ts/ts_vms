@@ -17,10 +17,10 @@
 #include <VMSApplicationSettings.h>
 #include <VMSPublisher.h>
 #include <unistd.h>
+#include <chrono>
 
 #ifdef SIMULATOR
 #include <math.h>
-#include <chrono>
 #endif
 
 namespace LSST {
@@ -33,13 +33,13 @@ FPGA::FPGA(VMSApplicationSettings *vmsApplicationSettings) {
     remaining = 0;
     outerLoopIRQContext = 0;
     if (vmsApplicationSettings->IsMaster) {
-        if (vmsApplicationSettings->Subsystem == "M1M3") {
+        if (vmsApplicationSettings->Subsystem != "M2") {
             mode = 0;
         } else {
             mode = 2;
         }
     } else {
-        if (vmsApplicationSettings->Subsystem == "M1M3") {
+        if (vmsApplicationSettings->Subsystem != "M2") {
             mode = 1;
         } else {
             mode = 3;
@@ -68,7 +68,7 @@ void FPGA::open() {
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Download(session));
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Reset(session));
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Run(session, 0));
-    usleep(1000000);
+    std::this_thread::sleep_for(std::chrono::seconds(mode < 2 ? 1 : 3));
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_ReserveIrqContext(session, &outerLoopIRQContext));
 #endif
 }
