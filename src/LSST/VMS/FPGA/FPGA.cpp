@@ -51,7 +51,6 @@ FPGA::FPGA(VMSApplicationSettings *vmsApplicationSettings) {
     requestFIFO = getRequestFIFO();
     u64ResponseFIFO = getU64ResponseFIFO();
     sglResponseFIFO = getSGLResponseFIFO();
-    buffer[0] = 0;
 }
 
 void FPGA::initialize() {
@@ -142,8 +141,7 @@ void FPGA::writeRequestFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs)
 
 void FPGA::writeRequestFIFO(uint16_t data, int32_t timeoutInMs) {
     SPDLOG_TRACE("FPGA: writeRequestFIFO(Data = {})", data);
-    buffer[0] = data;
-    writeRequestFIFO(buffer, 1, timeoutInMs);
+    writeRequestFIFO(&data, 1, timeoutInMs);
 }
 
 void FPGA::readU64ResponseFIFO(uint64_t *data, size_t length, int32_t timeoutInMs) {

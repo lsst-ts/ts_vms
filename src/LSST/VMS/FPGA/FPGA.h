@@ -31,7 +31,6 @@ private:
     uint32_t requestFIFO;
     uint32_t u64ResponseFIFO;
     uint32_t sglResponseFIFO;
-    uint16_t buffer[1];
 
 public:
     FPGA(VMSApplicationSettings *vmsApplicationSettings);
