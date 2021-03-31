@@ -1,6 +1,6 @@
 include Makefile.inc
 
-.PHONY: all clean deploy tests FORCE doc
+.PHONY: all clean deploy deploy_target tests FORCE doc
 
 # Add inputs and outputs from these tool invocations to the build variables 
 #
@@ -25,13 +25,20 @@ clean:
 src/%.cpp.o: src/%.cpp
 	$(MAKE) -C src $(patsubst src/%,%,$@)
 
-CRIO_IP = 139.229.178.4
+CRIO_IP:=139.229.178.183 139.229.178.193
+
+deploy_target: ts_MTVMS
+	@echo 'Installing ${cip}'
+	@echo '[SCP] $^'
+	${co}scp $^ admin@${cip}:
+	${co}ssh admin@${cip} 'mkdir -p Bitfiles'
+	@echo '[SCP] FPGA/FPGA\ Bitfiles/VMS_3_Master.lvbitx'
+	${co}scp "FPGA/FPGA Bitfiles/VMS_3_Master.lvbitx" admin@${cip}:Bitfiles/
+	@echo '[SCP] FPGA/FPGA\ Bitfiles/VMS_6_Master.lvbitx'
+	${co}scp "FPGA/FPGA Bitfiles/VMS_6_Master.lvbitx" admin@${cip}:Bitfiles/
 
 deploy: ts_MTVMS
-	@echo '[SCP] $^'
-	${co}scp $^ admin@${CRIO_IP}:
-	@echo '[SCP] FPGA/FPGA\ Bitfiles/VMS_6_Master.lvbitx'
-	${co}scp "FPGA/FPGA Bitfiles/VMS_6_Master.lvbitx" admin@${CRIO_IP}:Bitfiles
+	@$(foreach cip,${CRIO_IP},${MAKE} cip=${cip} deploy_target;)
 
 tests: tests/Makefile tests/*.cpp
 	@${MAKE} -C tests
