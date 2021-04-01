@@ -17,6 +17,11 @@
 #include <VMSPublisher.h>
 #include <unistd.h>
 
+#ifdef SIMULATOR
+#include <math.h>
+#include <chrono>
+#endif
+
 namespace LSST {
 namespace VMS {
 
@@ -179,9 +184,23 @@ int32_t FPGA::readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInM
 #ifndef SIMULATOR
     return NiFpga_ReadFifoSgl(session, sglResponseFIFO, data, length, timeoutInMs, &remaining);
 #else
-    for (size_t i = 0; i < length; i++) {
-        data[i] = (20.0 * static_cast<double>(random()) / RAND_MAX) - 10.0;
-        usleep(60);
+    static long count = 0;
+    static auto start = std::chrono::steady_clock::now();
+    for (size_t i = 0; i < length; i += 9) {
+        double cv = M_PI * static_cast<double>(count++);
+        // data are produced at ~1kHz (see sleep_for(1000))
+        // converts frequency into period and then sin/cos argument
+        // scales full sin period of 2*M_PI to into target frequency
+        auto frequency_to_period = [cv](double frequency) { return cv / (((1 / frequency) / 2) * 1000.0); };
+
+        double pv = 2.7 * sin(frequency_to_period(400)) + 6 * sin(frequency_to_period(200)) +
+                    1.5 * cos(frequency_to_period(100)) + 2 * sin(frequency_to_period(50)) +
+                    4 * sin(frequency_to_period(25)) + 3 * cos(frequency_to_period(12.5));
+        for (size_t ch = i; ch < i + 9; ch++) {
+            data[ch] = ((50.0 * static_cast<double>(random()) / RAND_MAX) - 25.0) + pv;
+        }
+        start += std::chrono::microseconds(1000);
+        std::this_thread::sleep_until(start);
     }
     return length;
 #endif
