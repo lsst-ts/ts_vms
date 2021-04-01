@@ -123,6 +123,8 @@ void Accelerometer::sampleData() {
         dataBufferIndex++;                                          \
         data->sensor3ZAcceleration[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
+        data->sensor4XAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        dataBufferIndex++;                                          \
         data->sensor4YAcceleration[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
         data->sensor4ZAcceleration[i] = sglBuffer[dataBufferIndex]; \
