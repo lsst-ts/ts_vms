@@ -181,16 +181,20 @@ void FPGA::readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInMs) 
     int channels = (mode < 2 ? 9 : 18);
     for (size_t i = 0; i < length; i += channels) {
         double cv = M_PI * static_cast<double>(count++);
-        // data are produced at ~1kHz (see sleep_for(1000))
-        // converts frequency into period and then sin/cos argument
-        // scales full sin period of 2*M_PI to into target frequency
+        // data are produced at 1kHz (see sleep_until) / 1 ms period
+        // scales target frequency into 0..2pi sin/cos period
         auto frequency_to_period = [cv](double frequency) { return cv / (((1 / frequency) / 2) * 1000.0); };
-
+        // introduce periodic signals with frequencies of 400, 200, 100, 50, 25 and 12.5 Hz
         double pv = 2.7 * sin(frequency_to_period(400)) + 6 * sin(frequency_to_period(200)) +
                     1.5 * cos(frequency_to_period(100)) + 2 * sin(frequency_to_period(50)) +
                     4 * sin(frequency_to_period(25)) + 3 * cos(frequency_to_period(12.5));
         for (size_t ch = i; ch < i + channels; ch++) {
             data[ch] = ((50.0 * static_cast<double>(random()) / RAND_MAX) - 25.0) + pv;
+        }
+        // high counts will be numerically unstable
+        // limit must be integer multiple of frequencies introduced
+        if (count == 40000) {
+            count = 0;
         }
         start += std::chrono::microseconds(1000);
         std::this_thread::sleep_until(start);
