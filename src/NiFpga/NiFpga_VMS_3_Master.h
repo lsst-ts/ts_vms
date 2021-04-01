@@ -1,13 +1,12 @@
 /*
- * Generated with the FPGA Interface C API Generator 16.0.0
- * for NI-RIO 16.0.0 or later.
+ * Generated with the FPGA Interface C API Generator 19.0
+ * for NI-RIO 19.0 or later.
  */
-
 #ifndef __NiFpga_VMS_3_Master_h__
 #define __NiFpga_VMS_3_Master_h__
 
 #ifndef NiFpga_Version
-   #define NiFpga_Version 1600
+   #define NiFpga_Version 190
 #endif
 
 #include "NiFpga.h"
@@ -24,7 +23,12 @@
 /**
  * The signature of the FPGA bitfile.
  */
-static const char* const NiFpga_VMS_3_Master_Signature = "A59152E6AA3DCB9FF65F328750DF2093";
+static const char* const NiFpga_VMS_3_Master_Signature = "11A26C4914A5DA9CE8B3267BCF3D742C";
+
+#if NiFpga_Cpp
+extern "C"
+{
+#endif
 
 typedef enum
 {
@@ -41,5 +45,10 @@ typedef enum
    NiFpga_VMS_3_Master_HostToTargetFifoU16_CommandFIFO = 3,
    NiFpga_VMS_3_Master_HostToTargetFifoU16_RequestFIFO = 2,
 } NiFpga_VMS_3_Master_HostToTargetFifoU16;
+
+
+#if NiFpga_Cpp
+}
+#endif
 
 #endif
