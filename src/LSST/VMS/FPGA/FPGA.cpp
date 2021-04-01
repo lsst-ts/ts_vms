@@ -161,6 +161,20 @@ void FPGA::readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInMs) 
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__,
                        NiFpga_ReadFifoSgl(session, sglResponseFIFO, data, length, timeoutInMs, &remaining));
+// enable this if you are looking for raw, at source accelerometers data
+#if 0
+    size_t i = length;
+    for (i = 0; i < length; i++)
+    {
+        if (data[i] != 0) {
+             SPDLOG_INFO("readSGLResponseFIFO {} {:.12f}", i, data[i]);
+             break;
+        }
+    }
+    if (i == length) {
+        SPDLOG_INFO("No data");
+    }
+#endif
 #else
     static long count = 0;
     static auto start = std::chrono::steady_clock::now();
