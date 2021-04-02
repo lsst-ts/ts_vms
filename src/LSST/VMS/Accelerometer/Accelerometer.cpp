@@ -81,23 +81,23 @@ void Accelerometer::sampleData() {
     data->timestamp = Timestamp::fromRaw(u64Buffer[0]);             \
     size_t dataBufferIndex = 0;                                     \
     for (size_t i = 0; i < MAX_SAMPLE_PER_PUBLISH; ++i) {           \
-        data->sensor1XAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationXSensor1[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor1YAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationYSensor1[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor1ZAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationZSensor1[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor2XAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationXSensor2[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor2YAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationYSensor2[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor2ZAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationZSensor2[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor3XAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationXSensor3[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor3YAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationYSensor3[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor3ZAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationZSensor3[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
     }
 
@@ -105,41 +105,41 @@ void Accelerometer::sampleData() {
     data->timestamp = Timestamp::fromRaw(u64Buffer[0]);             \
     size_t dataBufferIndex = 0;                                     \
     for (size_t i = 0; i < MAX_SAMPLE_PER_PUBLISH; ++i) {           \
-        data->sensor1XAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationXSensor1[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor1YAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationYSensor1[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor1ZAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationZSensor1[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor2XAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationXSensor2[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor2YAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationYSensor2[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor2ZAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationZSensor2[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor3XAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationXSensor3[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor3YAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationYSensor3[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor3ZAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationZSensor3[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor4XAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationXSensor4[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor4YAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationYSensor4[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor4ZAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationZSensor4[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor5XAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationXSensor5[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor5YAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationYSensor5[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor5ZAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationZSensor5[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor6XAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationXSensor6[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor6YAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationYSensor6[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
-        data->sensor6ZAcceleration[i] = sglBuffer[dataBufferIndex]; \
+        data->accelerationZSensor6[i] = sglBuffer[dataBufferIndex]; \
         dataBufferIndex++;                                          \
     }
 
