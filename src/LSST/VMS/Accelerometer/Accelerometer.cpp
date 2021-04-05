@@ -10,9 +10,8 @@
 #include <VMSPublisher.h>
 #include <spdlog/spdlog.h>
 #include <Timestamp.h>
-#include <VMSApplicationSettings.h>
 
-#define AXES_PER_SENSOR 3
+#define AXIS_PER_SENSOR 3
 #define MAX_SAMPLE_PER_PUBLISH 50
 
 namespace LSST {
@@ -21,10 +20,6 @@ namespace VMS {
 Accelerometer::Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplicationSettings) {
     SPDLOG_DEBUG("Accelerometer::Accelerometer()");
     fpga = _fpga;
-    m1m3Data = VMSPublisher::instance().getM1M3();
-    m2Data = VMSPublisher::instance().getM2();
-    cameraRotatorData = VMSPublisher::instance().getCameraRotator();
-    // tmaData = VMSPublisher::instance().getTMA();
 
     if (vmsApplicationSettings->Subsystem == "M1M3") {
         subsystem = M1M3;
@@ -58,113 +53,35 @@ void Accelerometer::disableAccelerometers() {
 
 void Accelerometer::sampleData() {
     SPDLOG_TRACE("Accelerometer: sampleData()");
+    uint64_t u64Buffer[MAX_SAMPLE_PER_PUBLISH];
+    float sglBuffer[numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH];
+
     fpga->writeRequestFIFO(FPGAAddresses::Accelerometers, 0);
     fpga->readU64ResponseFIFO(u64Buffer, MAX_SAMPLE_PER_PUBLISH, 30);
-    fpga->readSGLResponseFIFO(sglBuffer, numberOfSensors * AXES_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH, 500);
-    switch (subsystem) {
-        case M1M3:
-            processM1M3();
-            break;
-        case M2:
-            processM2();
-            break;
-        case CameraRotator:
-            processCameraRotator();
-            break;
-        case TMA:
-            processTMA();
-            break;
-    }
-}
+    fpga->readSGLResponseFIFO(sglBuffer, numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH, 500);
+    MTVMS_dataC data[numberOfSensors];
 
-#define SAMPLES_TO_SAL_3(data)                                      \
-    data->timestamp = Timestamp::fromRaw(u64Buffer[0]);             \
-    size_t dataBufferIndex = 0;                                     \
-    for (size_t i = 0; i < MAX_SAMPLE_PER_PUBLISH; ++i) {           \
-        data->accelerationXSensor1[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationYSensor1[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationZSensor1[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationXSensor2[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationYSensor2[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationZSensor2[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationXSensor3[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationYSensor3[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationZSensor3[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
+    for (int s = 0; s < numberOfSensors; s++) {
+        data[s].timestamp = Timestamp::fromRaw(u64Buffer[0]);
+        data[s].sensor = s + 1;
     }
 
-#define SAMPLES_TO_SAL_6(data)                                      \
-    data->timestamp = Timestamp::fromRaw(u64Buffer[0]);             \
-    size_t dataBufferIndex = 0;                                     \
-    for (size_t i = 0; i < MAX_SAMPLE_PER_PUBLISH; ++i) {           \
-        data->accelerationXSensor1[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationYSensor1[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationZSensor1[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationXSensor2[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationYSensor2[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationZSensor2[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationXSensor3[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationYSensor3[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationZSensor3[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationXSensor4[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationYSensor4[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationZSensor4[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationXSensor5[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationYSensor5[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationZSensor5[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationXSensor6[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationYSensor6[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
-        data->accelerationZSensor6[i] = sglBuffer[dataBufferIndex]; \
-        dataBufferIndex++;                                          \
+    float *dataBuffer = sglBuffer;
+
+    for (int i = 0; i < MAX_SAMPLE_PER_PUBLISH; i++) {
+        for (int s = 0; s < numberOfSensors; s++) {
+            data[s].accelerationX[i] = *dataBuffer;
+            dataBuffer++;
+            data[s].accelerationY[i] = *dataBuffer;
+            dataBuffer++;
+            data[s].accelerationZ[i] = *dataBuffer;
+            dataBuffer++;
+        }
     }
 
-void Accelerometer::processM1M3() {
-    SPDLOG_TRACE("Accelerometer: processM1M3()");
-    SAMPLES_TO_SAL_3(m1m3Data);
-    VMSPublisher::instance().putM1M3();
-}
-
-void Accelerometer::processM2() {
-    SPDLOG_TRACE("Accelerometer: processM2()");
-    SAMPLES_TO_SAL_6(m2Data);
-    VMSPublisher::instance().putM2();
-}
-
-void Accelerometer::processCameraRotator() {
-    SPDLOG_TRACE("Accelerometer: processCameraRotator()");
-    SAMPLES_TO_SAL_3(cameraRotatorData);
-    VMSPublisher::instance().putM2();
-}
-
-void Accelerometer::processTMA() {
-    SPDLOG_ERROR("Accelerometer: processTMA()");
-    // SAMPLES_TO_SAL_3(tmaData);
-    // VMSPublisher::instance().putTMA();
+    for (int s = 0; s < numberOfSensors; s++) {
+        VMSPublisher::instance().putData(&(data[s]));
+    }
 }
 
 } /* namespace VMS */

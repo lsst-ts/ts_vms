@@ -112,6 +112,18 @@ void processArgs(int argc, char* const argv[], const char*& configRoot) {
     setSinks("init");
 }
 
+short getIndex(const std::string subsystem) {
+    const char* subsystems[] = {"M1M3", "M2", "cameraRotator", NULL};
+    short index = 1;
+    for (const char** s = subsystems; *s != NULL; s++, index++) {
+        if (subsystem == *s) {
+            return index;
+        }
+    }
+    SPDLOG_CRITICAL("Unknown subsystem {}", subsystem);
+    exit(EXIT_FAILURE);
+}
+
 int main(int argc, char** argv) {
     const char* configRoot = "/usr/ts_VMS/SettingFiles/Base/";
 
@@ -127,11 +139,13 @@ int main(int argc, char** argv) {
     SettingReader settingReader = SettingReader(configRoot);
     SPDLOG_INFO("Main: Loading VMS application settings");
     VMSApplicationSettings* vmsApplicationSettings = settingReader.loadVMSApplicationSettings();
-    SPDLOG_INFO("Subsystem: {}, IsMaster: {}", vmsApplicationSettings->Subsystem.c_str(),
+
+    short index = getIndex(vmsApplicationSettings->Subsystem);
+    SPDLOG_INFO("Subsystem: {}, Index: {}, IsMaster: {}", vmsApplicationSettings->Subsystem.c_str(), index,
                 vmsApplicationSettings->IsMaster);
 
     SPDLOG_INFO("Main: Initializing VMS SAL");
-    std::shared_ptr<SAL_MTVMS> vmsSAL = std::make_shared<SAL_MTVMS>();
+    std::shared_ptr<SAL_MTVMS> vmsSAL = std::make_shared<SAL_MTVMS>(index);
     vmsSAL->setDebugLevel(0);
 
     sinks.push_back(std::make_shared<SALSink_mt>(vmsSAL));

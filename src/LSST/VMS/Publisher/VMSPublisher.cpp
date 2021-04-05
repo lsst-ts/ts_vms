@@ -23,10 +23,7 @@ void VMSPublisher::setSAL(std::shared_ptr<SAL_MTVMS> sal) {
     SPDLOG_DEBUG("VMSPublisher::setSAL()");
     vmsSAL = sal;
 
-    vmsSAL->salTelemetryPub((char *)"MTVMS_m1m3");
-    vmsSAL->salTelemetryPub((char *)"MTVMS_m2");
-    vmsSAL->salTelemetryPub((char *)"MTVMS_cameraRotator");
-    // vmsSAL->salTelemetryPub((char *)"MTVMS_tma");
+    vmsSAL->salTelemetryPub((char *)"MTVMS_data");
 }
 
 double VMSPublisher::getTimestamp() { return vmsSAL->getCurrentTime(); }
