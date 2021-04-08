@@ -4,9 +4,9 @@ ifndef VERBOSE
 endif
 
 ifdef DEBUG
-  c_opts := -g
+  c_opts := -g -DSAL_SUBSYSTEM_ID_IS_KEYED
 else
-  c_opts := -O3
+  c_opts := -O3 -DSAL_SUBSYSTEM_ID_IS_KEYED
 endif
 
 ifdef SIMULATOR

@@ -112,9 +112,9 @@ void processArgs(int argc, char* const argv[], const char*& configRoot) {
     setSinks("init");
 }
 
-short getIndex(const std::string subsystem) {
+int getIndex(const std::string subsystem) {
     const char* subsystems[] = {"M1M3", "M2", "cameraRotator", NULL};
-    short index = 1;
+    int index = 1;
     for (const char** s = subsystems; *s != NULL; s++, index++) {
         if (subsystem == *s) {
             return index;
@@ -140,7 +140,7 @@ int main(int argc, char** argv) {
     SPDLOG_INFO("Main: Loading VMS application settings");
     VMSApplicationSettings* vmsApplicationSettings = settingReader.loadVMSApplicationSettings();
 
-    short index = getIndex(vmsApplicationSettings->Subsystem);
+    int index = getIndex(vmsApplicationSettings->Subsystem);
     SPDLOG_INFO("Subsystem: {}, Index: {}, IsMaster: {}", vmsApplicationSettings->Subsystem.c_str(), index,
                 vmsApplicationSettings->IsMaster);
 
