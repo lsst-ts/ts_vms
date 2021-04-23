@@ -18,7 +18,6 @@ class VMSApplicationSettings {
 public:
     std::string Subsystem;
     bool IsMaster;
-    int NumberOfSensors;
     std::vector<double> XCoefficients;
     std::vector<double> YCoefficients;
     std::vector<double> ZCoefficients;

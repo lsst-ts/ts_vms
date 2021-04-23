@@ -9,23 +9,34 @@
 #include <FPGAAddresses.h>
 #include <VMSPublisher.h>
 #include <spdlog/spdlog.h>
-#include <SAL_MTVMSC.h>
 #include <Timestamp.h>
-#include <VMSApplicationSettings.h>
 
-#define AXES_PER_SENSOR 3
+#define AXIS_PER_SENSOR 3
 #define MAX_SAMPLE_PER_PUBLISH 50
 
 namespace LSST {
 namespace VMS {
 
-Accelerometer::Accelerometer(FPGA *_fpga, VMSApplicationSettings *_vmsApplicationSettings) {
+Accelerometer::Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplicationSettings) {
     SPDLOG_DEBUG("Accelerometer::Accelerometer()");
     fpga = _fpga;
-    vmsApplicationSettings = _vmsApplicationSettings;
-    m1m3Data = VMSPublisher::instance().getM1M3();
-    m2Data = VMSPublisher::instance().getM2();
-    tmaData = VMSPublisher::instance().getTMA();
+
+    if (vmsApplicationSettings->Subsystem == "M1M3") {
+        subsystem = M1M3;
+        numberOfSensors = 3;
+    } else if (vmsApplicationSettings->Subsystem == "M2") {
+        subsystem = M2;
+        numberOfSensors = 6;
+    } else if (vmsApplicationSettings->Subsystem == "CameraRotator") {
+        subsystem = CameraRotator;
+        numberOfSensors = 3;
+    } else if (vmsApplicationSettings->Subsystem == "TMA") {
+        subsystem = TMA;
+        numberOfSensors = 3;
+    } else {
+        SPDLOG_ERROR("Unknown subsystem: {}", vmsApplicationSettings->Subsystem);
+        exit(EXIT_FAILURE);
+    }
 }
 
 void Accelerometer::enableAccelerometers() {
@@ -42,59 +53,35 @@ void Accelerometer::disableAccelerometers() {
 
 void Accelerometer::sampleData() {
     SPDLOG_TRACE("Accelerometer: sampleData()");
+    uint64_t u64Buffer[MAX_SAMPLE_PER_PUBLISH];
+    float sglBuffer[numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH];
+
     fpga->writeRequestFIFO(FPGAAddresses::Accelerometers, 0);
-    fpga->readU64ResponseFIFO(u64Buffer, MAX_SAMPLE_PER_PUBLISH, 15);
-    fpga->readSGLResponseFIFO(
-            sglBuffer, vmsApplicationSettings->NumberOfSensors * AXES_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH,
-            100);
-    if (vmsApplicationSettings->Subsystem == "M1M3") {
-        processM1M3();
-    } else if (vmsApplicationSettings->Subsystem == "M2") {
-        processM2();
-    } else if (vmsApplicationSettings->Subsystem == "TMA") {
-        processTMA();
+    fpga->readU64ResponseFIFO(u64Buffer, MAX_SAMPLE_PER_PUBLISH, 30);
+    fpga->readSGLResponseFIFO(sglBuffer, numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH, 500);
+    MTVMS_dataC data[numberOfSensors];
+
+    for (int s = 0; s < numberOfSensors; s++) {
+        data[s].timestamp = Timestamp::fromRaw(u64Buffer[0]);
+        data[s].sensor = s + 1;
     }
-}
 
-void Accelerometer::processM1M3() {
-    SPDLOG_TRACE("Accelerometer: processM1M3()");
-    m1m3Data->timestamp = Timestamp::fromRaw(u64Buffer[0]);
-    int32_t dataBufferIndex = 0;
-    for (int i = 0; i < MAX_SAMPLE_PER_PUBLISH; ++i) {
-        m1m3Data->sensor1XAcceleration[i] = sglBuffer[dataBufferIndex];
-        dataBufferIndex++;
-        m1m3Data->sensor1YAcceleration[i] = sglBuffer[dataBufferIndex];
-        dataBufferIndex++;
-        m1m3Data->sensor1ZAcceleration[i] = sglBuffer[dataBufferIndex];
-        dataBufferIndex++;
-        m1m3Data->sensor2XAcceleration[i] = sglBuffer[dataBufferIndex];
-        dataBufferIndex++;
-        m1m3Data->sensor2YAcceleration[i] = sglBuffer[dataBufferIndex];
-        dataBufferIndex++;
-        m1m3Data->sensor2ZAcceleration[i] = sglBuffer[dataBufferIndex];
-        dataBufferIndex++;
-        m1m3Data->sensor3XAcceleration[i] = sglBuffer[dataBufferIndex];
-        dataBufferIndex++;
-        m1m3Data->sensor3YAcceleration[i] = sglBuffer[dataBufferIndex];
-        dataBufferIndex++;
-        m1m3Data->sensor3ZAcceleration[i] = sglBuffer[dataBufferIndex];
-        dataBufferIndex++;
+    float *dataBuffer = sglBuffer;
+
+    for (int i = 0; i < MAX_SAMPLE_PER_PUBLISH; i++) {
+        for (int s = 0; s < numberOfSensors; s++) {
+            data[s].accelerationX[i] = *dataBuffer;
+            dataBuffer++;
+            data[s].accelerationY[i] = *dataBuffer;
+            dataBuffer++;
+            data[s].accelerationZ[i] = *dataBuffer;
+            dataBuffer++;
+        }
     }
-    VMSPublisher::instance().putM1M3();
-}
 
-void Accelerometer::processM2() {
-    SPDLOG_INFO("Accelerometer: processM2()");
-    m2Data->timestamp = Timestamp::fromRaw(u64Buffer[0]);
-    // TODO: Populate M2
-    VMSPublisher::instance().putM2();
-}
-
-void Accelerometer::processTMA() {
-    SPDLOG_INFO("Accelerometer: processTMA()");
-    tmaData->timestamp = Timestamp::fromRaw(u64Buffer[0]);
-    // TODO: Populate TMA
-    VMSPublisher::instance().putTMA();
+    for (int s = 0; s < numberOfSensors; s++) {
+        VMSPublisher::instance().putData(&(data[s]));
+    }
 }
 
 } /* namespace VMS */

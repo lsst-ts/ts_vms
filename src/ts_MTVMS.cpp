@@ -13,6 +13,7 @@
 #include <Accelerometer.h>
 #include <FPGAAddresses.h>
 
+#include <cRIO/NiError.h>
 #include <cRIO/SALSink.h>
 
 #include <spdlog/spdlog.h>
@@ -25,6 +26,7 @@
 #include <signal.h>
 
 using namespace std;
+using namespace LSST;
 using namespace LSST::VMS;
 
 SALSinkMacro(MTVMS);
@@ -54,8 +56,8 @@ void sigKill(int signal) {
 
 std::vector<spdlog::sink_ptr> sinks;
 
-void setSinks() {
-    auto logger = std::make_shared<spdlog::async_logger>("MTM1M3", sinks.begin(), sinks.end(),
+void setSinks(std::string subsystem) {
+    auto logger = std::make_shared<spdlog::async_logger>("MTVMS " + subsystem, sinks.begin(), sinks.end(),
                                                          spdlog::thread_pool(),
                                                          spdlog::async_overflow_policy::block);
     spdlog::set_default_logger(logger);
@@ -107,7 +109,19 @@ void processArgs(int argc, char* const argv[], const char*& configRoot) {
         sinks.push_back(daily_sink);
     }
 
-    setSinks();
+    setSinks("init");
+}
+
+int getIndex(const std::string subsystem) {
+    const char* subsystems[] = {"M1M3", "M2", "cameraRotator", NULL};
+    int index = 1;
+    for (const char** s = subsystems; *s != NULL; s++, index++) {
+        if (subsystem == *s) {
+            return index;
+        }
+    }
+    SPDLOG_CRITICAL("Unknown subsystem {}", subsystem);
+    exit(EXIT_FAILURE);
 }
 
 int main(int argc, char** argv) {
@@ -125,57 +139,55 @@ int main(int argc, char** argv) {
     SettingReader settingReader = SettingReader(configRoot);
     SPDLOG_INFO("Main: Loading VMS application settings");
     VMSApplicationSettings* vmsApplicationSettings = settingReader.loadVMSApplicationSettings();
-    SPDLOG_INFO("Subsystem: {}, IsMaster: {}, NumberOfSensors: {}", vmsApplicationSettings->Subsystem.c_str(),
-                vmsApplicationSettings->IsMaster, vmsApplicationSettings->NumberOfSensors);
+
+    int index = getIndex(vmsApplicationSettings->Subsystem);
+    SPDLOG_INFO("Subsystem: {}, Index: {}, IsMaster: {}", vmsApplicationSettings->Subsystem.c_str(), index,
+                vmsApplicationSettings->IsMaster);
 
     SPDLOG_INFO("Main: Initializing VMS SAL");
-    std::shared_ptr<SAL_MTVMS> vmsSAL = std::make_shared<SAL_MTVMS>();
+    std::shared_ptr<SAL_MTVMS> vmsSAL = std::make_shared<SAL_MTVMS>(index);
     vmsSAL->setDebugLevel(0);
 
     sinks.push_back(std::make_shared<SALSink_mt>(vmsSAL));
-    setSinks();
+    setSinks(vmsApplicationSettings->Subsystem);
 
     SPDLOG_INFO("Main: Setting publisher");
     VMSPublisher::instance().setSAL(vmsSAL);
 
     SPDLOG_INFO("Main: Creating fpga");
     FPGA fpga = FPGA(vmsApplicationSettings);
-    if (fpga.isErrorCode(fpga.initialize())) {
-        SPDLOG_CRITICAL("Main: Error initializing FPGA");
+
+    try {
+        fpga.initialize();
+        fpga.open();
+        SPDLOG_INFO("Main: Creating accelerometer");
+        Accelerometer accelerometer = Accelerometer(&fpga, vmsApplicationSettings);
+
+        signal(SIGKILL, sigKill);
+        signal(SIGINT, sigKill);
+        // TODO: This is a non-commandable component so there isn't really a way to cleanly shutdown the
+        // software
+        SPDLOG_INFO("Main: Sample loop start");
+        while (runLoop) {
+            fpga.waitForOuterLoopClock(105);
+            SPDLOG_TRACE("Main: Outer loop iteration start");
+            accelerometer.sampleData();
+            fpga.setTimestamp(VMSPublisher::instance().getTimestamp());
+            fpga.ackOuterLoopClock();
+        }
+
+        fpga.close();
+        fpga.finalize();
+    } catch (cRIO::NiError& nie) {
+        SPDLOG_CRITICAL("Error starting or stopping FPG: {}", nie.what());
+        fpga.finalize();
         vmsSAL->salShutdown();
         return -1;
-    }
-    if (fpga.isErrorCode(fpga.open())) {
-        SPDLOG_CRITICAL("Main: Error opening FPGA");
-        vmsSAL->salShutdown();
-        return -1;
-    }
-    SPDLOG_INFO("Main: Creating accelerometer");
-    Accelerometer accelerometer = Accelerometer(&fpga, vmsApplicationSettings);
-
-    signal(SIGKILL, sigKill);
-    signal(SIGINT, sigKill);
-    // TODO: This is a non-commandable component so there isn't really a way to cleanly shutdown the software
-    SPDLOG_INFO("Main: Sample loop start");
-    while (runLoop) {
-        fpga.waitForOuterLoopClock(105);
-        SPDLOG_TRACE("Main: Outer loop iteration start");
-        accelerometer.sampleData();
-        fpga.setTimestamp(VMSPublisher::instance().getTimestamp());
-        fpga.ackOuterLoopClock();
-    }
-
-    if (fpga.isErrorCode(fpga.close())) {
-        SPDLOG_ERROR("Main: Error closing fpga");
-    }
-
-    if (fpga.isErrorCode(fpga.finalize())) {
-        SPDLOG_ERROR("Main: Error finalizing fpga");
     }
 
     SPDLOG_INFO("Main: Shutting down VMS SAL");
     sinks.pop_back();
-    setSinks();
+    setSinks("done");
     usleep(1000);
     vmsSAL->salShutdown();
 

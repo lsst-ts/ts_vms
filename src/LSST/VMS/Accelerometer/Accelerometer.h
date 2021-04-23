@@ -10,17 +10,15 @@
 
 #include <DataTypes.h>
 #include <FPGA.h>
-#include <SAL_MTVMSC.h>
-
-struct MTVMS_m1m3C;
-struct MTVMS_m2C;
-struct MTVMS_tmaC;
+#include <SAL_MTVMS.h>
+#include <VMSApplicationSettings.h>
 
 namespace LSST {
 namespace VMS {
 
-class VMSApplicationSettings;
-
+/**
+ * VMS Accelerometer sampling.
+ */
 class Accelerometer {
 public:
     Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplicationSettings);
@@ -31,19 +29,11 @@ public:
     void sampleData();
 
 private:
-    void processM1M3();
-    void processM2();
-    void processTMA();
-
     FPGA *fpga;
-    VMSApplicationSettings *vmsApplicationSettings;
 
-    MTVMS_m1m3C *m1m3Data;
-    MTVMS_m2C *m2Data;
-    MTVMS_tmaC *tmaData;
+    enum { M1M3, M2, CameraRotator, TMA } subsystem;
 
-    uint64_t u64Buffer[1024];
-    float sglBuffer[2048];
+    int numberOfSensors;
 };
 
 } /* namespace VMS */
