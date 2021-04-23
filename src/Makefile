@@ -26,7 +26,6 @@ M1M3_CPPFLAGS := -I. \
 	-I"LSST/VMS/Settings" \
 	-I"LSST/VMS/Utility" \
 	-I"NiFpga" \
-	-I"pugixml" \
 	-DVERSION="\"$(VERSION)\""
 
 

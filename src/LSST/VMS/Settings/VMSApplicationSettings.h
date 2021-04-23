@@ -18,6 +18,7 @@ class VMSApplicationSettings {
 public:
     std::string Subsystem;
     bool IsMaster;
+    std::string RIO;
     std::vector<double> XCoefficients;
     std::vector<double> YCoefficients;
     std::vector<double> ZCoefficients;
@@ -26,9 +27,6 @@ public:
     std::vector<double> ZOffsets;
 
     void load(const std::string &filename);
-
-private:
-    void loadVector(std::vector<double> *vector, std::string text);
 };
 
 } /* namespace VMS */

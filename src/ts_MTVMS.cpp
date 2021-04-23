@@ -115,7 +115,7 @@ void processArgs(int argc, char* const argv[], const char*& configRoot) {
 int getIndex(const std::string subsystem) {
     const char* subsystems[] = {"M1M3", "M2", "cameraRotator", NULL};
     int index = 1;
-    for (const char** s = subsystems; *s != NULL; s++, index++) {
+    for (const char **s = subsystems; *s != NULL; s++, index++) {
         if (subsystem == *s) {
             return index;
         }
@@ -141,8 +141,8 @@ int main(int argc, char** argv) {
     VMSApplicationSettings* vmsApplicationSettings = settingReader.loadVMSApplicationSettings();
 
     int index = getIndex(vmsApplicationSettings->Subsystem);
-    SPDLOG_INFO("Subsystem: {}, Index: {}, IsMaster: {}", vmsApplicationSettings->Subsystem.c_str(), index,
-                vmsApplicationSettings->IsMaster);
+    SPDLOG_INFO("Subsystem: {}, Index: {}, IsMaster: {}, RIO: {}", vmsApplicationSettings->Subsystem.c_str(),
+                index, vmsApplicationSettings->IsMaster, vmsApplicationSettings->RIO);
 
     SPDLOG_INFO("Main: Initializing VMS SAL");
     std::shared_ptr<SAL_MTVMS> vmsSAL = std::make_shared<SAL_MTVMS>(index);

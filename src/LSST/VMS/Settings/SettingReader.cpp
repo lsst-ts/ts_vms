@@ -17,8 +17,9 @@ SettingReader::SettingReader(std::string _basePath) {
 }
 
 VMSApplicationSettings *SettingReader::loadVMSApplicationSettings() {
-    SPDLOG_DEBUG("SettingReader: loadVMSApplicationSettings()");
-    vmsApplicationSettings.load(getBasePath("VMSApplicationSettings.xml").c_str());
+    std::string applicationSettingsFile = getBasePath("/VMSApplicationSettings.yaml");
+    SPDLOG_DEBUG("SettingReader: loadVMSApplicationSettings({})", applicationSettingsFile);
+    vmsApplicationSettings.load(applicationSettingsFile);
     return &this->vmsApplicationSettings;
 }
 
