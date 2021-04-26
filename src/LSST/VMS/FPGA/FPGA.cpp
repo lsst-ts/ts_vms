@@ -13,6 +13,7 @@
 #include <NiFpga_VMS_3_Slave.h>
 #include <NiFpga_VMS_6_Master.h>
 #include <NiFpga_VMS_6_Slave.h>
+#include <NiFpga_VMS_CameraRotator.h>
 #include <Timestamp.h>
 #include <VMSApplicationSettings.h>
 #include <VMSPublisher.h>
@@ -26,31 +27,30 @@
 namespace LSST {
 namespace VMS {
 
+#define POPULATE_FPGA(type)                                                     \
+    _bitFile = "/usr/ts_VMS/" NiFpga_VMS_##type##_Bitfile;                      \
+    _signature = NiFpga_VMS_##type##_Signature;                                 \
+    _commandFIFO = NiFpga_VMS_##type##_HostToTargetFifoU16_CommandFIFO;         \
+    _requestFIFO = NiFpga_VMS_##type##_HostToTargetFifoU16_RequestFIFO;         \
+    _u64ResponseFIFO = NiFpga_VMS_##type##_TargetToHostFifoU64_U64ResponseFIFO; \
+    _sglResponseFIFO = NiFpga_VMS_##type##_TargetToHostFifoSgl_SGLResponseFIFO;
+
 FPGA::FPGA(VMSApplicationSettings *vmsApplicationSettings) {
     SPDLOG_TRACE("FPGA::FPGA()");
     _vmsApplicationSettings = vmsApplicationSettings;
     session = 0;
     remaining = 0;
     outerLoopIRQContext = 0;
-    if (_vmsApplicationSettings->IsMaster) {
-        if (_vmsApplicationSettings->Subsystem != "M2") {
-            mode = 0;
-        } else {
-            mode = 2;
-        }
-    } else {
-        if (_vmsApplicationSettings->Subsystem != "M2") {
-            mode = 1;
-        } else {
-            mode = 3;
-        }
+    if (_vmsApplicationSettings->Subsystem == "CameraRotator") {
+        _channels = 3;
+        POPULATE_FPGA(CameraRotator);
+    } else if (_vmsApplicationSettings->Subsystem == "M2") {
+        _channels = 6;
+        POPULATE_FPGA(6_Master);
+    } else if (_vmsApplicationSettings->Subsystem == "M1M3") {
+        _channels = 3;
+        POPULATE_FPGA(3_Master);
     }
-    bitFile = getBitFile();
-    signature = getSignature();
-    commandFIFO = getCommandFIFO();
-    requestFIFO = getRequestFIFO();
-    u64ResponseFIFO = getU64ResponseFIFO();
-    sglResponseFIFO = getSGLResponseFIFO();
 }
 
 void FPGA::initialize() {
@@ -61,15 +61,15 @@ void FPGA::initialize() {
 }
 
 void FPGA::open() {
-    SPDLOG_DEBUG("FPGA: open({},{},{})", bitFile, signature, _vmsApplicationSettings->RIO);
+    SPDLOG_DEBUG("FPGA: open({},{},{})", _bitFile, _signature, _vmsApplicationSettings->RIO);
 #ifndef SIMULATOR
-    cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_Open(bitFile, signature, _vmsApplicationSettings->RIO.c_str(), 0, &(session)));
+    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Open(_bitFile, _signature,
+                                                        _vmsApplicationSettings->RIO.c_str(), 0, &(session)));
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Abort(session));
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Download(session));
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Reset(session));
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Run(session, 0));
-    std::this_thread::sleep_for(std::chrono::seconds(mode < 2 ? 1 : 3));
+    std::this_thread::sleep_for(std::chrono::seconds(_channels == 3 ? 1 : 3));
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_ReserveIrqContext(session, &outerLoopIRQContext));
 #endif
 }
@@ -128,7 +128,7 @@ void FPGA::writeCommandFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs)
     SPDLOG_TRACE("FPGA: writeCommandFIFO({})", length);
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_WriteFifoU16(session, commandFIFO, data, length, timeoutInMs, &remaining));
+                       NiFpga_WriteFifoU16(session, _commandFIFO, data, length, timeoutInMs, &remaining));
 #endif
 }
 
@@ -136,7 +136,7 @@ void FPGA::writeRequestFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs)
     SPDLOG_TRACE("FPGA: writeRequestFIFO(Length = {})", length);
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_WriteFifoU16(session, requestFIFO, data, length, timeoutInMs, &remaining));
+                       NiFpga_WriteFifoU16(session, _requestFIFO, data, length, timeoutInMs, &remaining));
 #endif
 }
 
@@ -149,7 +149,7 @@ void FPGA::readU64ResponseFIFO(uint64_t *data, size_t length, int32_t timeoutInM
     SPDLOG_TRACE("FPGA: readU64ResponseFIFO({})", length);
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_ReadFifoU64(session, u64ResponseFIFO, data, length, timeoutInMs, &remaining));
+                       NiFpga_ReadFifoU64(session, _u64ResponseFIFO, data, length, timeoutInMs, &remaining));
 #else
     for (size_t i = 0; i < length; i++) {
         data[i] = Timestamp::toRaw(VMSPublisher::instance().getTimestamp());
@@ -161,9 +161,9 @@ void FPGA::readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInMs) 
     SPDLOG_TRACE("FPGA: readSGLResponseFIFO({})", length);
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_ReadFifoSgl(session, sglResponseFIFO, data, length, timeoutInMs, &remaining));
+                       NiFpga_ReadFifoSgl(session, _sglResponseFIFO, data, length, timeoutInMs, &remaining));
 // enable this if you are looking for raw, at source accelerometers data
-#if 1
+#if 0
     size_t i = length;
     for (i = 0; i < length; i++) {
         if (data[i] != 0) {
@@ -178,7 +178,7 @@ void FPGA::readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInMs) 
 #else
     static long count = 0;
     static auto start = std::chrono::steady_clock::now();
-    int channels = (mode < 2 ? 9 : 18);
+    int channels = _channels * 3;
     for (size_t i = 0; i < length; i += channels) {
         double cv = M_PI * static_cast<double>(count++);
         // data are produced at 1kHz (see sleep_until) / 1 ms period
@@ -200,84 +200,6 @@ void FPGA::readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInMs) 
         std::this_thread::sleep_until(start);
     }
 #endif
-}
-
-char *FPGA::getBitFile() {
-    switch (mode) {
-        case 1:
-            return (char *)"/usr/ts_VMS/" NiFpga_VMS_3_Slave_Bitfile;
-        case 2:
-            return (char *)"/usr/ts_VMS/" NiFpga_VMS_6_Master_Bitfile;
-        case 3:
-            return (char *)"/usr/ts_VMS/" NiFpga_VMS_6_Slave_Bitfile;
-        default:
-            return (char *)"/usr/ts_VMS/" NiFpga_VMS_3_Master_Bitfile;
-    }
-}
-
-const char *FPGA::getSignature() {
-    switch (mode) {
-        case 1:
-            return NiFpga_VMS_3_Slave_Signature;
-        case 2:
-            return NiFpga_VMS_6_Master_Signature;
-        case 3:
-            return NiFpga_VMS_6_Slave_Signature;
-        default:
-            return NiFpga_VMS_3_Master_Signature;
-    }
-}
-
-uint32_t FPGA::getCommandFIFO() {
-    switch (mode) {
-        case 1:
-            return NiFpga_VMS_3_Slave_HostToTargetFifoU16_CommandFIFO;
-        case 2:
-            return NiFpga_VMS_6_Master_HostToTargetFifoU16_CommandFIFO;
-        case 3:
-            return NiFpga_VMS_6_Slave_HostToTargetFifoU16_CommandFIFO;
-        default:
-            return NiFpga_VMS_3_Master_HostToTargetFifoU16_CommandFIFO;
-    }
-}
-
-uint32_t FPGA::getRequestFIFO() {
-    switch (mode) {
-        case 1:
-            return NiFpga_VMS_3_Slave_HostToTargetFifoU16_RequestFIFO;
-        case 2:
-            return NiFpga_VMS_6_Master_HostToTargetFifoU16_RequestFIFO;
-        case 3:
-            return NiFpga_VMS_6_Slave_HostToTargetFifoU16_RequestFIFO;
-        default:
-            return NiFpga_VMS_3_Master_HostToTargetFifoU16_RequestFIFO;
-    }
-}
-
-uint32_t FPGA::getU64ResponseFIFO() {
-    switch (mode) {
-        case 1:
-            return NiFpga_VMS_3_Slave_TargetToHostFifoU64_U64ResponseFIFO;
-        case 2:
-            return NiFpga_VMS_6_Master_TargetToHostFifoU64_U64ResponseFIFO;
-        case 3:
-            return NiFpga_VMS_6_Slave_TargetToHostFifoU64_U64ResponseFIFO;
-        default:
-            return NiFpga_VMS_3_Master_TargetToHostFifoU64_U64ResponseFIFO;
-    }
-}
-
-uint32_t FPGA::getSGLResponseFIFO() {
-    switch (mode) {
-        case 1:
-            return NiFpga_VMS_3_Slave_TargetToHostFifoSgl_SGLResponseFIFO;
-        case 2:
-            return NiFpga_VMS_6_Master_TargetToHostFifoSgl_SGLResponseFIFO;
-        case 3:
-            return NiFpga_VMS_6_Slave_TargetToHostFifoSgl_SGLResponseFIFO;
-        default:
-            return NiFpga_VMS_3_Master_TargetToHostFifoSgl_SGLResponseFIFO;
-    }
 }
 
 } /* namespace VMS */

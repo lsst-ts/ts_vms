@@ -39,24 +39,17 @@ public:
     void readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInMs);
 
 private:
-    char *getBitFile();
-    const char *getSignature();
-    uint32_t getCommandFIFO();
-    uint32_t getRequestFIFO();
-    uint32_t getU64ResponseFIFO();
-    uint32_t getSGLResponseFIFO();
-
     VMSApplicationSettings *_vmsApplicationSettings;
     uint32_t session;
     size_t remaining;
     NiFpga_IrqContext outerLoopIRQContext;
-    int32_t mode;
-    char *bitFile;
-    const char *signature;
-    uint32_t commandFIFO;
-    uint32_t requestFIFO;
-    uint32_t u64ResponseFIFO;
-    uint32_t sglResponseFIFO;
+    uint8_t _channels;
+    const char *_bitFile;
+    const char *_signature;
+    uint32_t _commandFIFO;
+    uint32_t _requestFIFO;
+    uint32_t _u64ResponseFIFO;
+    uint32_t _sglResponseFIFO;
 };
 
 }  // namespace VMS

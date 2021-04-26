@@ -179,7 +179,7 @@ int main(int argc, char** argv) {
         fpga.close();
         fpga.finalize();
     } catch (cRIO::NiError& nie) {
-        SPDLOG_CRITICAL("Error starting or stopping FPG: {}", nie.what());
+        SPDLOG_CRITICAL("Error starting or stopping FPGA: {}", nie.what());
         fpga.finalize();
         vmsSAL->salShutdown();
         return -1;
