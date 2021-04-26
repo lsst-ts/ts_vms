@@ -163,7 +163,7 @@ void FPGA::readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInMs) 
     cRIO::NiThrowError(__PRETTY_FUNCTION__,
                        NiFpga_ReadFifoSgl(session, _sglResponseFIFO, data, length, timeoutInMs, &remaining));
 // enable this if you are looking for raw, at source accelerometers data
-#if 0
+#if 1
     size_t i = length;
     for (i = 0; i < length; i++) {
         if (data[i] != 0) {
