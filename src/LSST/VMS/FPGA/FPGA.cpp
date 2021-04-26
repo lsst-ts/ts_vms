@@ -27,19 +27,19 @@ namespace LSST {
 namespace VMS {
 
 FPGA::FPGA(VMSApplicationSettings *vmsApplicationSettings) {
-    SPDLOG_DEBUG("FPGA::FPGA()");
-    vmsApplicationSettings = vmsApplicationSettings;
+    SPDLOG_TRACE("FPGA::FPGA()");
+    _vmsApplicationSettings = vmsApplicationSettings;
     session = 0;
     remaining = 0;
     outerLoopIRQContext = 0;
-    if (vmsApplicationSettings->IsMaster) {
-        if (vmsApplicationSettings->Subsystem != "M2") {
+    if (_vmsApplicationSettings->IsMaster) {
+        if (_vmsApplicationSettings->Subsystem != "M2") {
             mode = 0;
         } else {
             mode = 2;
         }
     } else {
-        if (vmsApplicationSettings->Subsystem != "M2") {
+        if (_vmsApplicationSettings->Subsystem != "M2") {
             mode = 1;
         } else {
             mode = 3;
@@ -61,9 +61,10 @@ void FPGA::initialize() {
 }
 
 void FPGA::open() {
-    SPDLOG_DEBUG("FPGA: open() {} {}", bitFile, signature);
+    SPDLOG_DEBUG("FPGA: open({},{},{})", bitFile, signature, _vmsApplicationSettings->RIO);
 #ifndef SIMULATOR
-    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Open(bitFile, signature, "RIO0", 0, &(session)));
+    cRIO::NiThrowError(__PRETTY_FUNCTION__,
+                       NiFpga_Open(bitFile, signature, _vmsApplicationSettings->RIO.c_str(), 0, &(session)));
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Abort(session));
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Download(session));
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Reset(session));
@@ -162,13 +163,12 @@ void FPGA::readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInMs) 
     cRIO::NiThrowError(__PRETTY_FUNCTION__,
                        NiFpga_ReadFifoSgl(session, sglResponseFIFO, data, length, timeoutInMs, &remaining));
 // enable this if you are looking for raw, at source accelerometers data
-#if 0
+#if 1
     size_t i = length;
-    for (i = 0; i < length; i++)
-    {
+    for (i = 0; i < length; i++) {
         if (data[i] != 0) {
-             SPDLOG_INFO("readSGLResponseFIFO {} {:.12f}", i, data[i]);
-             break;
+            SPDLOG_INFO("readSGLResponseFIFO {} {:.12f}", i, data[i]);
+            break;
         }
     }
     if (i == length) {

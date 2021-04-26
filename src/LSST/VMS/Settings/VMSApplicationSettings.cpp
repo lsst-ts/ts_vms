@@ -15,12 +15,13 @@ namespace LSST {
 namespace VMS {
 
 void VMSApplicationSettings::load(const std::string &filename) {
+    SPDLOG_TRACE("VMSApplicationSettings({})", filename);
     try {
         YAML::Node doc = YAML::LoadFile(filename);
 
         Subsystem = doc["Subsystem"].as<std::string>();
         IsMaster = doc["IsMaster"].as<bool>();
-        RIO = doc["RIO"].as<std::string>("RIO");
+        RIO = doc["RIO"].as<std::string>("RIO0");
         XCoefficients = doc["XCoefficients"].as<std::vector<double>>();
         YCoefficients = doc["YCoefficients"].as<std::vector<double>>();
         ZCoefficients = doc["ZCoefficients"].as<std::vector<double>>();

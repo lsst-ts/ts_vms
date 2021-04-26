@@ -113,9 +113,9 @@ void processArgs(int argc, char* const argv[], const char*& configRoot) {
 }
 
 int getIndex(const std::string subsystem) {
-    const char* subsystems[] = {"M1M3", "M2", "cameraRotator", NULL};
+    const char* subsystems[] = {"M1M3", "M2", "CameraRotator", NULL};
     int index = 1;
-    for (const char **s = subsystems; *s != NULL; s++, index++) {
+    for (const char** s = subsystems; *s != NULL; s++, index++) {
         if (subsystem == *s) {
             return index;
         }

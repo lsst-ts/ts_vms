@@ -1,0 +1,9 @@
+Subsystem : "CameraRotator"
+IsMaster : true
+RIO : "rio://139.229.178.192/RIO"
+XCoefficients : [1.0,1.0,1.0]
+YCoefficients : [1.0,1.0,1.0]
+ZCoefficients : [0,1.0,1.0]
+XOffsets : [0.0,0.0,0.0]
+YOffsets : [0.0,0.0,0.0]
+ZOffsets : [0.0,0.0,0.0]
