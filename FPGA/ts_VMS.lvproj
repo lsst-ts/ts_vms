@@ -2447,4 +2447,877 @@
 		<Item Name="Dependencies" Type="Dependencies"/>
 		<Item Name="Build Specifications" Type="Build"/>
 	</Item>
+	<Item Name="CameraRotator" Type="RT CompactRIO">
+		<Property Name="alias.name" Type="Str">CameraRotator</Property>
+		<Property Name="alias.value" Type="Str">139.229.178.192</Property>
+		<Property Name="CCSymbols" Type="Str">TARGET_TYPE,RT;OS,VxWorks;CPU,PowerPC;DeviceCode,7527;</Property>
+		<Property Name="crio.ControllerPID" Type="Str">7527</Property>
+		<Property Name="host.ResponsivenessCheckEnabled" Type="Bool">true</Property>
+		<Property Name="host.ResponsivenessCheckPingDelay" Type="UInt">5000</Property>
+		<Property Name="host.ResponsivenessCheckPingTimeout" Type="UInt">1000</Property>
+		<Property Name="host.TargetCPUID" Type="UInt">2</Property>
+		<Property Name="host.TargetOSID" Type="UInt">14</Property>
+		<Property Name="target.cleanupVisa" Type="Bool">false</Property>
+		<Property Name="target.FPProtocolGlobals_ControlTimeLimit" Type="Int">300</Property>
+		<Property Name="target.getDefault-&gt;WebServer.Port" Type="Int">80</Property>
+		<Property Name="target.getDefault-&gt;WebServer.Timeout" Type="Int">60</Property>
+		<Property Name="target.IOScan.Faults" Type="Str"></Property>
+		<Property Name="target.IOScan.NetVarPeriod" Type="UInt">100</Property>
+		<Property Name="target.IOScan.NetWatchdogEnabled" Type="Bool">false</Property>
+		<Property Name="target.IOScan.Period" Type="UInt">10000</Property>
+		<Property Name="target.IOScan.PowerupMode" Type="UInt">0</Property>
+		<Property Name="target.IOScan.Priority" Type="UInt">0</Property>
+		<Property Name="target.IOScan.ReportModeConflict" Type="Bool">true</Property>
+		<Property Name="target.IsRemotePanelSupported" Type="Bool">true</Property>
+		<Property Name="target.RTCPULoadMonitoringEnabled" Type="Bool">true</Property>
+		<Property Name="target.RTDebugWebServerHTTPPort" Type="Int">8001</Property>
+		<Property Name="target.RTTarget.ApplicationPath" Type="Path">/c/ni-rt/startup/startup.rtexe</Property>
+		<Property Name="target.RTTarget.EnableFileSharing" Type="Bool">true</Property>
+		<Property Name="target.RTTarget.IPAccess" Type="Str">+*</Property>
+		<Property Name="target.RTTarget.LaunchAppAtBoot" Type="Bool">false</Property>
+		<Property Name="target.RTTarget.VIPath" Type="Path">/c/ni-rt/startup</Property>
+		<Property Name="target.server.app.propertiesEnabled" Type="Bool">true</Property>
+		<Property Name="target.server.control.propertiesEnabled" Type="Bool">true</Property>
+		<Property Name="target.server.tcp.access" Type="Str">+*</Property>
+		<Property Name="target.server.tcp.enabled" Type="Bool">false</Property>
+		<Property Name="target.server.tcp.paranoid" Type="Bool">true</Property>
+		<Property Name="target.server.tcp.port" Type="Int">3363</Property>
+		<Property Name="target.server.tcp.serviceName" Type="Str">Main Application Instance/VI Server</Property>
+		<Property Name="target.server.tcp.serviceName.default" Type="Str">Main Application Instance/VI Server</Property>
+		<Property Name="target.server.vi.access" Type="Str">+*</Property>
+		<Property Name="target.server.vi.callsEnabled" Type="Bool">true</Property>
+		<Property Name="target.server.vi.propertiesEnabled" Type="Bool">true</Property>
+		<Property Name="target.WebServer.Config" Type="Str">Listen 8000
+
+NI.ServerName default
+DocumentRoot "$LVSERVER_DOCROOT"
+TypesConfig "$LVSERVER_CONFIGROOT/mime.types"
+DirectoryIndex index.htm
+WorkerLimit 10
+InactivityTimeout 60
+
+LoadModulePath "$LVSERVER_MODULEPATHS"
+LoadModule LVAuth lvauthmodule
+LoadModule LVRFP lvrfpmodule
+
+#
+# Pipeline Definition
+#
+
+SetConnector netConnector
+
+AddHandler LVAuth
+AddHandler LVRFP
+
+AddHandler fileHandler ""
+
+AddOutputFilter chunkFilter
+
+
+</Property>
+		<Property Name="target.WebServer.Enabled" Type="Bool">false</Property>
+		<Property Name="target.WebServer.LogEnabled" Type="Bool">false</Property>
+		<Property Name="target.WebServer.LogPath" Type="Path">/c/ni-rt/system/www/www.log</Property>
+		<Property Name="target.WebServer.Port" Type="Int">80</Property>
+		<Property Name="target.WebServer.RootPath" Type="Path">/c/ni-rt/system/www</Property>
+		<Property Name="target.WebServer.TcpAccess" Type="Str">c+*</Property>
+		<Property Name="target.WebServer.Timeout" Type="Int">60</Property>
+		<Property Name="target.WebServer.ViAccess" Type="Str">+*</Property>
+		<Property Name="target.webservices.SecurityAPIKey" Type="Str">PqVr/ifkAQh+lVrdPIykXlFvg12GhhQFR8H9cUhphgg=:pTe9HRlQuMfJxAG6QCGq7UvoUpJzAzWGKy5SbZ+roSU=</Property>
+		<Property Name="target.webservices.ValidTimestampWindow" Type="Int">15</Property>
+		<Item Name="Chassis" Type="cRIO Chassis">
+			<Property Name="crio.ProgrammingMode" Type="Str">fpga</Property>
+			<Property Name="crio.ResourceID" Type="Str">RIO0</Property>
+			<Property Name="crio.Type" Type="Str">cRIO-9076</Property>
+			<Property Name="NI.SortType" Type="Int">3</Property>
+			<Item Name="Real-Time Scan Resources" Type="Module Container">
+				<Property Name="crio.ModuleContainerType" Type="Str">crio.RSIModuleContainer</Property>
+			</Item>
+			<Item Name="CameraRotator VMS" Type="FPGA Target">
+				<Property Name="AutoRun" Type="Bool">false</Property>
+				<Property Name="configString.guid" Type="Str">{00F69F8C-3033-4213-BDA9-2CDB9B23DCB0}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{04BEE62B-1317-4E79-AA32-D73C9F06FC1A}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{06A2C019-B088-4667-BC7F-55A85458C8FC}resource=/crio_Accelerometer3/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{174FC8A8-D5E3-4214-AF54-2D7906154B81}resource=/crio_Accelerometer2/Stop;0;WriteMethodType=bool{1ACDB640-BC73-40A1-82C6-6E763B0A6E19}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{2907B404-2CF7-4C59-8457-EF6A5F454149}"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;RequestFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"{2FADA927-4688-4E8B-80A5-659AC5407CEB}[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 2,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]{303FA2B7-46B5-4BAB-A73C-1C2A89582CF9}resource=/crio_Accelerometer1/Stop;0;WriteMethodType=bool{32305577-52D3-4E72-AB5C-A5FF20B897D1}"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;U64ResponseFIFO;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{449EA30E-D286-4844-B91E-ABB732DC03F6}resource=/Scan Clock;0;ReadMethodType=bool{47EA9A07-FD4B-407D-96C3-FAF77904A751}NumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer1/Onboard Clock;0;ReadMethodType=bool{4FF474FA-E68E-4589-83BB-F95FFEEA149F}resource=/crio_Accelerometer1/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{54D8A15C-498D-4DC4-A181-8D04C8178EEE}"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;SGLResponseFIFO;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{5FAEBD1C-1C24-47B8-AB68-FDDA1C2BD52C}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{5FB51CC8-F262-4C33-B2BB-E5B0ABF08C36}NumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer3/Onboard Clock;0;ReadMethodType=bool{64F575C4-8C66-412E-9CE1-E590BB2B6D94}resource=/Chassis Temperature;0;ReadMethodType=i16{651D0B45-EF7B-49C9-B00F-66D736C6EC4D}resource=/crio_Accelerometer2/Start;0;WriteMethodType=bool{6606080A-7D54-4D54-9E31-9CBCD2E5E0E9}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{669B5523-402D-4AFF-AA92-47D47D13339A}resource=/crio_Accelerometer3/Start;0;WriteMethodType=bool{66B8A6F9-C7D9-4B7F-8EF6-F406896663A3}resource=/crio_Accelerometer2/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{674360E0-9700-4FD0-AAA3-B2B5358CC685}resource=/crio_Accelerometer2/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{6909E5E2-993C-4EC0-B995-420DBB71BCBD}[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 1,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]{69565D01-9CA8-41A0-A966-FEDA0FE4F305}"DataType=1000800000000001000940070003553332000100000000000000000000;InitDataHash=2002E13ACF59079A1A5782C918894579;Name=MasterClockSamplePeriodRegister;WriteArb=1"{7B048A74-9319-4A24-84C8-00EA35A72FC9}"ControlLogic=1;NumberOfElements=1024;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=1000800000000004000D4007000741646472657373003340150006034E4F500353657403416464085375627472616374024F72074E6F7420416E64000A5570646174654D6F646500000B400800044461746100002240500003000000010002154865616C7468416E64537461747573557064617465000100030000000000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{A3A9A627-235F-4769-84C3-A99EDA666FB4}resource=/System Reset;0;ReadMethodType=bool;WriteMethodType=bool{A43667EC-EB45-4ADE-97A3-703D5F187A77}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{A48C7278-DE15-4A3F-95D9-863ADD5C7997}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{A55B6C00-43D6-47E2-B0ED-839731B56B7D}resource=/Sleep;0;ReadMethodType=bool;WriteMethodType=bool{B09B26AA-BCCD-4C78-A0D5-EA9EF7832E82}resource=/crio_Accelerometer1/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{B40F657D-0612-4FEA-9F88-CE889E713A00}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{BF711C80-FEEA-4CF7-B07C-9FC13836BF40}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{C8473929-EF0A-4C21-9DF8-7A6280FA5DE4}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{D241C03B-0940-4EBB-93D5-621150C12C71}resource=/crio_Accelerometer2/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{D3656F9A-5E5A-40F5-83C7-CE387961AC63}"DataType=100080000000000100094008000355363400010000000000000000000000000000;InitDataHash=;Name=TimestampRegister;WriteArb=2"{D7CFFB77-2121-4DC2-96CB-6E811E29BDCB}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{DB0D3EB2-8179-4316-9DC5-24D9C9A5F870}NumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer2/Onboard Clock;0;ReadMethodType=bool{DD092636-2D13-4879-A24E-B4169DEAE7A6}resource=/crio_Accelerometer1/Start;0;WriteMethodType=bool{E066D537-305E-4364-871C-ACE30D81DF10}resource=/crio_Accelerometer3/Stop;0;WriteMethodType=bool{F3426395-40B3-40BA-B615-5721BE884CBF}resource=/crio_Accelerometer3/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{F3A5C848-CD7B-41E1-A51E-1EAA0FB1D5F0}resource=/crio_Accelerometer1/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{F5D39673-BFDB-480E-98C6-ACD5A78D3570}Multiplier=1.000000;Divisor=8.000000{F8F7D066-1482-4E49-926E-99BFAB4DB53B}"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;CommandFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"{FA382478-E557-472C-B2E4-C82F24278184}ResourceName=40 MHz Onboard Clock;TopSignalConnect=Clk40;ClockSignalName=Clk40;MinFreq=40000000.000000;MaxFreq=40000000.000000;VariableFreq=0;NomFreq=40000000.000000;PeakPeriodJitter=250.000000;MinDutyCycle=50.000000;MaxDutyCycle=50.000000;Accuracy=100.000000;RunTime=0;SpreadSpectrum=0;GenericDataHash=D41D8CD98F00B204E9800998ECF8427E;{FD2EBEC7-B94D-487D-B0A9-4D6CAF0B84CB}resource=/crio_Accelerometer3/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{FE2AF43A-DF97-430D-B609-C7BF66621B4E}[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 3,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]{FE870F97-02D5-4494-8635-3243D0F5F5B7}resource=/FPGA LED;0;ReadMethodType=bool;WriteMethodType=boolcRIO-9076/Clk40/falsefalseFPGA_EXECUTION_MODEFPGA_TARGETFPGA_TARGET_CLASSCRIO_9076FPGA_TARGET_FAMILYSPARTAN6TARGET_TYPEFPGA</Property>
+				<Property Name="configString.name" Type="Str">40 MHz Onboard ClockResourceName=40 MHz Onboard Clock;TopSignalConnect=Clk40;ClockSignalName=Clk40;MinFreq=40000000.000000;MaxFreq=40000000.000000;VariableFreq=0;NomFreq=40000000.000000;PeakPeriodJitter=250.000000;MinDutyCycle=50.000000;MaxDutyCycle=50.000000;Accuracy=100.000000;RunTime=0;SpreadSpectrum=0;GenericDataHash=D41D8CD98F00B204E9800998ECF8427E;5MHzMultiplier=1.000000;Divisor=8.000000Accelerometer1/AI0resource=/crio_Accelerometer1/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer1/AI1resource=/crio_Accelerometer1/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer1/AI2resource=/crio_Accelerometer1/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer1/Onboard ClockNumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer1/Onboard Clock;0;ReadMethodType=boolAccelerometer1/Startresource=/crio_Accelerometer1/Start;0;WriteMethodType=boolAccelerometer1/Stopresource=/crio_Accelerometer1/Stop;0;WriteMethodType=boolAccelerometer1[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 1,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]Accelerometer1XFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer1YFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer1ZFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer2/AI0resource=/crio_Accelerometer2/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer2/AI1resource=/crio_Accelerometer2/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer2/AI2resource=/crio_Accelerometer2/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer2/Onboard ClockNumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer2/Onboard Clock;0;ReadMethodType=boolAccelerometer2/Startresource=/crio_Accelerometer2/Start;0;WriteMethodType=boolAccelerometer2/Stopresource=/crio_Accelerometer2/Stop;0;WriteMethodType=boolAccelerometer2[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 2,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]Accelerometer2XFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer2YFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer2ZFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer3/AI0resource=/crio_Accelerometer3/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer3/AI1resource=/crio_Accelerometer3/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer3/AI2resource=/crio_Accelerometer3/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer3/Onboard ClockNumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer3/Onboard Clock;0;ReadMethodType=boolAccelerometer3/Startresource=/crio_Accelerometer3/Start;0;WriteMethodType=boolAccelerometer3/Stopresource=/crio_Accelerometer3/Stop;0;WriteMethodType=boolAccelerometer3[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 3,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]Accelerometer3XFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer3YFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer3ZFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Chassis Temperatureresource=/Chassis Temperature;0;ReadMethodType=i16CommandFIFO"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;CommandFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"cRIO-9076/Clk40/falsefalseFPGA_EXECUTION_MODEFPGA_TARGETFPGA_TARGET_CLASSCRIO_9076FPGA_TARGET_FAMILYSPARTAN6TARGET_TYPEFPGAFPGA LEDresource=/FPGA LED;0;ReadMethodType=bool;WriteMethodType=boolMasterClockSamplePeriodRegister"DataType=1000800000000001000940070003553332000100000000000000000000;InitDataHash=2002E13ACF59079A1A5782C918894579;Name=MasterClockSamplePeriodRegister;WriteArb=1"RequestFIFO"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;RequestFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"SampleTimestampFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"Scan Clockresource=/Scan Clock;0;ReadMethodType=boolSGLResponseFIFO"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;SGLResponseFIFO;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Sleepresource=/Sleep;0;ReadMethodType=bool;WriteMethodType=boolSystem Resetresource=/System Reset;0;ReadMethodType=bool;WriteMethodType=boolTimestampFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"TimestampHealthAndStatusFIFO"ControlLogic=1;NumberOfElements=1024;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=1000800000000004000D4007000741646472657373003340150006034E4F500353657403416464085375627472616374024F72074E6F7420416E64000A5570646174654D6F646500000B400800044461746100002240500003000000010002154865616C7468416E64537461747573557064617465000100030000000000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"TimestampRegister"DataType=100080000000000100094008000355363400010000000000000000000000000000;InitDataHash=;Name=TimestampRegister;WriteArb=2"U64ResponseFIFO"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;U64ResponseFIFO;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+				<Property Name="NI.LV.FPGA.CompileConfigString" Type="Str">cRIO-9076/Clk40/falsefalseFPGA_EXECUTION_MODEFPGA_TARGETFPGA_TARGET_CLASSCRIO_9076FPGA_TARGET_FAMILYSPARTAN6TARGET_TYPEFPGA</Property>
+				<Property Name="NI.LV.FPGA.Version" Type="Int">6</Property>
+				<Property Name="niFpga_TopLevelVIID" Type="Path">/C/Users/pkubanek/ts_vms/FPGA/VMS_CameraRotator_Master.vi</Property>
+				<Property Name="Resource Name" Type="Str">RIO0</Property>
+				<Property Name="Target Class" Type="Str">cRIO-9076</Property>
+				<Property Name="Top-Level Timing Source" Type="Str">40 MHz Onboard Clock</Property>
+				<Property Name="Top-Level Timing Source Is Default" Type="Bool">true</Property>
+				<Item Name="Hardware Resources" Type="Folder">
+					<Item Name="Accelerometer1" Type="Folder">
+						<Item Name="Accelerometer1/AI0" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer1/AI0</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{4FF474FA-E68E-4589-83BB-F95FFEEA149F}</Property>
+						</Item>
+						<Item Name="Accelerometer1/AI1" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer1/AI1</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{B09B26AA-BCCD-4C78-A0D5-EA9EF7832E82}</Property>
+						</Item>
+						<Item Name="Accelerometer1/AI2" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer1/AI2</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{F3A5C848-CD7B-41E1-A51E-1EAA0FB1D5F0}</Property>
+						</Item>
+						<Item Name="Accelerometer1/Onboard Clock" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="NumberOfSyncRegistersForReadInProject">
+   <Value>Auto</Value>
+   </Attribute>
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer1/Onboard Clock</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{47EA9A07-FD4B-407D-96C3-FAF77904A751}</Property>
+						</Item>
+						<Item Name="Accelerometer1/Start" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer1/Start</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{DD092636-2D13-4879-A24E-B4169DEAE7A6}</Property>
+						</Item>
+						<Item Name="Accelerometer1/Stop" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer1/Stop</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{303FA2B7-46B5-4BAB-A73C-1C2A89582CF9}</Property>
+						</Item>
+					</Item>
+					<Item Name="Accelerometer2" Type="Folder">
+						<Item Name="Accelerometer2/AI0" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer2/AI0</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{674360E0-9700-4FD0-AAA3-B2B5358CC685}</Property>
+						</Item>
+						<Item Name="Accelerometer2/AI1" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer2/AI1</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{D241C03B-0940-4EBB-93D5-621150C12C71}</Property>
+						</Item>
+						<Item Name="Accelerometer2/AI2" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer2/AI2</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{66B8A6F9-C7D9-4B7F-8EF6-F406896663A3}</Property>
+						</Item>
+						<Item Name="Accelerometer2/Onboard Clock" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="NumberOfSyncRegistersForReadInProject">
+   <Value>Auto</Value>
+   </Attribute>
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer2/Onboard Clock</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{DB0D3EB2-8179-4316-9DC5-24D9C9A5F870}</Property>
+						</Item>
+						<Item Name="Accelerometer2/Start" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer2/Start</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{651D0B45-EF7B-49C9-B00F-66D736C6EC4D}</Property>
+						</Item>
+						<Item Name="Accelerometer2/Stop" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer2/Stop</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{174FC8A8-D5E3-4214-AF54-2D7906154B81}</Property>
+						</Item>
+					</Item>
+					<Item Name="Accelerometer3" Type="Folder">
+						<Item Name="Accelerometer3/AI0" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer3/AI0</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{F3426395-40B3-40BA-B615-5721BE884CBF}</Property>
+						</Item>
+						<Item Name="Accelerometer3/AI1" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer3/AI1</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{06A2C019-B088-4667-BC7F-55A85458C8FC}</Property>
+						</Item>
+						<Item Name="Accelerometer3/AI2" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer3/AI2</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{FD2EBEC7-B94D-487D-B0A9-4D6CAF0B84CB}</Property>
+						</Item>
+						<Item Name="Accelerometer3/Onboard Clock" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="NumberOfSyncRegistersForReadInProject">
+   <Value>Auto</Value>
+   </Attribute>
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer3/Onboard Clock</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{5FB51CC8-F262-4C33-B2BB-E5B0ABF08C36}</Property>
+						</Item>
+						<Item Name="Accelerometer3/Start" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer3/Start</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{669B5523-402D-4AFF-AA92-47D47D13339A}</Property>
+						</Item>
+						<Item Name="Accelerometer3/Stop" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/crio_Accelerometer3/Stop</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{E066D537-305E-4364-871C-ACE30D81DF10}</Property>
+						</Item>
+					</Item>
+					<Item Name="Chassis I/O" Type="Folder">
+						<Item Name="Chassis Temperature" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/Chassis Temperature</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{64F575C4-8C66-412E-9CE1-E590BB2B6D94}</Property>
+						</Item>
+						<Item Name="Sleep" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/Sleep</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{A55B6C00-43D6-47E2-B0ED-839731B56B7D}</Property>
+						</Item>
+						<Item Name="System Reset" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/System Reset</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{A3A9A627-235F-4769-84C3-A99EDA666FB4}</Property>
+						</Item>
+						<Item Name="FPGA LED" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/FPGA LED</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{FE870F97-02D5-4494-8635-3243D0F5F5B7}</Property>
+						</Item>
+						<Item Name="Scan Clock" Type="Elemental IO">
+							<Property Name="eioAttrBag" Type="Xml"><AttributeSet name="">
+   <Attribute name="resource">
+   <Value>/Scan Clock</Value>
+   </Attribute>
+</AttributeSet>
+</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{449EA30E-D286-4844-B91E-ABB732DC03F6}</Property>
+						</Item>
+					</Item>
+					<Item Name="40 MHz Onboard Clock" Type="FPGA Base Clock">
+						<Property Name="FPGA.PersistentID" Type="Str">{FA382478-E557-472C-B2E4-C82F24278184}</Property>
+						<Property Name="NI.LV.FPGA.BaseTSConfig" Type="Str">ResourceName=40 MHz Onboard Clock;TopSignalConnect=Clk40;ClockSignalName=Clk40;MinFreq=40000000.000000;MaxFreq=40000000.000000;VariableFreq=0;NomFreq=40000000.000000;PeakPeriodJitter=250.000000;MinDutyCycle=50.000000;MaxDutyCycle=50.000000;Accuracy=100.000000;RunTime=0;SpreadSpectrum=0;GenericDataHash=D41D8CD98F00B204E9800998ECF8427E;</Property>
+						<Property Name="NI.LV.FPGA.BaseTSConfig.Accuracy" Type="Dbl">100</Property>
+						<Property Name="NI.LV.FPGA.BaseTSConfig.ClockSignalName" Type="Str">Clk40</Property>
+						<Property Name="NI.LV.FPGA.BaseTSConfig.MaxDutyCycle" Type="Dbl">50</Property>
+						<Property Name="NI.LV.FPGA.BaseTSConfig.MaxFrequency" Type="Dbl">40000000</Property>
+						<Property Name="NI.LV.FPGA.BaseTSConfig.MinDutyCycle" Type="Dbl">50</Property>
+						<Property Name="NI.LV.FPGA.BaseTSConfig.MinFrequency" Type="Dbl">40000000</Property>
+						<Property Name="NI.LV.FPGA.BaseTSConfig.NominalFrequency" Type="Dbl">40000000</Property>
+						<Property Name="NI.LV.FPGA.BaseTSConfig.PeakPeriodJitter" Type="Dbl">250</Property>
+						<Property Name="NI.LV.FPGA.BaseTSConfig.ResourceName" Type="Str">40 MHz Onboard Clock</Property>
+						<Property Name="NI.LV.FPGA.BaseTSConfig.SupportAndRequireRuntimeEnableDisable" Type="Bool">false</Property>
+						<Property Name="NI.LV.FPGA.BaseTSConfig.TopSignalConnect" Type="Str">Clk40</Property>
+						<Property Name="NI.LV.FPGA.BaseTSConfig.VariableFrequency" Type="Bool">false</Property>
+						<Property Name="NI.LV.FPGA.Valid" Type="Bool">true</Property>
+						<Property Name="NI.LV.FPGA.Version" Type="Int">5</Property>
+						<Item Name="5MHz" Type="FPGA Derived Clock">
+							<Property Name="FPGA.PersistentID" Type="Str">{F5D39673-BFDB-480E-98C6-ACD5A78D3570}</Property>
+							<Property Name="NI.LV.FPGA.DerivedConfig" Type="Str">Multiplier=1.000000;Divisor=8.000000</Property>
+							<Property Name="NI.LV.FPGA.DerivedConfig.Divisor" Type="Dbl">8</Property>
+							<Property Name="NI.LV.FPGA.DerivedConfig.FromExternalClock" Type="Bool">false</Property>
+							<Property Name="NI.LV.FPGA.DerivedConfig.Multiplier" Type="Dbl">1</Property>
+							<Property Name="NI.LV.FPGA.DerivedConfig.ParentFrequencyInHertz" Type="Dbl">40000000</Property>
+							<Property Name="NI.LV.FPGA.Valid" Type="Bool">true</Property>
+							<Property Name="NI.LV.FPGA.Version" Type="Int">5</Property>
+						</Item>
+					</Item>
+					<Item Name="Accelerometer1" Type="RIO C Series Module">
+						<Property Name="crio.Calibration" Type="Str">1</Property>
+						<Property Name="crio.Location" Type="Str">Slot 1</Property>
+						<Property Name="crio.RequiresValidation" Type="Bool">true</Property>
+						<Property Name="crio.SDcounterSlaveChannelMask" Type="Str">0</Property>
+						<Property Name="crio.SDCounterSlaveMasterSlot" Type="Str">0</Property>
+						<Property Name="crio.SDInputFilter" Type="Str">128</Property>
+						<Property Name="crio.SupportsDynamicRes" Type="Bool">true</Property>
+						<Property Name="crio.Type" Type="Str">NI 9232</Property>
+						<Property Name="cRIOModule.ClockSource" Type="Str">0</Property>
+						<Property Name="cRIOModule.DataRate" Type="Str">102</Property>
+						<Property Name="cRIOModule.DigitalIOMode" Type="Str">0</Property>
+						<Property Name="cRIOModule.EnableSpecialtyDigital" Type="Str">false</Property>
+						<Property Name="cRIOModule.ExcitationVoltage" Type="Str">1</Property>
+						<Property Name="cRIOModule.ExternalClockSource" Type="Str"></Property>
+						<Property Name="cRIOModule.ExtTimeBaseType" Type="Str"></Property>
+						<Property Name="cRIOModule.HalfBridgeEnable" Type="Str">0</Property>
+						<Property Name="cRIOModule.InputConfiguration" Type="Str">33686016</Property>
+						<Property Name="cRIOModule.SourceModule" Type="Str">true</Property>
+						<Property Name="cRIOModule.SubPanVisitedVersion" Type="Str">0</Property>
+						<Property Name="cRIOModule.TEDSSupport" Type="Str">true</Property>
+						<Property Name="FPGA.PersistentID" Type="Str">{6909E5E2-993C-4EC0-B995-420DBB71BCBD}</Property>
+					</Item>
+					<Item Name="Accelerometer2" Type="RIO C Series Module">
+						<Property Name="crio.Calibration" Type="Str">1</Property>
+						<Property Name="crio.Location" Type="Str">Slot 2</Property>
+						<Property Name="crio.RequiresValidation" Type="Bool">true</Property>
+						<Property Name="crio.SDcounterSlaveChannelMask" Type="Str">0</Property>
+						<Property Name="crio.SDCounterSlaveMasterSlot" Type="Str">0</Property>
+						<Property Name="crio.SDInputFilter" Type="Str">128</Property>
+						<Property Name="crio.SupportsDynamicRes" Type="Bool">true</Property>
+						<Property Name="crio.Type" Type="Str">NI 9232</Property>
+						<Property Name="cRIOModule.ClockSource" Type="Str">0</Property>
+						<Property Name="cRIOModule.DataRate" Type="Str">102</Property>
+						<Property Name="cRIOModule.DigitalIOMode" Type="Str">0</Property>
+						<Property Name="cRIOModule.EnableSpecialtyDigital" Type="Str">false</Property>
+						<Property Name="cRIOModule.ExcitationVoltage" Type="Str">1</Property>
+						<Property Name="cRIOModule.ExternalClockSource" Type="Str"></Property>
+						<Property Name="cRIOModule.ExtTimeBaseType" Type="Str"></Property>
+						<Property Name="cRIOModule.HalfBridgeEnable" Type="Str">0</Property>
+						<Property Name="cRIOModule.InputConfiguration" Type="Str">33686016</Property>
+						<Property Name="cRIOModule.SourceModule" Type="Str">true</Property>
+						<Property Name="cRIOModule.SubPanVisitedVersion" Type="Str">0</Property>
+						<Property Name="cRIOModule.TEDSSupport" Type="Str">true</Property>
+						<Property Name="FPGA.PersistentID" Type="Str">{2FADA927-4688-4E8B-80A5-659AC5407CEB}</Property>
+					</Item>
+					<Item Name="Accelerometer3" Type="RIO C Series Module">
+						<Property Name="crio.Calibration" Type="Str">1</Property>
+						<Property Name="crio.Location" Type="Str">Slot 3</Property>
+						<Property Name="crio.RequiresValidation" Type="Bool">true</Property>
+						<Property Name="crio.SDcounterSlaveChannelMask" Type="Str">0</Property>
+						<Property Name="crio.SDCounterSlaveMasterSlot" Type="Str">0</Property>
+						<Property Name="crio.SDInputFilter" Type="Str">128</Property>
+						<Property Name="crio.SupportsDynamicRes" Type="Bool">true</Property>
+						<Property Name="crio.Type" Type="Str">NI 9232</Property>
+						<Property Name="cRIOModule.ClockSource" Type="Str">0</Property>
+						<Property Name="cRIOModule.DataRate" Type="Str">102</Property>
+						<Property Name="cRIOModule.DigitalIOMode" Type="Str">0</Property>
+						<Property Name="cRIOModule.EnableSpecialtyDigital" Type="Str">false</Property>
+						<Property Name="cRIOModule.ExcitationVoltage" Type="Str">1</Property>
+						<Property Name="cRIOModule.ExternalClockSource" Type="Str"></Property>
+						<Property Name="cRIOModule.ExtTimeBaseType" Type="Str"></Property>
+						<Property Name="cRIOModule.HalfBridgeEnable" Type="Str">0</Property>
+						<Property Name="cRIOModule.InputConfiguration" Type="Str">33686016</Property>
+						<Property Name="cRIOModule.SourceModule" Type="Str">true</Property>
+						<Property Name="cRIOModule.SubPanVisitedVersion" Type="Str">0</Property>
+						<Property Name="cRIOModule.TEDSSupport" Type="Str">true</Property>
+						<Property Name="FPGA.PersistentID" Type="Str">{FE2AF43A-DF97-430D-B609-C7BF66621B4E}</Property>
+					</Item>
+				</Item>
+				<Item Name="Software Resources" Type="Folder">
+					<Item Name="Accelerometer1" Type="Folder">
+						<Item Name="Accelerometer1XFIFO" Type="FPGA FIFO">
+							<Property Name="Actual Number of Elements" Type="UInt">1025</Property>
+							<Property Name="Arbitration for Read" Type="UInt">1</Property>
+							<Property Name="Arbitration for Write" Type="UInt">1</Property>
+							<Property Name="Control Logic" Type="UInt">1</Property>
+							<Property Name="Data Type" Type="UInt">11</Property>
+							<Property Name="Disable on Overflow/Underflow" Type="Bool">false</Property>
+							<Property Name="fifo.configuration" Type="Str">"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+							<Property Name="fifo.configured" Type="Bool">true</Property>
+							<Property Name="fifo.projectItemValid" Type="Bool">true</Property>
+							<Property Name="fifo.valid" Type="Bool">true</Property>
+							<Property Name="fifo.version" Type="Int">12</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{A48C7278-DE15-4A3F-95D9-863ADD5C7997}</Property>
+							<Property Name="Local" Type="Bool">false</Property>
+							<Property Name="Memory Type" Type="UInt">2</Property>
+							<Property Name="Number Of Elements Per Read" Type="UInt">1</Property>
+							<Property Name="Number Of Elements Per Write" Type="UInt">1</Property>
+							<Property Name="Requested Number of Elements" Type="UInt">1023</Property>
+							<Property Name="Type" Type="UInt">0</Property>
+							<Property Name="Type Descriptor" Type="Str">100080000000000100094009000353474C000100000000000000000000</Property>
+						</Item>
+						<Item Name="Accelerometer1YFIFO" Type="FPGA FIFO">
+							<Property Name="Actual Number of Elements" Type="UInt">1025</Property>
+							<Property Name="Arbitration for Read" Type="UInt">1</Property>
+							<Property Name="Arbitration for Write" Type="UInt">1</Property>
+							<Property Name="Control Logic" Type="UInt">1</Property>
+							<Property Name="Data Type" Type="UInt">11</Property>
+							<Property Name="Disable on Overflow/Underflow" Type="Bool">false</Property>
+							<Property Name="fifo.configuration" Type="Str">"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+							<Property Name="fifo.configured" Type="Bool">true</Property>
+							<Property Name="fifo.projectItemValid" Type="Bool">true</Property>
+							<Property Name="fifo.valid" Type="Bool">true</Property>
+							<Property Name="fifo.version" Type="Int">12</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{C8473929-EF0A-4C21-9DF8-7A6280FA5DE4}</Property>
+							<Property Name="Local" Type="Bool">false</Property>
+							<Property Name="Memory Type" Type="UInt">2</Property>
+							<Property Name="Number Of Elements Per Read" Type="UInt">1</Property>
+							<Property Name="Number Of Elements Per Write" Type="UInt">1</Property>
+							<Property Name="Requested Number of Elements" Type="UInt">1023</Property>
+							<Property Name="Type" Type="UInt">0</Property>
+							<Property Name="Type Descriptor" Type="Str">100080000000000100094009000353474C000100000000000000000000</Property>
+						</Item>
+						<Item Name="Accelerometer1ZFIFO" Type="FPGA FIFO">
+							<Property Name="Actual Number of Elements" Type="UInt">1025</Property>
+							<Property Name="Arbitration for Read" Type="UInt">1</Property>
+							<Property Name="Arbitration for Write" Type="UInt">1</Property>
+							<Property Name="Control Logic" Type="UInt">1</Property>
+							<Property Name="Data Type" Type="UInt">11</Property>
+							<Property Name="Disable on Overflow/Underflow" Type="Bool">false</Property>
+							<Property Name="fifo.configuration" Type="Str">"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+							<Property Name="fifo.configured" Type="Bool">true</Property>
+							<Property Name="fifo.projectItemValid" Type="Bool">true</Property>
+							<Property Name="fifo.valid" Type="Bool">true</Property>
+							<Property Name="fifo.version" Type="Int">12</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{00F69F8C-3033-4213-BDA9-2CDB9B23DCB0}</Property>
+							<Property Name="Local" Type="Bool">false</Property>
+							<Property Name="Memory Type" Type="UInt">2</Property>
+							<Property Name="Number Of Elements Per Read" Type="UInt">1</Property>
+							<Property Name="Number Of Elements Per Write" Type="UInt">1</Property>
+							<Property Name="Requested Number of Elements" Type="UInt">1023</Property>
+							<Property Name="Type" Type="UInt">0</Property>
+							<Property Name="Type Descriptor" Type="Str">100080000000000100094009000353474C000100000000000000000000</Property>
+						</Item>
+					</Item>
+					<Item Name="Accelerometer2" Type="Folder">
+						<Item Name="Accelerometer2XFIFO" Type="FPGA FIFO">
+							<Property Name="Actual Number of Elements" Type="UInt">1025</Property>
+							<Property Name="Arbitration for Read" Type="UInt">1</Property>
+							<Property Name="Arbitration for Write" Type="UInt">1</Property>
+							<Property Name="Control Logic" Type="UInt">1</Property>
+							<Property Name="Data Type" Type="UInt">11</Property>
+							<Property Name="Disable on Overflow/Underflow" Type="Bool">false</Property>
+							<Property Name="fifo.configuration" Type="Str">"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+							<Property Name="fifo.configured" Type="Bool">true</Property>
+							<Property Name="fifo.projectItemValid" Type="Bool">true</Property>
+							<Property Name="fifo.valid" Type="Bool">true</Property>
+							<Property Name="fifo.version" Type="Int">12</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{BF711C80-FEEA-4CF7-B07C-9FC13836BF40}</Property>
+							<Property Name="Local" Type="Bool">false</Property>
+							<Property Name="Memory Type" Type="UInt">2</Property>
+							<Property Name="Number Of Elements Per Read" Type="UInt">1</Property>
+							<Property Name="Number Of Elements Per Write" Type="UInt">1</Property>
+							<Property Name="Requested Number of Elements" Type="UInt">1023</Property>
+							<Property Name="Type" Type="UInt">0</Property>
+							<Property Name="Type Descriptor" Type="Str">100080000000000100094009000353474C000100000000000000000000</Property>
+						</Item>
+						<Item Name="Accelerometer2YFIFO" Type="FPGA FIFO">
+							<Property Name="Actual Number of Elements" Type="UInt">1025</Property>
+							<Property Name="Arbitration for Read" Type="UInt">1</Property>
+							<Property Name="Arbitration for Write" Type="UInt">1</Property>
+							<Property Name="Control Logic" Type="UInt">1</Property>
+							<Property Name="Data Type" Type="UInt">11</Property>
+							<Property Name="Disable on Overflow/Underflow" Type="Bool">false</Property>
+							<Property Name="fifo.configuration" Type="Str">"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+							<Property Name="fifo.configured" Type="Bool">true</Property>
+							<Property Name="fifo.projectItemValid" Type="Bool">true</Property>
+							<Property Name="fifo.valid" Type="Bool">true</Property>
+							<Property Name="fifo.version" Type="Int">12</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{04BEE62B-1317-4E79-AA32-D73C9F06FC1A}</Property>
+							<Property Name="Local" Type="Bool">false</Property>
+							<Property Name="Memory Type" Type="UInt">2</Property>
+							<Property Name="Number Of Elements Per Read" Type="UInt">1</Property>
+							<Property Name="Number Of Elements Per Write" Type="UInt">1</Property>
+							<Property Name="Requested Number of Elements" Type="UInt">1023</Property>
+							<Property Name="Type" Type="UInt">0</Property>
+							<Property Name="Type Descriptor" Type="Str">100080000000000100094009000353474C000100000000000000000000</Property>
+						</Item>
+						<Item Name="Accelerometer2ZFIFO" Type="FPGA FIFO">
+							<Property Name="Actual Number of Elements" Type="UInt">1025</Property>
+							<Property Name="Arbitration for Read" Type="UInt">1</Property>
+							<Property Name="Arbitration for Write" Type="UInt">1</Property>
+							<Property Name="Control Logic" Type="UInt">1</Property>
+							<Property Name="Data Type" Type="UInt">11</Property>
+							<Property Name="Disable on Overflow/Underflow" Type="Bool">false</Property>
+							<Property Name="fifo.configuration" Type="Str">"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+							<Property Name="fifo.configured" Type="Bool">true</Property>
+							<Property Name="fifo.projectItemValid" Type="Bool">true</Property>
+							<Property Name="fifo.valid" Type="Bool">true</Property>
+							<Property Name="fifo.version" Type="Int">12</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{B40F657D-0612-4FEA-9F88-CE889E713A00}</Property>
+							<Property Name="Local" Type="Bool">false</Property>
+							<Property Name="Memory Type" Type="UInt">2</Property>
+							<Property Name="Number Of Elements Per Read" Type="UInt">1</Property>
+							<Property Name="Number Of Elements Per Write" Type="UInt">1</Property>
+							<Property Name="Requested Number of Elements" Type="UInt">1023</Property>
+							<Property Name="Type" Type="UInt">0</Property>
+							<Property Name="Type Descriptor" Type="Str">100080000000000100094009000353474C000100000000000000000000</Property>
+						</Item>
+					</Item>
+					<Item Name="Accelerometer3" Type="Folder">
+						<Item Name="Accelerometer3XFIFO" Type="FPGA FIFO">
+							<Property Name="Actual Number of Elements" Type="UInt">1025</Property>
+							<Property Name="Arbitration for Read" Type="UInt">1</Property>
+							<Property Name="Arbitration for Write" Type="UInt">1</Property>
+							<Property Name="Control Logic" Type="UInt">1</Property>
+							<Property Name="Data Type" Type="UInt">11</Property>
+							<Property Name="Disable on Overflow/Underflow" Type="Bool">false</Property>
+							<Property Name="fifo.configuration" Type="Str">"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+							<Property Name="fifo.configured" Type="Bool">true</Property>
+							<Property Name="fifo.projectItemValid" Type="Bool">true</Property>
+							<Property Name="fifo.valid" Type="Bool">true</Property>
+							<Property Name="fifo.version" Type="Int">12</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{D7CFFB77-2121-4DC2-96CB-6E811E29BDCB}</Property>
+							<Property Name="Local" Type="Bool">false</Property>
+							<Property Name="Memory Type" Type="UInt">2</Property>
+							<Property Name="Number Of Elements Per Read" Type="UInt">1</Property>
+							<Property Name="Number Of Elements Per Write" Type="UInt">1</Property>
+							<Property Name="Requested Number of Elements" Type="UInt">1023</Property>
+							<Property Name="Type" Type="UInt">0</Property>
+							<Property Name="Type Descriptor" Type="Str">100080000000000100094009000353474C000100000000000000000000</Property>
+						</Item>
+						<Item Name="Accelerometer3YFIFO" Type="FPGA FIFO">
+							<Property Name="Actual Number of Elements" Type="UInt">1025</Property>
+							<Property Name="Arbitration for Read" Type="UInt">1</Property>
+							<Property Name="Arbitration for Write" Type="UInt">1</Property>
+							<Property Name="Control Logic" Type="UInt">1</Property>
+							<Property Name="Data Type" Type="UInt">11</Property>
+							<Property Name="Disable on Overflow/Underflow" Type="Bool">false</Property>
+							<Property Name="fifo.configuration" Type="Str">"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+							<Property Name="fifo.configured" Type="Bool">true</Property>
+							<Property Name="fifo.projectItemValid" Type="Bool">true</Property>
+							<Property Name="fifo.valid" Type="Bool">true</Property>
+							<Property Name="fifo.version" Type="Int">12</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{5FAEBD1C-1C24-47B8-AB68-FDDA1C2BD52C}</Property>
+							<Property Name="Local" Type="Bool">false</Property>
+							<Property Name="Memory Type" Type="UInt">2</Property>
+							<Property Name="Number Of Elements Per Read" Type="UInt">1</Property>
+							<Property Name="Number Of Elements Per Write" Type="UInt">1</Property>
+							<Property Name="Requested Number of Elements" Type="UInt">1023</Property>
+							<Property Name="Type" Type="UInt">0</Property>
+							<Property Name="Type Descriptor" Type="Str">100080000000000100094009000353474C000100000000000000000000</Property>
+						</Item>
+						<Item Name="Accelerometer3ZFIFO" Type="FPGA FIFO">
+							<Property Name="Actual Number of Elements" Type="UInt">1025</Property>
+							<Property Name="Arbitration for Read" Type="UInt">1</Property>
+							<Property Name="Arbitration for Write" Type="UInt">1</Property>
+							<Property Name="Control Logic" Type="UInt">1</Property>
+							<Property Name="Data Type" Type="UInt">11</Property>
+							<Property Name="Disable on Overflow/Underflow" Type="Bool">false</Property>
+							<Property Name="fifo.configuration" Type="Str">"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+							<Property Name="fifo.configured" Type="Bool">true</Property>
+							<Property Name="fifo.projectItemValid" Type="Bool">true</Property>
+							<Property Name="fifo.valid" Type="Bool">true</Property>
+							<Property Name="fifo.version" Type="Int">12</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{A43667EC-EB45-4ADE-97A3-703D5F187A77}</Property>
+							<Property Name="Local" Type="Bool">false</Property>
+							<Property Name="Memory Type" Type="UInt">2</Property>
+							<Property Name="Number Of Elements Per Read" Type="UInt">1</Property>
+							<Property Name="Number Of Elements Per Write" Type="UInt">1</Property>
+							<Property Name="Requested Number of Elements" Type="UInt">1023</Property>
+							<Property Name="Type" Type="UInt">0</Property>
+							<Property Name="Type Descriptor" Type="Str">100080000000000100094009000353474C000100000000000000000000</Property>
+						</Item>
+					</Item>
+					<Item Name="Timestamp" Type="Folder">
+						<Item Name="TimestampFIFO" Type="FPGA FIFO">
+							<Property Name="Actual Number of Elements" Type="UInt">1025</Property>
+							<Property Name="Arbitration for Read" Type="UInt">1</Property>
+							<Property Name="Arbitration for Write" Type="UInt">1</Property>
+							<Property Name="Control Logic" Type="UInt">1</Property>
+							<Property Name="Data Type" Type="UInt">8</Property>
+							<Property Name="Disable on Overflow/Underflow" Type="Bool">false</Property>
+							<Property Name="fifo.configuration" Type="Str">"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+							<Property Name="fifo.configured" Type="Bool">true</Property>
+							<Property Name="fifo.projectItemValid" Type="Bool">true</Property>
+							<Property Name="fifo.valid" Type="Bool">true</Property>
+							<Property Name="fifo.version" Type="Int">12</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{6606080A-7D54-4D54-9E31-9CBCD2E5E0E9}</Property>
+							<Property Name="Local" Type="Bool">false</Property>
+							<Property Name="Memory Type" Type="UInt">2</Property>
+							<Property Name="Number Of Elements Per Read" Type="UInt">1</Property>
+							<Property Name="Number Of Elements Per Write" Type="UInt">1</Property>
+							<Property Name="Requested Number of Elements" Type="UInt">1023</Property>
+							<Property Name="Type" Type="UInt">0</Property>
+							<Property Name="Type Descriptor" Type="Str">100080000000000100094008000355363400010000000000000000000000000000</Property>
+						</Item>
+						<Item Name="TimestampHealthAndStatusFIFO" Type="FPGA FIFO">
+							<Property Name="Actual Number of Elements" Type="UInt">1024</Property>
+							<Property Name="Arbitration for Read" Type="UInt">1</Property>
+							<Property Name="Arbitration for Write" Type="UInt">1</Property>
+							<Property Name="Control Logic" Type="UInt">1</Property>
+							<Property Name="Data Type" Type="UInt">10</Property>
+							<Property Name="Disable on Overflow/Underflow" Type="Bool">false</Property>
+							<Property Name="fifo.configuration" Type="Str">"ControlLogic=1;NumberOfElements=1024;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=1000800000000004000D4007000741646472657373003340150006034E4F500353657403416464085375627472616374024F72074E6F7420416E64000A5570646174654D6F646500000B400800044461746100002240500003000000010002154865616C7468416E64537461747573557064617465000100030000000000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+							<Property Name="fifo.configured" Type="Bool">true</Property>
+							<Property Name="fifo.projectItemValid" Type="Bool">true</Property>
+							<Property Name="fifo.valid" Type="Bool">true</Property>
+							<Property Name="fifo.version" Type="Int">12</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{7B048A74-9319-4A24-84C8-00EA35A72FC9}</Property>
+							<Property Name="Local" Type="Bool">false</Property>
+							<Property Name="Memory Type" Type="UInt">2</Property>
+							<Property Name="Number Of Elements Per Read" Type="UInt">1</Property>
+							<Property Name="Number Of Elements Per Write" Type="UInt">1</Property>
+							<Property Name="Requested Number of Elements" Type="UInt">1023</Property>
+							<Property Name="Type" Type="UInt">0</Property>
+							<Property Name="Type Descriptor" Type="Str">1000800000000004000D4007000741646472657373003340150006034E4F500353657403416464085375627472616374024F72074E6F7420416E64000A5570646174654D6F646500000B400800044461746100002240500003000000010002154865616C7468416E64537461747573557064617465000100030000000000000000000000000000000000</Property>
+						</Item>
+						<Item Name="TimestampRegister" Type="FPGA Register">
+							<Property Name="Arbitration For Write" Type="UInt">2</Property>
+							<Property Name="Compile Config String" Type="Str">"DataType=100080000000000100094008000355363400010000000000000000000000000000;InitDataHash=;Name=TimestampRegister;WriteArb=2"</Property>
+							<Property Name="Data Type" Type="UInt">8</Property>
+							<Property Name="FPGA.PersistentID" Type="Str">{D3656F9A-5E5A-40F5-83C7-CE387961AC63}</Property>
+							<Property Name="Initial Data" Type="Str"></Property>
+							<Property Name="Initialized" Type="Bool">false</Property>
+							<Property Name="InitVIPath" Type="Str"></Property>
+							<Property Name="Type Descriptor" Type="Str">100080000000000100094008000355363400010000000000000000000000000000</Property>
+							<Property Name="Valid" Type="Bool">true</Property>
+							<Property Name="Version" Type="Int">1</Property>
+						</Item>
+					</Item>
+					<Item Name="CommandFIFO" Type="FPGA FIFO">
+						<Property Name="Actual Number of Elements" Type="UInt">1029</Property>
+						<Property Name="Arbitration for Read" Type="UInt">1</Property>
+						<Property Name="Arbitration for Write" Type="UInt">1</Property>
+						<Property Name="Control Logic" Type="UInt">0</Property>
+						<Property Name="Data Type" Type="UInt">6</Property>
+						<Property Name="Disable on Overflow/Underflow" Type="Bool">false</Property>
+						<Property Name="fifo.configuration" Type="Str">"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;CommandFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+						<Property Name="fifo.configured" Type="Bool">true</Property>
+						<Property Name="fifo.projectItemValid" Type="Bool">true</Property>
+						<Property Name="fifo.valid" Type="Bool">true</Property>
+						<Property Name="fifo.version" Type="Int">12</Property>
+						<Property Name="FPGA.PersistentID" Type="Str">{F8F7D066-1482-4E49-926E-99BFAB4DB53B}</Property>
+						<Property Name="Local" Type="Bool">false</Property>
+						<Property Name="Memory Type" Type="UInt">2</Property>
+						<Property Name="Number Of Elements Per Read" Type="UInt">1</Property>
+						<Property Name="Number Of Elements Per Write" Type="UInt">1</Property>
+						<Property Name="Requested Number of Elements" Type="UInt">1023</Property>
+						<Property Name="Type" Type="UInt">1</Property>
+						<Property Name="Type Descriptor" Type="Str">100080000000000100094006000355313600010000000000000000</Property>
+					</Item>
+					<Item Name="MasterClockSamplePeriodRegister" Type="FPGA Register">
+						<Property Name="Arbitration For Write" Type="UInt">1</Property>
+						<Property Name="Compile Config String" Type="Str">"DataType=1000800000000001000940070003553332000100000000000000000000;InitDataHash=2002E13ACF59079A1A5782C918894579;Name=MasterClockSamplePeriodRegister;WriteArb=1"</Property>
+						<Property Name="Data Type" Type="UInt">7</Property>
+						<Property Name="FPGA.PersistentID" Type="Str">{69565D01-9CA8-41A0-A966-FEDA0FE4F305}</Property>
+						<Property Name="Initial Data" Type="Str">00000000000000000000000000000000</Property>
+						<Property Name="Initialized" Type="Bool">true</Property>
+						<Property Name="InitVIPath" Type="Str"></Property>
+						<Property Name="Type Descriptor" Type="Str">1000800000000001000940070003553332000100000000000000000000</Property>
+						<Property Name="Valid" Type="Bool">true</Property>
+						<Property Name="Version" Type="Int">1</Property>
+					</Item>
+					<Item Name="RequestFIFO" Type="FPGA FIFO">
+						<Property Name="Actual Number of Elements" Type="UInt">1029</Property>
+						<Property Name="Arbitration for Read" Type="UInt">1</Property>
+						<Property Name="Arbitration for Write" Type="UInt">1</Property>
+						<Property Name="Control Logic" Type="UInt">0</Property>
+						<Property Name="Data Type" Type="UInt">6</Property>
+						<Property Name="Disable on Overflow/Underflow" Type="Bool">false</Property>
+						<Property Name="fifo.configuration" Type="Str">"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;RequestFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+						<Property Name="fifo.configured" Type="Bool">true</Property>
+						<Property Name="fifo.projectItemValid" Type="Bool">true</Property>
+						<Property Name="fifo.valid" Type="Bool">true</Property>
+						<Property Name="fifo.version" Type="Int">12</Property>
+						<Property Name="FPGA.PersistentID" Type="Str">{2907B404-2CF7-4C59-8457-EF6A5F454149}</Property>
+						<Property Name="Local" Type="Bool">false</Property>
+						<Property Name="Memory Type" Type="UInt">2</Property>
+						<Property Name="Number Of Elements Per Read" Type="UInt">1</Property>
+						<Property Name="Number Of Elements Per Write" Type="UInt">1</Property>
+						<Property Name="Requested Number of Elements" Type="UInt">1023</Property>
+						<Property Name="Type" Type="UInt">1</Property>
+						<Property Name="Type Descriptor" Type="Str">100080000000000100094006000355313600010000000000000000</Property>
+					</Item>
+					<Item Name="SampleTimestampFIFO" Type="FPGA FIFO">
+						<Property Name="Actual Number of Elements" Type="UInt">1025</Property>
+						<Property Name="Arbitration for Read" Type="UInt">1</Property>
+						<Property Name="Arbitration for Write" Type="UInt">1</Property>
+						<Property Name="Control Logic" Type="UInt">1</Property>
+						<Property Name="Data Type" Type="UInt">8</Property>
+						<Property Name="Disable on Overflow/Underflow" Type="Bool">false</Property>
+						<Property Name="fifo.configuration" Type="Str">"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+						<Property Name="fifo.configured" Type="Bool">true</Property>
+						<Property Name="fifo.projectItemValid" Type="Bool">true</Property>
+						<Property Name="fifo.valid" Type="Bool">true</Property>
+						<Property Name="fifo.version" Type="Int">12</Property>
+						<Property Name="FPGA.PersistentID" Type="Str">{1ACDB640-BC73-40A1-82C6-6E763B0A6E19}</Property>
+						<Property Name="Local" Type="Bool">false</Property>
+						<Property Name="Memory Type" Type="UInt">2</Property>
+						<Property Name="Number Of Elements Per Read" Type="UInt">1</Property>
+						<Property Name="Number Of Elements Per Write" Type="UInt">1</Property>
+						<Property Name="Requested Number of Elements" Type="UInt">1023</Property>
+						<Property Name="Type" Type="UInt">0</Property>
+						<Property Name="Type Descriptor" Type="Str">100080000000000100094008000355363400010000000000000000000000000000</Property>
+					</Item>
+					<Item Name="SGLResponseFIFO" Type="FPGA FIFO">
+						<Property Name="Actual Number of Elements" Type="UInt">1023</Property>
+						<Property Name="Arbitration for Read" Type="UInt">1</Property>
+						<Property Name="Arbitration for Write" Type="UInt">1</Property>
+						<Property Name="Control Logic" Type="UInt">0</Property>
+						<Property Name="Data Type" Type="UInt">11</Property>
+						<Property Name="Disable on Overflow/Underflow" Type="Bool">false</Property>
+						<Property Name="fifo.configuration" Type="Str">"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;SGLResponseFIFO;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+						<Property Name="fifo.configured" Type="Bool">true</Property>
+						<Property Name="fifo.projectItemValid" Type="Bool">true</Property>
+						<Property Name="fifo.valid" Type="Bool">true</Property>
+						<Property Name="fifo.version" Type="Int">12</Property>
+						<Property Name="FPGA.PersistentID" Type="Str">{54D8A15C-498D-4DC4-A181-8D04C8178EEE}</Property>
+						<Property Name="Local" Type="Bool">false</Property>
+						<Property Name="Memory Type" Type="UInt">2</Property>
+						<Property Name="Number Of Elements Per Read" Type="UInt">1</Property>
+						<Property Name="Number Of Elements Per Write" Type="UInt">1</Property>
+						<Property Name="Requested Number of Elements" Type="UInt">1023</Property>
+						<Property Name="Type" Type="UInt">2</Property>
+						<Property Name="Type Descriptor" Type="Str">100080000000000100094009000353474C000100000000000000000000</Property>
+					</Item>
+					<Item Name="U64ResponseFIFO" Type="FPGA FIFO">
+						<Property Name="Actual Number of Elements" Type="UInt">1023</Property>
+						<Property Name="Arbitration for Read" Type="UInt">1</Property>
+						<Property Name="Arbitration for Write" Type="UInt">1</Property>
+						<Property Name="Control Logic" Type="UInt">0</Property>
+						<Property Name="Data Type" Type="UInt">8</Property>
+						<Property Name="Disable on Overflow/Underflow" Type="Bool">false</Property>
+						<Property Name="fifo.configuration" Type="Str">"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;U64ResponseFIFO;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+						<Property Name="fifo.configured" Type="Bool">true</Property>
+						<Property Name="fifo.projectItemValid" Type="Bool">true</Property>
+						<Property Name="fifo.valid" Type="Bool">true</Property>
+						<Property Name="fifo.version" Type="Int">12</Property>
+						<Property Name="FPGA.PersistentID" Type="Str">{32305577-52D3-4E72-AB5C-A5FF20B897D1}</Property>
+						<Property Name="Local" Type="Bool">false</Property>
+						<Property Name="Memory Type" Type="UInt">2</Property>
+						<Property Name="Number Of Elements Per Read" Type="UInt">1</Property>
+						<Property Name="Number Of Elements Per Write" Type="UInt">1</Property>
+						<Property Name="Requested Number of Elements" Type="UInt">1023</Property>
+						<Property Name="Type" Type="UInt">2</Property>
+						<Property Name="Type Descriptor" Type="Str">100080000000000100094008000355363400010000000000000000000000000000</Property>
+					</Item>
+				</Item>
+				<Item Name="Support" Type="Folder">
+					<Item Name="DataTypes" Type="Folder"/>
+					<Item Name="Utility" Type="Folder">
+						<Item Name="OuterLoopClock.vi" Type="VI" URL="../Support/Utility/OuterLoopClock.vi">
+							<Property Name="configString.guid" Type="Str">{00F69F8C-3033-4213-BDA9-2CDB9B23DCB0}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{04BEE62B-1317-4E79-AA32-D73C9F06FC1A}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{06A2C019-B088-4667-BC7F-55A85458C8FC}resource=/crio_Accelerometer3/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{174FC8A8-D5E3-4214-AF54-2D7906154B81}resource=/crio_Accelerometer2/Stop;0;WriteMethodType=bool{1ACDB640-BC73-40A1-82C6-6E763B0A6E19}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{2907B404-2CF7-4C59-8457-EF6A5F454149}"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;RequestFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"{2FADA927-4688-4E8B-80A5-659AC5407CEB}[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 2,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]{303FA2B7-46B5-4BAB-A73C-1C2A89582CF9}resource=/crio_Accelerometer1/Stop;0;WriteMethodType=bool{32305577-52D3-4E72-AB5C-A5FF20B897D1}"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;U64ResponseFIFO;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{449EA30E-D286-4844-B91E-ABB732DC03F6}resource=/Scan Clock;0;ReadMethodType=bool{47EA9A07-FD4B-407D-96C3-FAF77904A751}NumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer1/Onboard Clock;0;ReadMethodType=bool{4FF474FA-E68E-4589-83BB-F95FFEEA149F}resource=/crio_Accelerometer1/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{54D8A15C-498D-4DC4-A181-8D04C8178EEE}"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;SGLResponseFIFO;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{5FAEBD1C-1C24-47B8-AB68-FDDA1C2BD52C}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{5FB51CC8-F262-4C33-B2BB-E5B0ABF08C36}NumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer3/Onboard Clock;0;ReadMethodType=bool{64F575C4-8C66-412E-9CE1-E590BB2B6D94}resource=/Chassis Temperature;0;ReadMethodType=i16{651D0B45-EF7B-49C9-B00F-66D736C6EC4D}resource=/crio_Accelerometer2/Start;0;WriteMethodType=bool{6606080A-7D54-4D54-9E31-9CBCD2E5E0E9}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{669B5523-402D-4AFF-AA92-47D47D13339A}resource=/crio_Accelerometer3/Start;0;WriteMethodType=bool{66B8A6F9-C7D9-4B7F-8EF6-F406896663A3}resource=/crio_Accelerometer2/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{674360E0-9700-4FD0-AAA3-B2B5358CC685}resource=/crio_Accelerometer2/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{6909E5E2-993C-4EC0-B995-420DBB71BCBD}[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 1,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]{69565D01-9CA8-41A0-A966-FEDA0FE4F305}"DataType=1000800000000001000940070003553332000100000000000000000000;InitDataHash=2002E13ACF59079A1A5782C918894579;Name=MasterClockSamplePeriodRegister;WriteArb=1"{7B048A74-9319-4A24-84C8-00EA35A72FC9}"ControlLogic=1;NumberOfElements=1024;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=1000800000000004000D4007000741646472657373003340150006034E4F500353657403416464085375627472616374024F72074E6F7420416E64000A5570646174654D6F646500000B400800044461746100002240500003000000010002154865616C7468416E64537461747573557064617465000100030000000000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{A3A9A627-235F-4769-84C3-A99EDA666FB4}resource=/System Reset;0;ReadMethodType=bool;WriteMethodType=bool{A43667EC-EB45-4ADE-97A3-703D5F187A77}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{A48C7278-DE15-4A3F-95D9-863ADD5C7997}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{A55B6C00-43D6-47E2-B0ED-839731B56B7D}resource=/Sleep;0;ReadMethodType=bool;WriteMethodType=bool{B09B26AA-BCCD-4C78-A0D5-EA9EF7832E82}resource=/crio_Accelerometer1/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{B40F657D-0612-4FEA-9F88-CE889E713A00}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{BF711C80-FEEA-4CF7-B07C-9FC13836BF40}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{C8473929-EF0A-4C21-9DF8-7A6280FA5DE4}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{D241C03B-0940-4EBB-93D5-621150C12C71}resource=/crio_Accelerometer2/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{D3656F9A-5E5A-40F5-83C7-CE387961AC63}"DataType=100080000000000100094008000355363400010000000000000000000000000000;InitDataHash=;Name=TimestampRegister;WriteArb=2"{D7CFFB77-2121-4DC2-96CB-6E811E29BDCB}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{DB0D3EB2-8179-4316-9DC5-24D9C9A5F870}NumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer2/Onboard Clock;0;ReadMethodType=bool{DD092636-2D13-4879-A24E-B4169DEAE7A6}resource=/crio_Accelerometer1/Start;0;WriteMethodType=bool{E066D537-305E-4364-871C-ACE30D81DF10}resource=/crio_Accelerometer3/Stop;0;WriteMethodType=bool{F3426395-40B3-40BA-B615-5721BE884CBF}resource=/crio_Accelerometer3/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{F3A5C848-CD7B-41E1-A51E-1EAA0FB1D5F0}resource=/crio_Accelerometer1/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{F5D39673-BFDB-480E-98C6-ACD5A78D3570}Multiplier=1.000000;Divisor=8.000000{F8F7D066-1482-4E49-926E-99BFAB4DB53B}"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;CommandFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"{FA382478-E557-472C-B2E4-C82F24278184}ResourceName=40 MHz Onboard Clock;TopSignalConnect=Clk40;ClockSignalName=Clk40;MinFreq=40000000.000000;MaxFreq=40000000.000000;VariableFreq=0;NomFreq=40000000.000000;PeakPeriodJitter=250.000000;MinDutyCycle=50.000000;MaxDutyCycle=50.000000;Accuracy=100.000000;RunTime=0;SpreadSpectrum=0;GenericDataHash=D41D8CD98F00B204E9800998ECF8427E;{FD2EBEC7-B94D-487D-B0A9-4D6CAF0B84CB}resource=/crio_Accelerometer3/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{FE2AF43A-DF97-430D-B609-C7BF66621B4E}[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 3,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]{FE870F97-02D5-4494-8635-3243D0F5F5B7}resource=/FPGA LED;0;ReadMethodType=bool;WriteMethodType=boolcRIO-9076/Clk40/falsefalseFPGA_EXECUTION_MODEFPGA_TARGETFPGA_TARGET_CLASSCRIO_9076FPGA_TARGET_FAMILYSPARTAN6TARGET_TYPEFPGA</Property>
+							<Property Name="configString.name" Type="Str">40 MHz Onboard ClockResourceName=40 MHz Onboard Clock;TopSignalConnect=Clk40;ClockSignalName=Clk40;MinFreq=40000000.000000;MaxFreq=40000000.000000;VariableFreq=0;NomFreq=40000000.000000;PeakPeriodJitter=250.000000;MinDutyCycle=50.000000;MaxDutyCycle=50.000000;Accuracy=100.000000;RunTime=0;SpreadSpectrum=0;GenericDataHash=D41D8CD98F00B204E9800998ECF8427E;5MHzMultiplier=1.000000;Divisor=8.000000Accelerometer1/AI0resource=/crio_Accelerometer1/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer1/AI1resource=/crio_Accelerometer1/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer1/AI2resource=/crio_Accelerometer1/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer1/Onboard ClockNumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer1/Onboard Clock;0;ReadMethodType=boolAccelerometer1/Startresource=/crio_Accelerometer1/Start;0;WriteMethodType=boolAccelerometer1/Stopresource=/crio_Accelerometer1/Stop;0;WriteMethodType=boolAccelerometer1[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 1,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]Accelerometer1XFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer1YFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer1ZFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer2/AI0resource=/crio_Accelerometer2/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer2/AI1resource=/crio_Accelerometer2/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer2/AI2resource=/crio_Accelerometer2/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer2/Onboard ClockNumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer2/Onboard Clock;0;ReadMethodType=boolAccelerometer2/Startresource=/crio_Accelerometer2/Start;0;WriteMethodType=boolAccelerometer2/Stopresource=/crio_Accelerometer2/Stop;0;WriteMethodType=boolAccelerometer2[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 2,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]Accelerometer2XFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer2YFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer2ZFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer3/AI0resource=/crio_Accelerometer3/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer3/AI1resource=/crio_Accelerometer3/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer3/AI2resource=/crio_Accelerometer3/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer3/Onboard ClockNumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer3/Onboard Clock;0;ReadMethodType=boolAccelerometer3/Startresource=/crio_Accelerometer3/Start;0;WriteMethodType=boolAccelerometer3/Stopresource=/crio_Accelerometer3/Stop;0;WriteMethodType=boolAccelerometer3[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 3,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]Accelerometer3XFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer3YFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer3ZFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Chassis Temperatureresource=/Chassis Temperature;0;ReadMethodType=i16CommandFIFO"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;CommandFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"cRIO-9076/Clk40/falsefalseFPGA_EXECUTION_MODEFPGA_TARGETFPGA_TARGET_CLASSCRIO_9076FPGA_TARGET_FAMILYSPARTAN6TARGET_TYPEFPGAFPGA LEDresource=/FPGA LED;0;ReadMethodType=bool;WriteMethodType=boolMasterClockSamplePeriodRegister"DataType=1000800000000001000940070003553332000100000000000000000000;InitDataHash=2002E13ACF59079A1A5782C918894579;Name=MasterClockSamplePeriodRegister;WriteArb=1"RequestFIFO"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;RequestFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"SampleTimestampFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"Scan Clockresource=/Scan Clock;0;ReadMethodType=boolSGLResponseFIFO"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;SGLResponseFIFO;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Sleepresource=/Sleep;0;ReadMethodType=bool;WriteMethodType=boolSystem Resetresource=/System Reset;0;ReadMethodType=bool;WriteMethodType=boolTimestampFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"TimestampHealthAndStatusFIFO"ControlLogic=1;NumberOfElements=1024;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=1000800000000004000D4007000741646472657373003340150006034E4F500353657403416464085375627472616374024F72074E6F7420416E64000A5570646174654D6F646500000B400800044461746100002240500003000000010002154865616C7468416E64537461747573557064617465000100030000000000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"TimestampRegister"DataType=100080000000000100094008000355363400010000000000000000000000000000;InitDataHash=;Name=TimestampRegister;WriteArb=2"U64ResponseFIFO"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;U64ResponseFIFO;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+						</Item>
+					</Item>
+					<Item Name="MasterAccelerometerSampleCameraRotator.vi" Type="VI" URL="../Support/MasterAccelerometerSampleCameraRotator.vi">
+						<Property Name="configString.guid" Type="Str">{00F69F8C-3033-4213-BDA9-2CDB9B23DCB0}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{04BEE62B-1317-4E79-AA32-D73C9F06FC1A}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{06A2C019-B088-4667-BC7F-55A85458C8FC}resource=/crio_Accelerometer3/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{174FC8A8-D5E3-4214-AF54-2D7906154B81}resource=/crio_Accelerometer2/Stop;0;WriteMethodType=bool{1ACDB640-BC73-40A1-82C6-6E763B0A6E19}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{2907B404-2CF7-4C59-8457-EF6A5F454149}"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;RequestFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"{2FADA927-4688-4E8B-80A5-659AC5407CEB}[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 2,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]{303FA2B7-46B5-4BAB-A73C-1C2A89582CF9}resource=/crio_Accelerometer1/Stop;0;WriteMethodType=bool{32305577-52D3-4E72-AB5C-A5FF20B897D1}"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;U64ResponseFIFO;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{449EA30E-D286-4844-B91E-ABB732DC03F6}resource=/Scan Clock;0;ReadMethodType=bool{47EA9A07-FD4B-407D-96C3-FAF77904A751}NumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer1/Onboard Clock;0;ReadMethodType=bool{4FF474FA-E68E-4589-83BB-F95FFEEA149F}resource=/crio_Accelerometer1/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{54D8A15C-498D-4DC4-A181-8D04C8178EEE}"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;SGLResponseFIFO;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{5FAEBD1C-1C24-47B8-AB68-FDDA1C2BD52C}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{5FB51CC8-F262-4C33-B2BB-E5B0ABF08C36}NumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer3/Onboard Clock;0;ReadMethodType=bool{64F575C4-8C66-412E-9CE1-E590BB2B6D94}resource=/Chassis Temperature;0;ReadMethodType=i16{651D0B45-EF7B-49C9-B00F-66D736C6EC4D}resource=/crio_Accelerometer2/Start;0;WriteMethodType=bool{6606080A-7D54-4D54-9E31-9CBCD2E5E0E9}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{669B5523-402D-4AFF-AA92-47D47D13339A}resource=/crio_Accelerometer3/Start;0;WriteMethodType=bool{66B8A6F9-C7D9-4B7F-8EF6-F406896663A3}resource=/crio_Accelerometer2/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{674360E0-9700-4FD0-AAA3-B2B5358CC685}resource=/crio_Accelerometer2/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{6909E5E2-993C-4EC0-B995-420DBB71BCBD}[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 1,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]{69565D01-9CA8-41A0-A966-FEDA0FE4F305}"DataType=1000800000000001000940070003553332000100000000000000000000;InitDataHash=2002E13ACF59079A1A5782C918894579;Name=MasterClockSamplePeriodRegister;WriteArb=1"{7B048A74-9319-4A24-84C8-00EA35A72FC9}"ControlLogic=1;NumberOfElements=1024;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=1000800000000004000D4007000741646472657373003340150006034E4F500353657403416464085375627472616374024F72074E6F7420416E64000A5570646174654D6F646500000B400800044461746100002240500003000000010002154865616C7468416E64537461747573557064617465000100030000000000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{A3A9A627-235F-4769-84C3-A99EDA666FB4}resource=/System Reset;0;ReadMethodType=bool;WriteMethodType=bool{A43667EC-EB45-4ADE-97A3-703D5F187A77}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{A48C7278-DE15-4A3F-95D9-863ADD5C7997}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{A55B6C00-43D6-47E2-B0ED-839731B56B7D}resource=/Sleep;0;ReadMethodType=bool;WriteMethodType=bool{B09B26AA-BCCD-4C78-A0D5-EA9EF7832E82}resource=/crio_Accelerometer1/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{B40F657D-0612-4FEA-9F88-CE889E713A00}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{BF711C80-FEEA-4CF7-B07C-9FC13836BF40}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{C8473929-EF0A-4C21-9DF8-7A6280FA5DE4}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{D241C03B-0940-4EBB-93D5-621150C12C71}resource=/crio_Accelerometer2/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{D3656F9A-5E5A-40F5-83C7-CE387961AC63}"DataType=100080000000000100094008000355363400010000000000000000000000000000;InitDataHash=;Name=TimestampRegister;WriteArb=2"{D7CFFB77-2121-4DC2-96CB-6E811E29BDCB}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{DB0D3EB2-8179-4316-9DC5-24D9C9A5F870}NumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer2/Onboard Clock;0;ReadMethodType=bool{DD092636-2D13-4879-A24E-B4169DEAE7A6}resource=/crio_Accelerometer1/Start;0;WriteMethodType=bool{E066D537-305E-4364-871C-ACE30D81DF10}resource=/crio_Accelerometer3/Stop;0;WriteMethodType=bool{F3426395-40B3-40BA-B615-5721BE884CBF}resource=/crio_Accelerometer3/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{F3A5C848-CD7B-41E1-A51E-1EAA0FB1D5F0}resource=/crio_Accelerometer1/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{F5D39673-BFDB-480E-98C6-ACD5A78D3570}Multiplier=1.000000;Divisor=8.000000{F8F7D066-1482-4E49-926E-99BFAB4DB53B}"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;CommandFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"{FA382478-E557-472C-B2E4-C82F24278184}ResourceName=40 MHz Onboard Clock;TopSignalConnect=Clk40;ClockSignalName=Clk40;MinFreq=40000000.000000;MaxFreq=40000000.000000;VariableFreq=0;NomFreq=40000000.000000;PeakPeriodJitter=250.000000;MinDutyCycle=50.000000;MaxDutyCycle=50.000000;Accuracy=100.000000;RunTime=0;SpreadSpectrum=0;GenericDataHash=D41D8CD98F00B204E9800998ECF8427E;{FD2EBEC7-B94D-487D-B0A9-4D6CAF0B84CB}resource=/crio_Accelerometer3/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{FE2AF43A-DF97-430D-B609-C7BF66621B4E}[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 3,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]{FE870F97-02D5-4494-8635-3243D0F5F5B7}resource=/FPGA LED;0;ReadMethodType=bool;WriteMethodType=boolcRIO-9076/Clk40/falsefalseFPGA_EXECUTION_MODEFPGA_TARGETFPGA_TARGET_CLASSCRIO_9076FPGA_TARGET_FAMILYSPARTAN6TARGET_TYPEFPGA</Property>
+						<Property Name="configString.name" Type="Str">40 MHz Onboard ClockResourceName=40 MHz Onboard Clock;TopSignalConnect=Clk40;ClockSignalName=Clk40;MinFreq=40000000.000000;MaxFreq=40000000.000000;VariableFreq=0;NomFreq=40000000.000000;PeakPeriodJitter=250.000000;MinDutyCycle=50.000000;MaxDutyCycle=50.000000;Accuracy=100.000000;RunTime=0;SpreadSpectrum=0;GenericDataHash=D41D8CD98F00B204E9800998ECF8427E;5MHzMultiplier=1.000000;Divisor=8.000000Accelerometer1/AI0resource=/crio_Accelerometer1/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer1/AI1resource=/crio_Accelerometer1/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer1/AI2resource=/crio_Accelerometer1/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer1/Onboard ClockNumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer1/Onboard Clock;0;ReadMethodType=boolAccelerometer1/Startresource=/crio_Accelerometer1/Start;0;WriteMethodType=boolAccelerometer1/Stopresource=/crio_Accelerometer1/Stop;0;WriteMethodType=boolAccelerometer1[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 1,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]Accelerometer1XFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer1YFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer1ZFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer2/AI0resource=/crio_Accelerometer2/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer2/AI1resource=/crio_Accelerometer2/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer2/AI2resource=/crio_Accelerometer2/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer2/Onboard ClockNumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer2/Onboard Clock;0;ReadMethodType=boolAccelerometer2/Startresource=/crio_Accelerometer2/Start;0;WriteMethodType=boolAccelerometer2/Stopresource=/crio_Accelerometer2/Stop;0;WriteMethodType=boolAccelerometer2[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 2,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]Accelerometer2XFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer2YFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer2ZFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer3/AI0resource=/crio_Accelerometer3/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer3/AI1resource=/crio_Accelerometer3/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer3/AI2resource=/crio_Accelerometer3/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer3/Onboard ClockNumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer3/Onboard Clock;0;ReadMethodType=boolAccelerometer3/Startresource=/crio_Accelerometer3/Start;0;WriteMethodType=boolAccelerometer3/Stopresource=/crio_Accelerometer3/Stop;0;WriteMethodType=boolAccelerometer3[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 3,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]Accelerometer3XFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer3YFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer3ZFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Chassis Temperatureresource=/Chassis Temperature;0;ReadMethodType=i16CommandFIFO"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;CommandFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"cRIO-9076/Clk40/falsefalseFPGA_EXECUTION_MODEFPGA_TARGETFPGA_TARGET_CLASSCRIO_9076FPGA_TARGET_FAMILYSPARTAN6TARGET_TYPEFPGAFPGA LEDresource=/FPGA LED;0;ReadMethodType=bool;WriteMethodType=boolMasterClockSamplePeriodRegister"DataType=1000800000000001000940070003553332000100000000000000000000;InitDataHash=2002E13ACF59079A1A5782C918894579;Name=MasterClockSamplePeriodRegister;WriteArb=1"RequestFIFO"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;RequestFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"SampleTimestampFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"Scan Clockresource=/Scan Clock;0;ReadMethodType=boolSGLResponseFIFO"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;SGLResponseFIFO;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Sleepresource=/Sleep;0;ReadMethodType=bool;WriteMethodType=boolSystem Resetresource=/System Reset;0;ReadMethodType=bool;WriteMethodType=boolTimestampFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"TimestampHealthAndStatusFIFO"ControlLogic=1;NumberOfElements=1024;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=1000800000000004000D4007000741646472657373003340150006034E4F500353657403416464085375627472616374024F72074E6F7420416E64000A5570646174654D6F646500000B400800044461746100002240500003000000010002154865616C7468416E64537461747573557064617465000100030000000000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"TimestampRegister"DataType=100080000000000100094008000355363400010000000000000000000000000000;InitDataHash=;Name=TimestampRegister;WriteArb=2"U64ResponseFIFO"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;U64ResponseFIFO;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+					</Item>
+				</Item>
+				<Item Name="IP Builder" Type="IP Builder Target">
+					<Item Name="Dependencies" Type="Dependencies"/>
+					<Item Name="Build Specifications" Type="Build"/>
+				</Item>
+				<Item Name="FPGAHealthAndStatus.lvlib" Type="Library" URL="../Common_FPGA_HealthAndStatus/FPGAHealthAndStatus.lvlib"/>
+				<Item Name="FPGATimestamp.lvlib" Type="Library" URL="../Common_FPGA_Timestamp/FPGATimestamp.lvlib"/>
+				<Item Name="VMS_CameraRotator.vi" Type="VI" URL="../VMS_CameraRotator.vi">
+					<Property Name="BuildSpec" Type="Str">{42929B2A-01F6-4BA3-B761-C9C68ED8F44A}</Property>
+					<Property Name="configString.guid" Type="Str">{00F69F8C-3033-4213-BDA9-2CDB9B23DCB0}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{04BEE62B-1317-4E79-AA32-D73C9F06FC1A}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{06A2C019-B088-4667-BC7F-55A85458C8FC}resource=/crio_Accelerometer3/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{174FC8A8-D5E3-4214-AF54-2D7906154B81}resource=/crio_Accelerometer2/Stop;0;WriteMethodType=bool{1ACDB640-BC73-40A1-82C6-6E763B0A6E19}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{2907B404-2CF7-4C59-8457-EF6A5F454149}"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;RequestFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"{2FADA927-4688-4E8B-80A5-659AC5407CEB}[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 2,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]{303FA2B7-46B5-4BAB-A73C-1C2A89582CF9}resource=/crio_Accelerometer1/Stop;0;WriteMethodType=bool{32305577-52D3-4E72-AB5C-A5FF20B897D1}"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;U64ResponseFIFO;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{449EA30E-D286-4844-B91E-ABB732DC03F6}resource=/Scan Clock;0;ReadMethodType=bool{47EA9A07-FD4B-407D-96C3-FAF77904A751}NumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer1/Onboard Clock;0;ReadMethodType=bool{4FF474FA-E68E-4589-83BB-F95FFEEA149F}resource=/crio_Accelerometer1/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{54D8A15C-498D-4DC4-A181-8D04C8178EEE}"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;SGLResponseFIFO;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{5FAEBD1C-1C24-47B8-AB68-FDDA1C2BD52C}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{5FB51CC8-F262-4C33-B2BB-E5B0ABF08C36}NumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer3/Onboard Clock;0;ReadMethodType=bool{64F575C4-8C66-412E-9CE1-E590BB2B6D94}resource=/Chassis Temperature;0;ReadMethodType=i16{651D0B45-EF7B-49C9-B00F-66D736C6EC4D}resource=/crio_Accelerometer2/Start;0;WriteMethodType=bool{6606080A-7D54-4D54-9E31-9CBCD2E5E0E9}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{669B5523-402D-4AFF-AA92-47D47D13339A}resource=/crio_Accelerometer3/Start;0;WriteMethodType=bool{66B8A6F9-C7D9-4B7F-8EF6-F406896663A3}resource=/crio_Accelerometer2/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{674360E0-9700-4FD0-AAA3-B2B5358CC685}resource=/crio_Accelerometer2/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{6909E5E2-993C-4EC0-B995-420DBB71BCBD}[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 1,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]{69565D01-9CA8-41A0-A966-FEDA0FE4F305}"DataType=1000800000000001000940070003553332000100000000000000000000;InitDataHash=2002E13ACF59079A1A5782C918894579;Name=MasterClockSamplePeriodRegister;WriteArb=1"{7B048A74-9319-4A24-84C8-00EA35A72FC9}"ControlLogic=1;NumberOfElements=1024;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=1000800000000004000D4007000741646472657373003340150006034E4F500353657403416464085375627472616374024F72074E6F7420416E64000A5570646174654D6F646500000B400800044461746100002240500003000000010002154865616C7468416E64537461747573557064617465000100030000000000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{A3A9A627-235F-4769-84C3-A99EDA666FB4}resource=/System Reset;0;ReadMethodType=bool;WriteMethodType=bool{A43667EC-EB45-4ADE-97A3-703D5F187A77}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{A48C7278-DE15-4A3F-95D9-863ADD5C7997}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{A55B6C00-43D6-47E2-B0ED-839731B56B7D}resource=/Sleep;0;ReadMethodType=bool;WriteMethodType=bool{B09B26AA-BCCD-4C78-A0D5-EA9EF7832E82}resource=/crio_Accelerometer1/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{B40F657D-0612-4FEA-9F88-CE889E713A00}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{BF711C80-FEEA-4CF7-B07C-9FC13836BF40}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{C8473929-EF0A-4C21-9DF8-7A6280FA5DE4}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{D241C03B-0940-4EBB-93D5-621150C12C71}resource=/crio_Accelerometer2/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{D3656F9A-5E5A-40F5-83C7-CE387961AC63}"DataType=100080000000000100094008000355363400010000000000000000000000000000;InitDataHash=;Name=TimestampRegister;WriteArb=2"{D7CFFB77-2121-4DC2-96CB-6E811E29BDCB}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{DB0D3EB2-8179-4316-9DC5-24D9C9A5F870}NumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer2/Onboard Clock;0;ReadMethodType=bool{DD092636-2D13-4879-A24E-B4169DEAE7A6}resource=/crio_Accelerometer1/Start;0;WriteMethodType=bool{E066D537-305E-4364-871C-ACE30D81DF10}resource=/crio_Accelerometer3/Stop;0;WriteMethodType=bool{F3426395-40B3-40BA-B615-5721BE884CBF}resource=/crio_Accelerometer3/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{F3A5C848-CD7B-41E1-A51E-1EAA0FB1D5F0}resource=/crio_Accelerometer1/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{F5D39673-BFDB-480E-98C6-ACD5A78D3570}Multiplier=1.000000;Divisor=8.000000{F8F7D066-1482-4E49-926E-99BFAB4DB53B}"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;CommandFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"{FA382478-E557-472C-B2E4-C82F24278184}ResourceName=40 MHz Onboard Clock;TopSignalConnect=Clk40;ClockSignalName=Clk40;MinFreq=40000000.000000;MaxFreq=40000000.000000;VariableFreq=0;NomFreq=40000000.000000;PeakPeriodJitter=250.000000;MinDutyCycle=50.000000;MaxDutyCycle=50.000000;Accuracy=100.000000;RunTime=0;SpreadSpectrum=0;GenericDataHash=D41D8CD98F00B204E9800998ECF8427E;{FD2EBEC7-B94D-487D-B0A9-4D6CAF0B84CB}resource=/crio_Accelerometer3/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{FE2AF43A-DF97-430D-B609-C7BF66621B4E}[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 3,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]{FE870F97-02D5-4494-8635-3243D0F5F5B7}resource=/FPGA LED;0;ReadMethodType=bool;WriteMethodType=boolcRIO-9076/Clk40/falsefalseFPGA_EXECUTION_MODEFPGA_TARGETFPGA_TARGET_CLASSCRIO_9076FPGA_TARGET_FAMILYSPARTAN6TARGET_TYPEFPGA</Property>
+					<Property Name="configString.name" Type="Str">40 MHz Onboard ClockResourceName=40 MHz Onboard Clock;TopSignalConnect=Clk40;ClockSignalName=Clk40;MinFreq=40000000.000000;MaxFreq=40000000.000000;VariableFreq=0;NomFreq=40000000.000000;PeakPeriodJitter=250.000000;MinDutyCycle=50.000000;MaxDutyCycle=50.000000;Accuracy=100.000000;RunTime=0;SpreadSpectrum=0;GenericDataHash=D41D8CD98F00B204E9800998ECF8427E;5MHzMultiplier=1.000000;Divisor=8.000000Accelerometer1/AI0resource=/crio_Accelerometer1/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer1/AI1resource=/crio_Accelerometer1/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer1/AI2resource=/crio_Accelerometer1/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer1/Onboard ClockNumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer1/Onboard Clock;0;ReadMethodType=boolAccelerometer1/Startresource=/crio_Accelerometer1/Start;0;WriteMethodType=boolAccelerometer1/Stopresource=/crio_Accelerometer1/Stop;0;WriteMethodType=boolAccelerometer1[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 1,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]Accelerometer1XFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer1YFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer1ZFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer2/AI0resource=/crio_Accelerometer2/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer2/AI1resource=/crio_Accelerometer2/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer2/AI2resource=/crio_Accelerometer2/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer2/Onboard ClockNumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer2/Onboard Clock;0;ReadMethodType=boolAccelerometer2/Startresource=/crio_Accelerometer2/Start;0;WriteMethodType=boolAccelerometer2/Stopresource=/crio_Accelerometer2/Stop;0;WriteMethodType=boolAccelerometer2[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 2,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]Accelerometer2XFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer2YFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer2ZFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer3/AI0resource=/crio_Accelerometer3/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer3/AI1resource=/crio_Accelerometer3/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer3/AI2resource=/crio_Accelerometer3/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer3/Onboard ClockNumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer3/Onboard Clock;0;ReadMethodType=boolAccelerometer3/Startresource=/crio_Accelerometer3/Start;0;WriteMethodType=boolAccelerometer3/Stopresource=/crio_Accelerometer3/Stop;0;WriteMethodType=boolAccelerometer3[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 3,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]Accelerometer3XFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer3YFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer3ZFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Chassis Temperatureresource=/Chassis Temperature;0;ReadMethodType=i16CommandFIFO"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;CommandFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"cRIO-9076/Clk40/falsefalseFPGA_EXECUTION_MODEFPGA_TARGETFPGA_TARGET_CLASSCRIO_9076FPGA_TARGET_FAMILYSPARTAN6TARGET_TYPEFPGAFPGA LEDresource=/FPGA LED;0;ReadMethodType=bool;WriteMethodType=boolMasterClockSamplePeriodRegister"DataType=1000800000000001000940070003553332000100000000000000000000;InitDataHash=2002E13ACF59079A1A5782C918894579;Name=MasterClockSamplePeriodRegister;WriteArb=1"RequestFIFO"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;RequestFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"SampleTimestampFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"Scan Clockresource=/Scan Clock;0;ReadMethodType=boolSGLResponseFIFO"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;SGLResponseFIFO;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Sleepresource=/Sleep;0;ReadMethodType=bool;WriteMethodType=boolSystem Resetresource=/System Reset;0;ReadMethodType=bool;WriteMethodType=boolTimestampFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"TimestampHealthAndStatusFIFO"ControlLogic=1;NumberOfElements=1024;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=1000800000000004000D4007000741646472657373003340150006034E4F500353657403416464085375627472616374024F72074E6F7420416E64000A5570646174654D6F646500000B400800044461746100002240500003000000010002154865616C7468416E64537461747573557064617465000100030000000000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"TimestampRegister"DataType=100080000000000100094008000355363400010000000000000000000000000000;InitDataHash=;Name=TimestampRegister;WriteArb=2"U64ResponseFIFO"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;U64ResponseFIFO;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+					<Property Name="NI.LV.FPGA.InterfaceBitfile" Type="Str">C:\Users\pkubanek\ts_vms\FPGA\FPGA Bitfiles\NiFpga_VMS_CameraRotator.lvbitx</Property>
+				</Item>
+				<Item Name="Dependencies" Type="Dependencies">
+					<Item Name="vi.lib" Type="Folder">
+						<Item Name="lvSimController.dll" Type="Document" URL="/&lt;vilib&gt;/rvi/Simulation/lvSimController.dll"/>
+						<Item Name="Clear Errors.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Clear Errors.vi"/>
+					</Item>
+					<Item Name="Addresses.ctl" Type="VI" URL="../Support/DataTypes/Addresses.ctl"/>
+					<Item Name="U16ToAddress.vi" Type="VI" URL="../Support/Utility/U16ToAddress.vi">
+						<Property Name="configString.guid" Type="Str">{00F69F8C-3033-4213-BDA9-2CDB9B23DCB0}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{04BEE62B-1317-4E79-AA32-D73C9F06FC1A}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{06A2C019-B088-4667-BC7F-55A85458C8FC}resource=/crio_Accelerometer3/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{174FC8A8-D5E3-4214-AF54-2D7906154B81}resource=/crio_Accelerometer2/Stop;0;WriteMethodType=bool{1ACDB640-BC73-40A1-82C6-6E763B0A6E19}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{2907B404-2CF7-4C59-8457-EF6A5F454149}"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;RequestFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"{2FADA927-4688-4E8B-80A5-659AC5407CEB}[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 2,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]{303FA2B7-46B5-4BAB-A73C-1C2A89582CF9}resource=/crio_Accelerometer1/Stop;0;WriteMethodType=bool{32305577-52D3-4E72-AB5C-A5FF20B897D1}"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;U64ResponseFIFO;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{449EA30E-D286-4844-B91E-ABB732DC03F6}resource=/Scan Clock;0;ReadMethodType=bool{47EA9A07-FD4B-407D-96C3-FAF77904A751}NumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer1/Onboard Clock;0;ReadMethodType=bool{4FF474FA-E68E-4589-83BB-F95FFEEA149F}resource=/crio_Accelerometer1/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{54D8A15C-498D-4DC4-A181-8D04C8178EEE}"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;SGLResponseFIFO;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{5FAEBD1C-1C24-47B8-AB68-FDDA1C2BD52C}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{5FB51CC8-F262-4C33-B2BB-E5B0ABF08C36}NumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer3/Onboard Clock;0;ReadMethodType=bool{64F575C4-8C66-412E-9CE1-E590BB2B6D94}resource=/Chassis Temperature;0;ReadMethodType=i16{651D0B45-EF7B-49C9-B00F-66D736C6EC4D}resource=/crio_Accelerometer2/Start;0;WriteMethodType=bool{6606080A-7D54-4D54-9E31-9CBCD2E5E0E9}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{669B5523-402D-4AFF-AA92-47D47D13339A}resource=/crio_Accelerometer3/Start;0;WriteMethodType=bool{66B8A6F9-C7D9-4B7F-8EF6-F406896663A3}resource=/crio_Accelerometer2/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{674360E0-9700-4FD0-AAA3-B2B5358CC685}resource=/crio_Accelerometer2/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{6909E5E2-993C-4EC0-B995-420DBB71BCBD}[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 1,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]{69565D01-9CA8-41A0-A966-FEDA0FE4F305}"DataType=1000800000000001000940070003553332000100000000000000000000;InitDataHash=2002E13ACF59079A1A5782C918894579;Name=MasterClockSamplePeriodRegister;WriteArb=1"{7B048A74-9319-4A24-84C8-00EA35A72FC9}"ControlLogic=1;NumberOfElements=1024;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=1000800000000004000D4007000741646472657373003340150006034E4F500353657403416464085375627472616374024F72074E6F7420416E64000A5570646174654D6F646500000B400800044461746100002240500003000000010002154865616C7468416E64537461747573557064617465000100030000000000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"{A3A9A627-235F-4769-84C3-A99EDA666FB4}resource=/System Reset;0;ReadMethodType=bool;WriteMethodType=bool{A43667EC-EB45-4ADE-97A3-703D5F187A77}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{A48C7278-DE15-4A3F-95D9-863ADD5C7997}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{A55B6C00-43D6-47E2-B0ED-839731B56B7D}resource=/Sleep;0;ReadMethodType=bool;WriteMethodType=bool{B09B26AA-BCCD-4C78-A0D5-EA9EF7832E82}resource=/crio_Accelerometer1/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{B40F657D-0612-4FEA-9F88-CE889E713A00}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{BF711C80-FEEA-4CF7-B07C-9FC13836BF40}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{C8473929-EF0A-4C21-9DF8-7A6280FA5DE4}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{D241C03B-0940-4EBB-93D5-621150C12C71}resource=/crio_Accelerometer2/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{D3656F9A-5E5A-40F5-83C7-CE387961AC63}"DataType=100080000000000100094008000355363400010000000000000000000000000000;InitDataHash=;Name=TimestampRegister;WriteArb=2"{D7CFFB77-2121-4DC2-96CB-6E811E29BDCB}"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"{DB0D3EB2-8179-4316-9DC5-24D9C9A5F870}NumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer2/Onboard Clock;0;ReadMethodType=bool{DD092636-2D13-4879-A24E-B4169DEAE7A6}resource=/crio_Accelerometer1/Start;0;WriteMethodType=bool{E066D537-305E-4364-871C-ACE30D81DF10}resource=/crio_Accelerometer3/Stop;0;WriteMethodType=bool{F3426395-40B3-40BA-B615-5721BE884CBF}resource=/crio_Accelerometer3/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{F3A5C848-CD7B-41E1-A51E-1EAA0FB1D5F0}resource=/crio_Accelerometer1/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{F8F7D066-1482-4E49-926E-99BFAB4DB53B}"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;CommandFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"{FA382478-E557-472C-B2E4-C82F24278184}ResourceName=40 MHz Onboard Clock;TopSignalConnect=Clk40;ClockSignalName=Clk40;MinFreq=40000000.000000;MaxFreq=40000000.000000;VariableFreq=0;NomFreq=40000000.000000;PeakPeriodJitter=250.000000;MinDutyCycle=50.000000;MaxDutyCycle=50.000000;Accuracy=100.000000;RunTime=0;SpreadSpectrum=0;GenericDataHash=D41D8CD98F00B204E9800998ECF8427E;{FD2EBEC7-B94D-487D-B0A9-4D6CAF0B84CB}resource=/crio_Accelerometer3/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctl{FE2AF43A-DF97-430D-B609-C7BF66621B4E}[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 3,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]{FE870F97-02D5-4494-8635-3243D0F5F5B7}resource=/FPGA LED;0;ReadMethodType=bool;WriteMethodType=boolcRIO-9076/Clk40/falsefalseFPGA_EXECUTION_MODEFPGA_TARGETFPGA_TARGET_CLASSCRIO_9076FPGA_TARGET_FAMILYSPARTAN6TARGET_TYPEFPGA</Property>
+						<Property Name="configString.name" Type="Str">40 MHz Onboard ClockResourceName=40 MHz Onboard Clock;TopSignalConnect=Clk40;ClockSignalName=Clk40;MinFreq=40000000.000000;MaxFreq=40000000.000000;VariableFreq=0;NomFreq=40000000.000000;PeakPeriodJitter=250.000000;MinDutyCycle=50.000000;MaxDutyCycle=50.000000;Accuracy=100.000000;RunTime=0;SpreadSpectrum=0;GenericDataHash=D41D8CD98F00B204E9800998ECF8427E;Accelerometer1/AI0resource=/crio_Accelerometer1/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer1/AI1resource=/crio_Accelerometer1/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer1/AI2resource=/crio_Accelerometer1/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer1/Onboard ClockNumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer1/Onboard Clock;0;ReadMethodType=boolAccelerometer1/Startresource=/crio_Accelerometer1/Start;0;WriteMethodType=boolAccelerometer1/Stopresource=/crio_Accelerometer1/Stop;0;WriteMethodType=boolAccelerometer1[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 1,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]Accelerometer1XFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer1YFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer1ZFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer2/AI0resource=/crio_Accelerometer2/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer2/AI1resource=/crio_Accelerometer2/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer2/AI2resource=/crio_Accelerometer2/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer2/Onboard ClockNumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer2/Onboard Clock;0;ReadMethodType=boolAccelerometer2/Startresource=/crio_Accelerometer2/Start;0;WriteMethodType=boolAccelerometer2/Stopresource=/crio_Accelerometer2/Stop;0;WriteMethodType=boolAccelerometer2[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 2,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]Accelerometer2XFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer2YFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer2ZFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer3/AI0resource=/crio_Accelerometer3/AI0;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer3/AI1resource=/crio_Accelerometer3/AI1;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer3/AI2resource=/crio_Accelerometer3/AI2;0;ReadMethodType=vi.lib\LabVIEW Targets\FPGA\cRIO\shared\nicrio_FXP_Controls\nicrio_FXP_S_24_7.ctlAccelerometer3/Onboard ClockNumberOfSyncRegistersForReadInProject=Auto;resource=/crio_Accelerometer3/Onboard Clock;0;ReadMethodType=boolAccelerometer3/Startresource=/crio_Accelerometer3/Start;0;WriteMethodType=boolAccelerometer3/Stopresource=/crio_Accelerometer3/Stop;0;WriteMethodType=boolAccelerometer3[crioConfig.Begin]crio.Calibration=1,crio.Location=Slot 3,crio.Type=NI 9232,cRIOModule.ClockSource=0,cRIOModule.DataRate=102,cRIOModule.ExcitationVoltage=1,cRIOModule.ExternalClockSource=,cRIOModule.ExtTimeBaseType=,cRIOModule.HalfBridgeEnable=0,cRIOModule.InputConfiguration=33686016,cRIOModule.SourceModule=true,cRIOModule.SubPanVisitedVersion=0,cRIOModule.TEDSSupport=true[crioConfig.End]Accelerometer3XFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer3YFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Accelerometer3ZFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Chassis Temperatureresource=/Chassis Temperature;0;ReadMethodType=i16CommandFIFO"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;CommandFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"cRIO-9076/Clk40/falsefalseFPGA_EXECUTION_MODEFPGA_TARGETFPGA_TARGET_CLASSCRIO_9076FPGA_TARGET_FAMILYSPARTAN6TARGET_TYPEFPGAFPGA LEDresource=/FPGA LED;0;ReadMethodType=bool;WriteMethodType=boolMasterClockSamplePeriodRegister"DataType=1000800000000001000940070003553332000100000000000000000000;InitDataHash=2002E13ACF59079A1A5782C918894579;Name=MasterClockSamplePeriodRegister;WriteArb=1"RequestFIFO"ControlLogic=0;NumberOfElements=1029;Type=1;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;RequestFIFO;DataType=100080000000000100094006000355313600010000000000000000;DisableOnOverflowUnderflow=FALSE"SampleTimestampFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"Scan Clockresource=/Scan Clock;0;ReadMethodType=boolSGLResponseFIFO"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;SGLResponseFIFO;DataType=100080000000000100094009000353474C000100000000000000000000;DisableOnOverflowUnderflow=FALSE"Sleepresource=/Sleep;0;ReadMethodType=bool;WriteMethodType=boolSystem Resetresource=/System Reset;0;ReadMethodType=bool;WriteMethodType=boolTimestampFIFO"ControlLogic=1;NumberOfElements=1025;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"TimestampHealthAndStatusFIFO"ControlLogic=1;NumberOfElements=1024;Type=0;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;;DataType=1000800000000004000D4007000741646472657373003340150006034E4F500353657403416464085375627472616374024F72074E6F7420416E64000A5570646174654D6F646500000B400800044461746100002240500003000000010002154865616C7468416E64537461747573557064617465000100030000000000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"TimestampRegister"DataType=100080000000000100094008000355363400010000000000000000000000000000;InitDataHash=;Name=TimestampRegister;WriteArb=2"U64ResponseFIFO"ControlLogic=0;NumberOfElements=1023;Type=2;ReadArbs=Arbitrate if Multiple Requestors Only;ElementsPerRead=1;WriteArbs=Arbitrate if Multiple Requestors Only;ElementsPerWrite=1;Implementation=2;U64ResponseFIFO;DataType=100080000000000100094008000355363400010000000000000000000000000000;DisableOnOverflowUnderflow=FALSE"</Property>
+					</Item>
+					<Item Name="CommandFIFO3.vi" Type="VI" URL="../Support/CommandFIFO3.vi"/>
+					<Item Name="RequestFIFO3.vi" Type="VI" URL="../Support/RequestFIFO3.vi"/>
+				</Item>
+				<Item Name="Build Specifications" Type="Build">
+					<Item Name="VMS_CameraRotator" Type="{F4C5E96F-7410-48A5-BB87-3559BC9B167F}">
+						<Property Name="AllowEnableRemoval" Type="Bool">false</Property>
+						<Property Name="BuildSpecDecription" Type="Str"></Property>
+						<Property Name="BuildSpecName" Type="Str">VMS_CameraRotator</Property>
+						<Property Name="Comp.BitfileName" Type="Str">NiFpga_VMS_CameraRotator.lvbitx</Property>
+						<Property Name="Comp.CustomXilinxParameters" Type="Str"></Property>
+						<Property Name="Comp.MaxFanout" Type="Int">-1</Property>
+						<Property Name="Comp.RandomSeed" Type="Bool">false</Property>
+						<Property Name="Comp.Version.Build" Type="Int">4</Property>
+						<Property Name="Comp.Version.Fix" Type="Int">0</Property>
+						<Property Name="Comp.Version.Major" Type="Int">1</Property>
+						<Property Name="Comp.Version.Minor" Type="Int">0</Property>
+						<Property Name="Comp.VersionAutoIncrement" Type="Bool">true</Property>
+						<Property Name="Comp.Vivado.EnableMultiThreading" Type="Bool">true</Property>
+						<Property Name="Comp.Vivado.OptDirective" Type="Str"></Property>
+						<Property Name="Comp.Vivado.PhysOptDirective" Type="Str"></Property>
+						<Property Name="Comp.Vivado.PlaceDirective" Type="Str"></Property>
+						<Property Name="Comp.Vivado.RouteDirective" Type="Str"></Property>
+						<Property Name="Comp.Vivado.RunPowerOpt" Type="Bool">false</Property>
+						<Property Name="Comp.Vivado.Strategy" Type="Str">Default</Property>
+						<Property Name="Comp.Xilinx.DesignStrategy" Type="Str">balanced</Property>
+						<Property Name="Comp.Xilinx.MapEffort" Type="Str">high(timing)</Property>
+						<Property Name="Comp.Xilinx.ParEffort" Type="Str">standard</Property>
+						<Property Name="Comp.Xilinx.SynthEffort" Type="Str">normal</Property>
+						<Property Name="Comp.Xilinx.SynthGoal" Type="Str">speed</Property>
+						<Property Name="Comp.Xilinx.UseRecommended" Type="Bool">true</Property>
+						<Property Name="DefaultBuildSpec" Type="Bool">true</Property>
+						<Property Name="DestinationDirectory" Type="Path">FPGA Bitfiles</Property>
+						<Property Name="NI.LV.FPGA.LastCompiledBitfilePath" Type="Path">/C/Users/pkubanek/ts_vms/FPGA/FPGA Bitfiles/NiFpga_VMS_CameraRotator.lvbitx</Property>
+						<Property Name="NI.LV.FPGA.LastCompiledBitfilePathRelativeToProject" Type="Path">FPGA Bitfiles/NiFpga_VMS_CameraRotator.lvbitx</Property>
+						<Property Name="ProjectPath" Type="Path">/C/Users/pkubanek/ts_vms/FPGA/ts_VMS.lvproj</Property>
+						<Property Name="RelativePath" Type="Bool">true</Property>
+						<Property Name="RunWhenLoaded" Type="Bool">false</Property>
+						<Property Name="SupportDownload" Type="Bool">true</Property>
+						<Property Name="SupportResourceEstimation" Type="Bool">true</Property>
+						<Property Name="TargetName" Type="Str">CameraRotator VMS</Property>
+						<Property Name="TopLevelVI" Type="Ref">/CameraRotator/Chassis/CameraRotator VMS/VMS_CameraRotator.vi</Property>
+					</Item>
+				</Item>
+			</Item>
+		</Item>
+		<Item Name="Dependencies" Type="Dependencies"/>
+		<Item Name="Build Specifications" Type="Build"/>
+	</Item>
 </Project>
