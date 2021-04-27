@@ -146,7 +146,7 @@ int main(int argc, char** argv) {
 
     SPDLOG_INFO("Main: Initializing VMS SAL");
     std::shared_ptr<SAL_MTVMS> vmsSAL = std::make_shared<SAL_MTVMS>(index);
-    vmsSAL->setDebugLevel(0);
+    vmsSAL->setDebugLevel(debugLevelSAL);
 
     sinks.push_back(std::make_shared<SALSink_mt>(vmsSAL));
     setSinks(vmsApplicationSettings->Subsystem);
