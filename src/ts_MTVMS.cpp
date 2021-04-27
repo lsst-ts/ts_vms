@@ -21,6 +21,7 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/sinks/daily_file_sink.h"
 
+#include <chrono>
 #include <getopt.h>
 #include <memory>
 #include <signal.h>
@@ -190,6 +191,8 @@ int main(int argc, char** argv) {
     setSinks("done");
     usleep(1000);
     vmsSAL->salShutdown();
+
+    std::this_thread::sleep_for(std::chrono::seconds(2));
 
     SPDLOG_INFO("Main: Shutdown complete");
 
