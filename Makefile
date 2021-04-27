@@ -32,14 +32,16 @@ deploy_target: ts_MTVMS
 	@echo '[SCP] $^'
 	${co}scp $^ admin@${cip}:
 	${co}ssh admin@${cip} 'mkdir -p Bitfiles'
-	@echo '[SCP] FPGA/FPGA\ Bitfiles/NiFpga_VMS_3_Master.lvbitx'
-	${co}scp "FPGA/FPGA Bitfiles/NiFpga_VMS_3_Master.lvbitx" admin@${cip}:Bitfiles/
-	@echo '[SCP] FPGA/FPGA\ Bitfiles/NiFpga_VMS_6_Master.lvbitx'
-	${co}scp "FPGA/FPGA Bitfiles/NiFpga_VMS_6_Master.lvbitx" admin@${cip}:Bitfiles/
-	@echo '[SCP] FPGA/FPGA\ Bitfiles/NiFpga_VMS_3_Slave.lvbitx'
-	${co}scp "FPGA/FPGA Bitfiles/NiFpga_VMS_3_Slave.lvbitx" admin@${cip}:Bitfiles/
-	@echo '[SCP] FPGA/FPGA\ Bitfiles/NiFpga_VMS_6_Slave.lvbitx'
-	${co}scp "FPGA/FPGA Bitfiles/NiFpga_VMS_6_Slave.lvbitx" admin@${cip}:Bitfiles/
+	@echo '[SCP] Bitfiles/NiFpga_VMS_3_Master.lvbitx'
+	${co}scp "Bitfiles/NiFpga_VMS_3_Master.lvbitx" admin@${cip}:Bitfiles/
+	@echo '[SCP] Bitfiles/NiFpga_VMS_6_Master.lvbitx'
+	${co}scp "Bitfiles/NiFpga_VMS_6_Master.lvbitx" admin@${cip}:Bitfiles/
+	@echo '[SCP] Bitfiles/NiFpga_VMS_3_Slave.lvbitx'
+	${co}scp "Bitfiles/NiFpga_VMS_3_Slave.lvbitx" admin@${cip}:Bitfiles/
+	@echo '[SCP] Bitfiles/NiFpga_VMS_6_Slave.lvbitx'
+	${co}scp "Bitfiles/NiFpga_VMS_6_Slave.lvbitx" admin@${cip}:Bitfiles/
+	@echo '[SCP] Bitfiles/NiFpga_VMS_CameraRotator.lvbitx'
+	${co}scp "Bitfiles/NiFpga_VMS_CameraRotator.lvbitx" admin@${cip}:Bitfiles/
 
 deploy: ts_MTVMS
 	@$(foreach cip,${CRIO_IP},${MAKE} cip=${cip} deploy_target;)
