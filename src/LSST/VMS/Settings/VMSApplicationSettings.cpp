@@ -6,40 +6,46 @@
  */
 
 #include <VMSApplicationSettings.h>
-#include <boost/lexical_cast.hpp>
-#include <boost/tokenizer.hpp>
-#include <pugixml.hpp>
+#include <yaml-cpp/yaml.h>
+#include <spdlog/spdlog.h>
+
+#include <vector>
 
 namespace LSST {
 namespace VMS {
 
 void VMSApplicationSettings::load(const std::string &filename) {
-    pugi::xml_document doc;
-    doc.load_file(filename.c_str());
+    SPDLOG_TRACE("VMSApplicationSettings({})", filename);
+    try {
+        YAML::Node doc = YAML::LoadFile(filename);
 
-    this->Subsystem = doc.select_node("//VMSApplicationSettings/Subsystem").node().child_value();
-    this->IsMaster = boost::lexical_cast<int>(
-                             doc.select_node("//VMSApplicationSettings/IsMaster").node().child_value()) != 0;
-    this->loadVector(&this->XCoefficients,
-                     doc.select_node("//VMSApplicationSettings/XCoefficients").node().child_value());
-    this->loadVector(&this->YCoefficients,
-                     doc.select_node("//VMSApplicationSettings/YCoefficients").node().child_value());
-    this->loadVector(&this->ZCoefficients,
-                     doc.select_node("//VMSApplicationSettings/ZCoefficients").node().child_value());
-    this->loadVector(&this->XOffsets,
-                     doc.select_node("//VMSApplicationSettings/XOffsets").node().child_value());
-    this->loadVector(&this->YOffsets,
-                     doc.select_node("//VMSApplicationSettings/YOffsets").node().child_value());
-    this->loadVector(&this->ZOffsets,
-                     doc.select_node("//VMSApplicationSettings/ZOffsets").node().child_value());
-}
-
-void VMSApplicationSettings::loadVector(std::vector<double> *vector, std::string text) {
-    typedef boost::tokenizer<boost::escaped_list_separator<char>> tokenizer;
-    tokenizer tokenize(text);
-    for (tokenizer::iterator token = tokenize.begin(); token != tokenize.end(); ++token) {
-        vector->push_back(boost::lexical_cast<double>(*token));
+        Subsystem = doc["Subsystem"].as<std::string>();
+        IsMaster = doc["IsMaster"].as<bool>();
+        RIO = doc["RIO"].as<std::string>("RIO0");
+        XCoefficients = doc["XCoefficients"].as<std::vector<double>>();
+        YCoefficients = doc["YCoefficients"].as<std::vector<double>>();
+        ZCoefficients = doc["ZCoefficients"].as<std::vector<double>>();
+        XOffsets = doc["XOffsets"].as<std::vector<double>>();
+        YOffsets = doc["YOffsets"].as<std::vector<double>>();
+        ZOffsets = doc["ZOffsets"].as<std::vector<double>>();
+    } catch (YAML::Exception &ex) {
+        SPDLOG_CRITICAL("YAML Loading {}: {}", filename, ex.what());
+        exit(EXIT_FAILURE);
     }
+
+    auto check_vector = [](const char *name, std::vector<double> vec) {
+        if (vec.size() != 3) {
+            SPDLOG_CRITICAL("Invalid array {} length: {}, expected 3", name, vec.size());
+            exit(EXIT_FAILURE);
+        }
+    };
+
+    check_vector("XCoefficients", XCoefficients);
+    check_vector("YCoefficients", YCoefficients);
+    check_vector("ZCoefficients", ZCoefficients);
+    check_vector("XOffsets", XOffsets);
+    check_vector("YOffsets", YOffsets);
+    check_vector("ZOffsets", ZOffsets);
 }
 
 } /* namespace VMS */

@@ -1,8 +1,8 @@
+[CameraRotator]
+CameraRotator = "139.229.178.192"
+
 [My Computer]
 My Computer = "10.0.0.10"
-
-[RT CompactRIO Target]
-RT CompactRIO Target = "0.0.0.0"
 
 [VMS_3]
 VMS_3 = "139.229.178.183"
