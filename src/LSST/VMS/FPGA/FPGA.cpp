@@ -107,6 +107,13 @@ void FPGA::setTimestamp(double timestamp) {
     writeCommandFIFO(buffer, 5, 0);
 }
 
+float FPGA::chasisTemperature() {
+    writeRequestFIFO(FPGAAddresses::ChasisTemperature, 0);
+    uint64_t buffer;
+    readU64ResponseFIFO(&buffer, 1, 500);
+    return static_cast<float>(buffer) / 100.0;
+}
+
 void FPGA::waitForOuterLoopClock(int32_t timeout) {
     SPDLOG_TRACE("FPGA: waitForOuterLoopClock({})", timeout);
 #ifndef SIMULATOR

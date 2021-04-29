@@ -162,10 +162,15 @@ int main(int argc, char** argv) {
         fpga.initialize();
         fpga.open();
         SPDLOG_INFO("Main: Creating accelerometer");
-        Accelerometer accelerometer = Accelerometer(&fpga, vmsApplicationSettings);
+        Accelerometer accelerometer(&fpga, vmsApplicationSettings);
 
         signal(SIGKILL, sigKill);
         signal(SIGINT, sigKill);
+
+        fpga.setTimestamp(VMSPublisher::instance().getTimestamp());
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        accelerometer.enableAccelerometers();
+
         // TODO: This is a non-commandable component so there isn't really a way to cleanly shutdown the
         // software
         SPDLOG_INFO("Main: Sample loop start");
@@ -176,6 +181,8 @@ int main(int argc, char** argv) {
             fpga.setTimestamp(VMSPublisher::instance().getTimestamp());
             fpga.ackOuterLoopClock();
         }
+
+        accelerometer.disableAccelerometers();
 
         fpga.close();
         fpga.finalize();

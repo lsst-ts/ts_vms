@@ -59,10 +59,12 @@ void Accelerometer::sampleData() {
     fpga->writeRequestFIFO(FPGAAddresses::Accelerometers, 0);
     fpga->readU64ResponseFIFO(u64Buffer, MAX_SAMPLE_PER_PUBLISH, 30);
     fpga->readSGLResponseFIFO(sglBuffer, numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH, 500);
+    double data_timestamp = Timestamp::fromRaw(u64Buffer[0]);
+
     MTVMS_dataC data[numberOfSensors];
 
     for (int s = 0; s < numberOfSensors; s++) {
-        data[s].timestamp = Timestamp::fromRaw(u64Buffer[0]);
+        data[s].timestamp = data_timestamp;
         data[s].sensor = s + 1;
     }
 
