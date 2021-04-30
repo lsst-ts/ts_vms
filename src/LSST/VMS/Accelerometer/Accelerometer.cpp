@@ -37,12 +37,15 @@ Accelerometer::Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplication
         SPDLOG_ERROR("Unknown subsystem: {}", vmsApplicationSettings->Subsystem);
         exit(EXIT_FAILURE);
     }
+
+    _firstSample = true;
 }
 
 void Accelerometer::enableAccelerometers() {
     SPDLOG_INFO("Accelerometer: enableAccelerometers()");
     uint16_t buffer[2] = {FPGAAddresses::Accelerometers, true};
     fpga->writeCommandFIFO(buffer, 2, 20);
+    _firstSample = true;
 }
 
 void Accelerometer::disableAccelerometers() {
@@ -57,8 +60,10 @@ void Accelerometer::sampleData() {
     float sglBuffer[numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH];
 
     fpga->writeRequestFIFO(FPGAAddresses::Accelerometers, 0);
-    fpga->readU64ResponseFIFO(u64Buffer, MAX_SAMPLE_PER_PUBLISH, 30);
-    fpga->readSGLResponseFIFO(sglBuffer, numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH, 500);
+    fpga->readU64ResponseFIFO(u64Buffer, MAX_SAMPLE_PER_PUBLISH, _firstSample ? 500 : 70);
+    fpga->readSGLResponseFIFO(sglBuffer, numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH, 10);
+    _firstSample = false;
+
     double data_timestamp = Timestamp::fromRaw(u64Buffer[0]);
 
     MTVMS_dataC data[numberOfSensors];

@@ -23,7 +23,7 @@
 /**
  * The signature of the FPGA bitfile.
  */
-static const char* const NiFpga_VMS_3_Master_Signature = "413253084529DA0D8586C6ADAD105915";
+static const char* const NiFpga_VMS_3_Master_Signature = "68E651276C0038BBC841F3C06458578B";
 
 #if NiFpga_Cpp
 extern "C"

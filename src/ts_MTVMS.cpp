@@ -175,11 +175,9 @@ int main(int argc, char** argv) {
         // software
         SPDLOG_INFO("Main: Sample loop start");
         while (runLoop) {
-            fpga.waitForOuterLoopClock(105);
             SPDLOG_TRACE("Main: Outer loop iteration start");
             accelerometer.sampleData();
             fpga.setTimestamp(VMSPublisher::instance().getTimestamp());
-            fpga.ackOuterLoopClock();
         }
 
         accelerometer.disableAccelerometers();
