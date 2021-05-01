@@ -198,7 +198,7 @@ int main(int argc, char** argv) {
         startLog();
         setuid(runAs->pw_uid);
         setgid(runGroup->gr_gid);
-        SPDLOG_INFO("Running as {}:{}", daemonUser, daemonGroup);
+        SPDLOG_DEBUG("Running as {}:{}", daemonUser, daemonGroup);
         if (!(enabledSinks & 0x01)) {
             close(0);
             close(1);
@@ -220,11 +220,11 @@ int main(int argc, char** argv) {
 
     SPDLOG_INFO("Main: Creating setting reader from {}", configRoot);
     SettingReader settingReader = SettingReader(configRoot);
-    SPDLOG_INFO("Main: Loading VMS application settings");
+    SPDLOG_DEBUG("Main: Loading VMS application settings");
     VMSApplicationSettings* vmsApplicationSettings = settingReader.loadVMSApplicationSettings();
 
     int index = getIndex(vmsApplicationSettings->Subsystem);
-    SPDLOG_INFO("Subsystem: {}, Index: {}, IsMaster: {}, RIO: {}", vmsApplicationSettings->Subsystem.c_str(),
+    SPDLOG_DEBUG("Subsystem: {}, Index: {}, IsMaster: {}, RIO: {}", vmsApplicationSettings->Subsystem.c_str(),
                 index, vmsApplicationSettings->IsMaster, vmsApplicationSettings->RIO);
 
     SPDLOG_INFO("Main: Initializing VMS SAL");
