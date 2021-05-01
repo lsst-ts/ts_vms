@@ -52,6 +52,7 @@ void printHelp() {
               << "  -s increases SAL debugging (can be specified multiple times, default is 0)" << std::endl
               << "  -u <user>:<group> run under user & group" << std::endl
               << "  -v prints version and exits" << std::endl;
+    // << "  -V prints SAL, XML and OSPL versions and exits" << std::endl;
 }
 
 int debugLevel = 0;
@@ -125,6 +126,14 @@ void processArgs(int argc, char* const argv[], std::string& configRoot) {
             case 'v':
                 std::cout << VERSION << std::endl;
                 exit(EXIT_SUCCESS);
+// TODO enable once supported
+#if 0
+            case 'V':
+                std::cout << "SAL " << SAL_MTVMS::getSALVersion() << std::endl
+                          << "XML " << SAL_MTVMS::getXMLVersion() << std::endl
+                          << "OSPL " << SAL_MTVMS::getOSPLVersion() << std::endl;
+                exit(EXIT_SUCCESS);
+#endif
             default:
                 std::cerr << "Unknown option " << opt << std::endl;
                 printHelp();
