@@ -20,27 +20,40 @@ test -r /etc/default/rcS && . /etc/default/rcS
 # Source function library.
 . /etc/init.d/functions
 
+# Source devices
+. /etc/default/vms
+
 startdaemon(){
-	echo -n "Starting TS VMS: "
-	start-stop-daemon --start --quiet --oknodo --pidfile $PIDFILE --startas $DAEMON -- -p $PIDFILE -u vms:vms -c M1M3
+	echo -n "Starting TS VMS $1:"
+	start-stop-daemon --start --quiet --oknodo --pidfile ${PIDFILE}_$1 --startas $DAEMON -- -p ${PIDFILE}_$1 -u vms:vms -c $1
 	echo "done"
 }
 stopdaemon(){
-	echo -n "Stopping TS VMS: "
-	start-stop-daemon --stop --quiet --oknodo -p $PIDFILE
+	echo -n "Stopping TS VMS $1:"
+	start-stop-daemon --stop --quiet --oknodo -p ${PIDFILE}_$1
 	echo "done"
+}
+startall(){
+	for v in $VMS; do
+		startdaemon $v
+	done
+}
+stopall(){
+	for v in $VMS; do
+		stopdaemon $v
+	done
 }
 
 case "$1" in
   start)
-	startdaemon -g
+	startall
 	;;
   stop)
-  	stopdaemon
+  	stopall
 	;;
   restart)
-	stopdaemon
-	startdaemon
+	stopll
+	startall
 	;;
   status)
 	status /usr/sbin/ts_MTVMS;

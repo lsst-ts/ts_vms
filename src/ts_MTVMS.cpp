@@ -187,12 +187,12 @@ int main(int argc, char** argv) {
         }
         struct passwd* runAs = getpwnam(daemonUser.c_str());
         if (runAs == NULL) {
-            std::cerr << "Cannot find user {}" << daemonUser << std::endl;
+            std::cerr << "Cannot find user " << daemonUser << std::endl;
             exit(EXIT_FAILURE);
         }
         struct group* runGroup = getgrnam(daemonGroup.c_str());
         if (runGroup == NULL) {
-            std::cerr << "Cannot find group" << daemonGroup << std::endl;
+            std::cerr << "Cannot find group " << daemonGroup << std::endl;
             exit(EXIT_FAILURE);
         }
         startLog();
@@ -225,7 +225,7 @@ int main(int argc, char** argv) {
 
     int index = getIndex(vmsApplicationSettings->Subsystem);
     SPDLOG_DEBUG("Subsystem: {}, Index: {}, IsMaster: {}, RIO: {}", vmsApplicationSettings->Subsystem.c_str(),
-                index, vmsApplicationSettings->IsMaster, vmsApplicationSettings->RIO);
+                 index, vmsApplicationSettings->IsMaster, vmsApplicationSettings->RIO);
 
     SPDLOG_INFO("Main: Initializing VMS SAL");
     std::shared_ptr<SAL_MTVMS> vmsSAL = std::make_shared<SAL_MTVMS>(index);
