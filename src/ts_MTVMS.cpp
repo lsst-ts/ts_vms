@@ -178,32 +178,56 @@ int main(int argc, char** argv) {
 
     processArgs(argc, argv, configRoot);
 
+    int startPipe[2] = {-1, -1};
+
     if (pidFile) {
-        pid_t child = fork();
-        if (child < 0) {
-            std::cerr << "Cannot fork:" << strerror(errno) << std::endl;
-            exit(EXIT_FAILURE);
-        }
-        if (child > 0) {
-            std::ofstream pidf(pidFile, std::ofstream::out);
-            pidf << child;
-            pidf.close();
-            if (pidf.fail()) {
-                std::cerr << "Cannot write to PID file " << pidFile << ": " << strerror(errno) << std::endl;
-                exit(EXIT_FAILURE);
-            }
-            return EXIT_SUCCESS;
-        }
         struct passwd* runAs = getpwnam(daemonUser.c_str());
         if (runAs == NULL) {
-            std::cerr << "Cannot find user " << daemonUser << std::endl;
+            std::cerr << "Error: Cannot find user " << daemonUser << std::endl;
             exit(EXIT_FAILURE);
         }
         struct group* runGroup = getgrnam(daemonGroup.c_str());
         if (runGroup == NULL) {
-            std::cerr << "Cannot find group " << daemonGroup << std::endl;
+            std::cerr << "Error: Cannot find group " << daemonGroup << std::endl;
             exit(EXIT_FAILURE);
         }
+
+        if (pipe(startPipe) == -1) {
+            std::cerr << "Error: Cannot create pipe for child/start process: " << strerror(errno)
+                      << std::endl;
+            exit(EXIT_FAILURE);
+        }
+
+        pid_t child = fork();
+        if (child < 0) {
+            std::cerr << "Error: Cannot fork:" << strerror(errno) << std::endl;
+            exit(EXIT_FAILURE);
+        }
+        if (child > 0) {
+            close(startPipe[1]);
+            std::ofstream pidf(pidFile, std::ofstream::out);
+            pidf << child;
+            pidf.close();
+            if (pidf.fail()) {
+                std::cerr << "Error: Cannot write to PID file " << pidFile << ": " << strerror(errno)
+                          << std::endl;
+                exit(EXIT_FAILURE);
+            }
+            char retbuf[2000];
+            memset(retbuf, 0, sizeof(retbuf));
+            signal(SIGALRM, [](int) {
+                std::cerr << "Error: Start timeouted, see syslog for details." << std::endl;
+                exit(EXIT_FAILURE);
+            });
+            alarm(15);
+            read(startPipe[0], retbuf, 2000);
+            if (strcmp(retbuf, "OK") == 0) {
+                return EXIT_SUCCESS;
+            }
+            std::cerr << retbuf << std::endl;
+            return EXIT_FAILURE;
+        }
+        close(startPipe[0]);
         startLog();
         setuid(runAs->pw_uid);
         setgid(runGroup->gr_gid);
@@ -274,6 +298,11 @@ int main(int argc, char** argv) {
 
         spdlog::apply_all([&](std::shared_ptr<spdlog::logger> l) { l->flush(); });
 
+        if (startPipe[1] >= 0) {
+            write(startPipe[1], "OK", 2);
+            close(startPipe[1]);
+        }
+
         while (runLoop) {
             SPDLOG_TRACE("Main: Outer loop iteration start");
             accelerometer.sampleData();
@@ -286,6 +315,10 @@ int main(int argc, char** argv) {
         fpga.close();
         fpga.finalize();
     } catch (cRIO::NiError& nie) {
+        if (startPipe[1] >= 0) {
+            write(startPipe[1], nie.what(), strlen(nie.what()));
+            close(startPipe[1]);
+        }
         SPDLOG_CRITICAL("Error starting or stopping FPGA: {}", nie.what());
         fpga.finalize();
         vmsSAL->salShutdown();
