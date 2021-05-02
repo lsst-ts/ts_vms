@@ -12,7 +12,7 @@
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
 
 DAEMON=/usr/sbin/ts_MTVMS
-PIDFILE=/var/run/tsvms.pid
+PIDFILE=/var/run/tsvms
 
 # rcS contains TICKADJ
 test -r /etc/default/rcS && . /etc/default/rcS
@@ -25,12 +25,12 @@ test -r /etc/default/rcS && . /etc/default/rcS
 
 startdaemon(){
 	echo -n "Starting TS VMS $1:"
-	start-stop-daemon --start --quiet --oknodo --pidfile ${PIDFILE}_$1 --startas $DAEMON -- -p ${PIDFILE}_$1 -u vms:vms -c $1
+	start-stop-daemon --start --oknodo --pidfile ${PIDFILE}_$1.pid --startas $DAEMON -- -p ${PIDFILE}_$1.pid -u vms:vms -c $1
 	echo "done"
 }
 stopdaemon(){
 	echo -n "Stopping TS VMS $1:"
-	start-stop-daemon --stop --quiet --oknodo -p ${PIDFILE}_$1
+	start-stop-daemon --stop --retry 5 -p ${PIDFILE}_$1.pid
 	echo "done"
 }
 startall(){

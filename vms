@@ -1,2 +1,11 @@
-VMS="M1M3"
-#VMS="M2 CameraRotator"
+#VMS="M1M3"
+VMS="M2 CameraRotator"
+
+export OSPL_HOME=/home/admin/ts_opensplice/OpenSpliceDDS/V6.9.0/HDE/x86_64.linux
+export LSST_DDS_PARTITION_PREFIX=summit
+export LSST_DDS_DOMAIN_ID=0
+#export OSPL_URI=file:///home/admin/ts_opensplice/OpenSpliceDDS/V6.9.0/HDE/x86_64.linux/etc/config/ospl.xml
+export OSPL_URI=file:///home/admin/ts_ddsconfig/config/ospl-sp.xml
+export LSST_DDS_QOS=file:///home/admin/ts_ddsconfig/qos/QoS.xml
+export LSST_DDS_IP=`ip route get 1 | awk '{print $7;exit}'`
+export LD_LIBRARY_PATH=$OSPL_HOME/lib
