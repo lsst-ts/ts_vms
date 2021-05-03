@@ -11,8 +11,8 @@
 
 PATH=/sbin:/bin:/usr/bin:/usr/sbin
 
-DAEMON=/usr/sbin/ts_MTVMS
-PIDFILE=/var/run/tsvms
+DAEMON=/usr/sbin/tsvmsd
+PIDFILE=/var/run/tsvmsd
 
 # rcS contains TICKADJ
 test -r /etc/default/rcS && . /etc/default/rcS
@@ -21,7 +21,7 @@ test -r /etc/default/rcS && . /etc/default/rcS
 . /etc/init.d/functions
 
 # Source devices
-. /etc/default/vms
+. /etc/default/tsvmsd
 
 startdaemon(){
 	echo -n "Starting TS VMS $1:"
