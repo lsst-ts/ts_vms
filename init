@@ -21,7 +21,7 @@ test -r /etc/default/rcS && . /etc/default/rcS
 . /etc/init.d/functions
 
 # Source devices
-. /etc/default/tsvmsd
+. /etc/default/ts-VMS
 
 if [ -z $VMS ]; then
 	echo "Please edit /etc/default/tsvmsd and specify at least one VMS device to start"

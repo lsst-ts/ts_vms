@@ -12,7 +12,7 @@ src/libVMS.a: FORCE
 	$(MAKE) -C src libVMS.a
 
 # Tool invocations
-ts_MTVMS: src/ts_MTVMS.cpp.o src/libVMS.a
+ts-VMSd: src/ts-VMSd.cpp.o src/libVMS.a
 	@echo '[LD ] $@'
 	${co}$(CPP) $(LIBS_FLAGS) -o $@ $^ $(LIBS)
 
@@ -61,22 +61,22 @@ doc:
 simulator:
 	@${MAKE} SIMULATOR=1
 
-ipk: ts_MTVMS tsvmsd_$(VERSION)_x86.ipk
+ipk: ts-VMSd ts-VMS_$(VERSION)_x86.ipk
 
-tsvmsd_$(VERSION)_x86.ipk:
+ts-VMS_$(VERSION)_x86.ipk:
 	@echo '[MK ] ipk $@'
 	${co}mkdir -p ipk/data/usr/sbin
 	${co}mkdir -p ipk/data/etc/init.d
 	${co}mkdir -p ipk/data/etc/default
-	${co}mkdir -p ipk/data/var/lib/tsvmsd
+	${co}mkdir -p ipk/data/var/lib/ts-VMS
 	${co}mkdir -p ipk/control
-	${co}cp ts_MTVMS ipk/data/usr/sbin/tsvmsd
-	${co}cp init ipk/data/etc/init.d/tsvmsd
-	${co}cp default_tsvmsd ipk/data/etc/default/tsvmsd
-	${co}cp -r Bitfiles ipk/data/var/lib/tsvmsd
+	${co}cp ts-VMSd ipk/data/usr/sbin/ts-VMSd
+	${co}cp init ipk/data/etc/init.d/ts-VMS
+	${co}cp default_ts-VMS ipk/data/etc/default/ts-VMS
+	${co}cp -r Bitfiles ipk/data/var/lib/ts-VMS
 	${co}sed s?@VERSION@?$(VERSION)?g control.ipk.in > ipk/control/control
 	${co}cp postinst postrm ipk/control
-	${co}echo "/etc/default/tsvmsd" > ipk/control/conffiles
+	${co}echo "/etc/default/ts-VMS" > ipk/control/conffiles
 	${co}echo "2.0" > ipk/debian-binary
 	${co}tar czf ipk/data.tar.gz -P --transform "s#^ipk/data#.#" --owner=0 --group=0 ipk/data
 	${co}tar czf ipk/control.tar.gz -P --transform "s#^ipk/control#.#" --owner=0 --group=0 ipk/control
