@@ -74,7 +74,7 @@ void sigKill(int signal) {
 std::vector<spdlog::sink_ptr> sinks;
 
 void setSinks(std::string subsystem) {
-    auto logger = std::make_shared<spdlog::async_logger>("MTVMS " + subsystem, sinks.begin(), sinks.end(),
+    auto logger = std::make_shared<spdlog::async_logger>("VMS " + subsystem, sinks.begin(), sinks.end(),
                                                          spdlog::thread_pool(),
                                                          spdlog::async_overflow_policy::block);
     spdlog::set_default_logger(logger);
@@ -161,12 +161,12 @@ void startLog() {
         sinks.push_back(stdout_sink);
     }
     if (enabledSinks & 0x02) {
-        auto daily_sink = std::make_shared<spdlog::sinks::daily_file_sink_mt>("MTVMS", 0, 0);
+        auto daily_sink = std::make_shared<spdlog::sinks::daily_file_sink_mt>("VMS", 0, 0);
         sinks.push_back(daily_sink);
     }
     if (enabledSinks & 0x04) {
         auto syslog_sink =
-                std::make_shared<spdlog::sinks::syslog_sink_mt>("MTVMS", LOG_PID | LOG_CONS, LOG_USER, false);
+                std::make_shared<spdlog::sinks::syslog_sink_mt>("VMS", LOG_PID | LOG_CONS, LOG_USER, false);
         sinks.push_back(syslog_sink);
     }
 
@@ -174,7 +174,7 @@ void startLog() {
 }
 
 int main(int argc, char** argv) {
-    std::string configRoot("/usr/ts_VMS/SettingFiles/");
+    std::string configRoot("/var/lib/ts-VMS");
 
     processArgs(argc, argv, configRoot);
 

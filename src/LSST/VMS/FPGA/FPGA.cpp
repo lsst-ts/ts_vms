@@ -28,7 +28,7 @@ namespace LSST {
 namespace VMS {
 
 #define POPULATE_FPGA(type)                                                     \
-    _bitFile = "/usr/ts_VMS/" NiFpga_VMS_##type##_Bitfile;                      \
+    _bitFile = "/var/lib/ts-VMS/" NiFpga_VMS_##type##_Bitfile;                  \
     _signature = NiFpga_VMS_##type##_Signature;                                 \
     _commandFIFO = NiFpga_VMS_##type##_HostToTargetFifoU16_CommandFIFO;         \
     _requestFIFO = NiFpga_VMS_##type##_HostToTargetFifoU16_RequestFIFO;         \

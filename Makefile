@@ -18,7 +18,7 @@ ts-VMSd: src/ts-VMSd.cpp.o src/libVMS.a
 
 # Other Targets
 clean:
-	@$(foreach file,ts_MTVMS src/ts_MTVMS.cpp.o doc build *.ipk, echo '[RM ] ${file}'; $(RM) -r $(file);)
+	@$(foreach file,ts_MTVMS src/ts_MTVMS.cpp.o doc build *.ipk ipk, echo '[RM ] ${file}'; $(RM) -r $(file);)
 	@$(foreach dir,src tests,$(MAKE) -C ${dir} $@;)
 
 # file targets
@@ -73,10 +73,11 @@ ts-VMS_$(VERSION)_x86.ipk:
 	${co}cp ts-VMSd ipk/data/usr/sbin/ts-VMSd
 	${co}cp init ipk/data/etc/init.d/ts-VMS
 	${co}cp default_ts-VMS ipk/data/etc/default/ts-VMS
-	${co}cp -r Bitfiles ipk/data/var/lib/ts-VMS
+	${co}cp -r SettingFiles/* ipk/data/var/lib/ts-VMS
+	${co}cp -r Bitfiles/* ipk/data/var/lib/ts-VMS
 	${co}sed s?@VERSION@?$(VERSION)?g control.ipk.in > ipk/control/control
 	${co}cp postinst postrm ipk/control
-	${co}echo "/etc/default/ts-VMS" > ipk/control/conffiles
+	${co}echo -e "/etc/default/ts-VMS\n/var/lib/ts-VMS/M1M3/VMSApplicationSettings.yaml\n/var/lib/ts-VMS/M2/VMSApplicationSettings.yaml\n/var/lib/ts-VMS/CameraRotator/VMSApplicationSettings.yaml" > ipk/control/conffiles
 	${co}echo "2.0" > ipk/debian-binary
 	${co}tar czf ipk/data.tar.gz -P --transform "s#^ipk/data#.#" --owner=0 --group=0 ipk/data
 	${co}tar czf ipk/control.tar.gz -P --transform "s#^ipk/control#.#" --owner=0 --group=0 ipk/control
