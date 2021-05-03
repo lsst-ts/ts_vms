@@ -23,6 +23,11 @@ test -r /etc/default/rcS && . /etc/default/rcS
 # Source devices
 . /etc/default/tsvmsd
 
+if [ -z $VMS ]; then
+	echo "Please edit /etc/default/tsvmsd and specify at least one VMS device to start"
+	exit 1
+fi
+
 startdaemon(){
 	echo -n "Starting TS VMS $1:"
 	start-stop-daemon --start --oknodo --pidfile ${PIDFILE}_$1.pid --startas $DAEMON -- -p ${PIDFILE}_$1.pid -u vms:vms -c $1

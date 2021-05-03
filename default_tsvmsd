@@ -1,5 +1,6 @@
+#Configurations to start on this VMS
 #VMS="M1M3"
-VMS="M2 CameraRotator"
+#VMS="M2 CameraRotator"
 
 export OSPL_HOME=/home/admin/ts_opensplice/OpenSpliceDDS/V6.9.0/HDE/x86_64.linux
 export LSST_DDS_PARTITION_PREFIX=summit
