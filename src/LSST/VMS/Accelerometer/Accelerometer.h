@@ -34,6 +34,8 @@ private:
     enum { M1M3, M2, CameraRotator, TMA } subsystem;
 
     int numberOfSensors;
+
+    bool _firstSample;
 };
 
 } /* namespace VMS */

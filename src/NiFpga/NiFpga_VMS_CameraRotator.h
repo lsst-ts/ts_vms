@@ -23,7 +23,7 @@
 /**
  * The signature of the FPGA bitfile.
  */
-static const char* const NiFpga_VMS_CameraRotator_Signature = "61F3E144C995010FBA8E37E32BA9B5D4";
+static const char* const NiFpga_VMS_CameraRotator_Signature = "7DBD2986B84801AFAAA39B3952D3A0E3";
 
 #if NiFpga_Cpp
 extern "C"

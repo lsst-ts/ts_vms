@@ -28,6 +28,7 @@ public:
     void finalize();
 
     void setTimestamp(double timestamp);
+    float chasisTemperature();
 
     void waitForOuterLoopClock(int32_t timeout);
     void ackOuterLoopClock();
