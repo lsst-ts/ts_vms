@@ -1,0 +1,10 @@
+Package: ts-VMS
+Version: @VERSION@
+Description: Telescope & Site (TS) Vibration Monitor System (VMS) daemon.
+Section: lsst/tssw
+Priority: optional
+Maintainer: Petr Kubánek <pkubanek@lsst.org>
+License: GPL-3.0+
+Architecture: x64
+Homepage: https://github.com/lsst-ts/ts_VMS
+Depends: OpenSpliceDDS
