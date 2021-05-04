@@ -6,7 +6,7 @@ include Makefile.inc
 #
 
 # All Target
-all: ts_MTVMS
+all: ts-VMSd
 
 src/libVMS.a: FORCE
 	$(MAKE) -C src libVMS.a

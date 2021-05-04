@@ -174,7 +174,7 @@ void startLog() {
 }
 
 int main(int argc, char** argv) {
-    std::string configRoot("/var/lib/ts-VMS");
+    std::string configRoot("/var/lib/ts-VMS/");
 
     processArgs(argc, argv, configRoot);
 

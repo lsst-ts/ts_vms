@@ -1,1 +1,3 @@
+#!/bin/sh
+update-rc.d ts-VMS remove
 userdel vms
