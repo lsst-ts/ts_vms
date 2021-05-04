@@ -20,8 +20,10 @@ test -r /etc/default/rcS && . /etc/default/rcS
 # Source function library.
 . /etc/init.d/functions
 
-# Source devices
+# Source devices, export all variables
+set -a
 . /etc/default/ts-VMS
+set +a
 
 if [ -z "$VMS" ]; then
 	echo "Please edit /etc/default/ts-VMS and specify at least one VMS device to start"

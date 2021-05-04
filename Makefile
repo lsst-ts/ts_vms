@@ -76,7 +76,7 @@ ts-VMS_$(VERSION)_x86.ipk:
 	${co}cp -r SettingFiles/* ipk/data/var/lib/ts-VMS
 	${co}cp -r Bitfiles/* ipk/data/var/lib/ts-VMS
 	${co}sed s?@VERSION@?$(VERSION)?g control.ipk.in > ipk/control/control
-	${co}cp postinst postrm ipk/control
+	${co}cp postinst prerm postrm ipk/control
 	${co}echo -e "/etc/default/ts-VMS\n/var/lib/ts-VMS/M1M3/VMSApplicationSettings.yaml\n/var/lib/ts-VMS/M2/VMSApplicationSettings.yaml\n/var/lib/ts-VMS/CameraRotator/VMSApplicationSettings.yaml" > ipk/control/conffiles
 	${co}echo "2.0" > ipk/debian-binary
 	${co}tar czf ipk/data.tar.gz -P --transform "s#^ipk/data#.#" --owner=0 --group=0 ipk/data
