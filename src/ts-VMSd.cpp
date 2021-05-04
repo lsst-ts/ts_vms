@@ -84,7 +84,7 @@ void setSinks(std::string subsystem) {
 
 void processArgs(int argc, char* const argv[], std::string& configRoot) {
     int opt;
-    while ((opt = getopt(argc, argv, "bc:dfhp:u:v")) != -1) {
+    while ((opt = getopt(argc, argv, "bc:dfhp:su:v")) != -1) {
         switch (opt) {
             case 'b':
                 enabledSinks |= 0x02;
