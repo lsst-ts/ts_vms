@@ -61,9 +61,9 @@ doc:
 simulator:
 	@${MAKE} SIMULATOR=1
 
-ipk: ts-VMSd ts-VMS_$(VERSION)_x86.ipk
+ipk: ts-VMSd ts-VMS_$(VERSION)_x64.ipk
 
-ts-VMS_$(VERSION)_x86.ipk:
+ts-VMS_$(VERSION)_x64.ipk:
 	@echo '[MK ] ipk $@'
 	${co}mkdir -p ipk/data/usr/sbin
 	${co}mkdir -p ipk/data/etc/init.d
