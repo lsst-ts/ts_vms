@@ -59,7 +59,7 @@ case "$1" in
   	stopall
 	;;
   restart)
-	stopll
+	stopall
 	startall
 	;;
   status)
