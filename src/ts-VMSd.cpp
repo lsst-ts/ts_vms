@@ -33,7 +33,7 @@
 #include <signal.h>
 #include <sys/types.h>
 
-using namespace std;
+using namespace std::chrono;
 using namespace LSST;
 using namespace LSST::VMS;
 
@@ -288,9 +288,11 @@ int main(int argc, char** argv) {
         signal(SIGINT, sigKill);
         signal(SIGTERM, sigKill);
 
+        std::this_thread::sleep_for(3000ms);
+
         fpga.setTimestamp(VMSPublisher::instance().getTimestamp());
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         accelerometer.enableAccelerometers();
+        std::this_thread::sleep_for(1000ms);
 
         // TODO: This is a non-commandable component so there isn't really a way to cleanly shutdown the
         // software
@@ -320,6 +322,7 @@ int main(int argc, char** argv) {
             close(startPipe[1]);
         }
         SPDLOG_CRITICAL("Error starting or stopping FPGA: {}", nie.what());
+        fpga.close();
         fpga.finalize();
         vmsSAL->salShutdown();
         return -1;
@@ -330,10 +333,10 @@ int main(int argc, char** argv) {
         sinks.pop_back();
     }
     setSinks("done");
-    usleep(1000);
+    std::this_thread::sleep_for(1000us);
     vmsSAL->salShutdown();
 
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::this_thread::sleep_for(2s);
 
     SPDLOG_INFO("Main: Shutdown complete");
 
