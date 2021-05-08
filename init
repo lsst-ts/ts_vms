@@ -50,7 +50,7 @@ startdaemon(){
 }
 stopdaemon(){
 	echo -n "Stopping TS VMS $1:"
-	start-stop-daemon --stop --retry 5 -p ${PIDFILE}_$1.pid
+	start-stop-daemon --stop --oknodo --remove-pidfile --retry 5 -p ${PIDFILE}_$1.pid
 	echo "done"
 }
 startall(){
