@@ -1,0 +1,3 @@
+#!/bin/sh
+userdel vms
+update-rc.d -f ts-VMS remove

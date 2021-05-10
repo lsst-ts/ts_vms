@@ -1,0 +1,10 @@
+#Configurations to start on this VMS
+#VMS="M1M3"
+#VMS="M2 CameraRotator"
+
+OSPL_HOME=/opt/OpenSpliceDDS/V6.11.0/HDE/x86_64.linux
+LSST_DDS_PARTITION_PREFIX=summit
+LSST_DDS_DOMAIN_ID=0
+OSPL_URI=file:///home/admin/ts_ddsconfig/config/ospl-sp.xml
+LSST_DDS_QOS=file:///home/admin/ts_ddsconfig/qos/QoS.xml
+LD_LIBRARY_PATH=$OSPL_HOME/lib

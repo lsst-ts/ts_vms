@@ -29,5 +29,5 @@ LIBS_FLAGS := -L"${OSPL_HOME}/lib" -L"${LSST_SDK_INSTALL}/lib"
 VERSION := $(shell git describe --tags --dirty)
 ifeq ("$(VERSION)","")
   $(warning "Cannot retrieve version by git, using v0.0.0-None")
-  VERSION := "v0.0.0-None"
+  VERSION := v0.0.0-None
 endif

@@ -1,0 +1,88 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:        ts-VMS
+# Required-Start:  $network $remote_fs
+# Required-Stop:   $network $remote_fs
+# Default-Start:   2 3 4 5
+# Default-Stop:    6
+# Short-Description: Start TS VMS (Vibration Monitor System) daemon
+### END INIT INFO
+
+PATH=/sbin:/bin:/usr/bin:/usr/sbin
+
+DAEMON=/usr/sbin/ts-VMSd
+PIDFILE=/var/run/ts-VMSd
+
+# rcS contains TICKADJ
+test -r /etc/default/rcS && . /etc/default/rcS
+
+# Source function library.
+. /etc/init.d/functions
+
+# Source devices, export all variables
+set -a
+. /etc/default/ts-VMS
+set +a
+
+if [ -z "$VMS" ]; then
+	echo "Please edit /etc/default/ts-VMS and specify at least one VMS device to start"
+	exit 1
+fi
+
+startdaemon(){
+	# make sure network is up and running
+	attemps=0
+	export LSST_DDS_IP=`ip route get 1 | awk '{print $7;exit}'`
+	while [ -z $LSST_DDS_IP ]; do
+		sleep 1
+		export LSST_DDS_IP=`ip route get 1 | awk '{print $7;exit}'`
+		let attemps+=1
+		if [ $attemps -gt 60 ]; then
+			logger -t VMS_start -p user.error "Timeouted waiting for interface"
+			exit 1
+		fi
+	done
+	logger -t VMS_start -p user.info "Starting with IP $LSST_DDS_IP"
+	echo -n "Starting TS VMS $1:"
+	start-stop-daemon --start --oknodo --pidfile ${PIDFILE}_$1.pid --startas $DAEMON -- -p ${PIDFILE}_$1.pid -u vms:vms -c $1
+	echo "done"
+}
+stopdaemon(){
+	echo -n "Stopping TS VMS $1:"
+	start-stop-daemon --stop --oknodo --remove-pidfile --retry 5 -p ${PIDFILE}_$1.pid
+	echo "done"
+}
+startall(){
+	for v in $VMS; do
+		startdaemon $v
+	done
+}
+stopall(){
+	for v in $VMS; do
+		stopdaemon $v
+	done
+}
+
+case "$1" in
+  start)
+	startall
+	;;
+  stop)
+  	stopall
+	;;
+  restart)
+	stopall
+	startall
+	;;
+  status)
+	status $DAEMON
+	exit $?
+	;;
+  *)
+	echo "Usage: ts-VMS { start | stop | status | restart }" >&2
+	exit 1
+	;;
+esac
+
+exit 0
