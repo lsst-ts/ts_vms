@@ -196,7 +196,7 @@ void FPGA::readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInMs) 
                     1.5 * cos(frequency_to_period(100)) + 2 * sin(frequency_to_period(50)) +
                     4 * sin(frequency_to_period(25)) + 3 * cos(frequency_to_period(12.5));
         for (size_t ch = i; ch < i + channels; ch++) {
-            data[ch] = ((50.0 * static_cast<double>(random()) / RAND_MAX) - 25.0) + pv;
+            data[ch] = (((50.0 * static_cast<double>(random()) / RAND_MAX) - 25.0) + pv) / 1000000.0;
         }
         // high counts will be numerically unstable
         // limit must be integer multiple of frequencies introduced
