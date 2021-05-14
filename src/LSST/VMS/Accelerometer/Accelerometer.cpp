@@ -13,6 +13,7 @@
 
 #define AXIS_PER_SENSOR 3
 #define MAX_SAMPLE_PER_PUBLISH 50
+#define G2M_S_2(g) (g * 9.80665)
 
 namespace LSST {
 namespace VMS {
@@ -77,11 +78,11 @@ void Accelerometer::sampleData() {
 
     for (int i = 0; i < MAX_SAMPLE_PER_PUBLISH; i++) {
         for (int s = 0; s < numberOfSensors; s++) {
-            data[s].accelerationX[i] = *dataBuffer;
+            data[s].accelerationX[i] = G2M_S_2(*dataBuffer);
             dataBuffer++;
-            data[s].accelerationY[i] = *dataBuffer;
+            data[s].accelerationY[i] = G2M_S_2(*dataBuffer);
             dataBuffer++;
-            data[s].accelerationZ[i] = *dataBuffer;
+            data[s].accelerationZ[i] = G2M_S_2(*dataBuffer);
             dataBuffer++;
         }
     }
