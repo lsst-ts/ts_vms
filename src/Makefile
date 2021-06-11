@@ -5,7 +5,7 @@ all: libVMS.a
 .PHONY: DEPS clean
 
 C_SRCS = $(shell find LSST NiFpga -name '*.c')
-CPP_SRCS = $(shell find LSST NiFpga pugixml -name '*.cpp')
+CPP_SRCS = $(shell find LSST NiFpga -name '*.cpp')
 
 OBJS = $(patsubst %.c,%.c.o,$(C_SRCS)) $(patsubst %.cpp,%.cpp.o,$(CPP_SRCS))
 
