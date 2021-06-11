@@ -24,7 +24,7 @@ SAL_CPPFLAGS := -I${OSPL_HOME}/include -I${OSPL_HOME}/include/sys -I${OSPL_HOME}
 
 LIBS := -lyaml-cpp -ldl -ldcpssacpp -ldcpsgapi -lddsuser -lddskernel -lpthread -lddsserialization -lddsconfparser -lddsconf -lddsdatabase -lddsutil -lddsos ${SAL_WORK_DIR}/lib/libSAL_MTVMS.a ${CRIOCPP}/lib/libcRIOcpp.a
 
-LIBS_FLAGS := -L"${OSPL_HOME}/lib" -L"${LSST_SDK_INSTALL}/lib"
+LIBS_FLAGS += -L"${OSPL_HOME}/lib" -L"${LSST_SDK_INSTALL}/lib"
 
 VERSION := $(shell git describe --tags --dirty)
 ifeq ("$(VERSION)","")

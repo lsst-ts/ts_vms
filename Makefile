@@ -1,6 +1,6 @@
 include Makefile.inc
 
-.PHONY: all clean deploy deploy_target tests FORCE doc simulator ipk
+.PHONY: all clean tests FORCE doc simulator ipk
 
 # Add inputs and outputs from these tool invocations to the build variables 
 #
@@ -24,27 +24,6 @@ clean:
 # file targets
 src/%.cpp.o: src/%.cpp
 	$(MAKE) -C src $(patsubst src/%,%,$@)
-
-CRIO_IP:=139.229.178.183 139.229.178.193
-
-deploy_target: ts_MTVMS
-	@echo 'Installing ${cip}'
-	@echo '[SCP] $^'
-	${co}scp $^ admin@${cip}:
-	${co}ssh admin@${cip} 'mkdir -p Bitfiles'
-	@echo '[SCP] Bitfiles/NiFpga_VMS_3_Master.lvbitx'
-	${co}scp "Bitfiles/NiFpga_VMS_3_Master.lvbitx" admin@${cip}:Bitfiles/
-	@echo '[SCP] Bitfiles/NiFpga_VMS_6_Master.lvbitx'
-	${co}scp "Bitfiles/NiFpga_VMS_6_Master.lvbitx" admin@${cip}:Bitfiles/
-	@echo '[SCP] Bitfiles/NiFpga_VMS_3_Slave.lvbitx'
-	${co}scp "Bitfiles/NiFpga_VMS_3_Slave.lvbitx" admin@${cip}:Bitfiles/
-	@echo '[SCP] Bitfiles/NiFpga_VMS_6_Slave.lvbitx'
-	${co}scp "Bitfiles/NiFpga_VMS_6_Slave.lvbitx" admin@${cip}:Bitfiles/
-	@echo '[SCP] Bitfiles/NiFpga_VMS_CameraRotator.lvbitx'
-	${co}scp "Bitfiles/NiFpga_VMS_CameraRotator.lvbitx" admin@${cip}:Bitfiles/
-
-deploy: ts_MTVMS
-	@$(foreach cip,${CRIO_IP},${MAKE} cip=${cip} deploy_target;)
 
 tests: tests/Makefile tests/*.cpp
 	@${MAKE} -C tests
