@@ -16,8 +16,6 @@
 #include <cRIO/NiError.h>
 #include <cRIO/SALSink.h>
 
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
-
 #include <spdlog/spdlog.h>
 #include <spdlog/async.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
