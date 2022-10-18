@@ -18,11 +18,9 @@ endif
 
 CPPFLAGS += -I. \
 	-I"../$(CRIOCPP)/include" \
-	-I"LSST/VMS/Accelerometer" \
+	-I"LSST/VMS" \
 	-I"LSST/VMS/Include" \
 	-I"LSST/VMS/Logging" \
-	-I"LSST/VMS/FPGA" \
-	-I"LSST/VMS/Publisher" \
 	-I"LSST/VMS/Settings" \
 	-I"LSST/VMS/Utility" \
 	-I"NiFpga" \

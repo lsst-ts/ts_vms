@@ -21,18 +21,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <SettingReader.h>
-#include <SAL_MTVMS.h>
-#include <VMSPublisher.h>
-#include <FPGA.h>
-#include <Accelerometer.h>
-#include <FPGAAddresses.h>
-
 #include <cRIO/ControllerThread.h>
 #include <cRIO/CSC.h>
 #include <cRIO/NiError.h>
 #include <cRIO/SALSink.h>
 #include <cRIO/Settings/Path.h>
+
+#include <SettingReader.h>
+#include <SAL_MTVMS.h>
+#include <VMSPublisher.h>
+#include <VMSSubscriber.h>
+#include <FPGA.h>
+#include <Accelerometer.h>
+#include <FPGAAddresses.h>
 
 using namespace std::chrono;
 using namespace LSST;
@@ -108,6 +109,13 @@ void MTVMSd::init() {
 
     SPDLOG_INFO("Main: Setting publisher");
     VMSPublisher::instance().setSAL(_vmsSAL);
+    VMSPublisher::instance().setLogLevel(getSpdLogLogLevel() * 10);
+
+    SPDLOG_INFO("Starting controller thread");
+    LSST::cRIO::ControllerThread::instance().start();
+
+    SPDLOG_INFO("Creating subscriber");
+    addThread(new VMSSubscriber(_vmsSAL));
 
     fpga->setTimestamp(VMSPublisher::instance().getTimestamp());
     accelerometer->enableAccelerometers();
