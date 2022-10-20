@@ -36,7 +36,7 @@ namespace VMS {
 
 class VMSSubscriber : public cRIO::Thread {
 public:
-    VMSSubscriber(std::shared_ptr<SAL_MTVMS> vmsSAL);
+    VMSSubscriber(std::shared_ptr<SAL_MTVMS> vmsSAL, std::shared_ptr<SAL_MTVMS> allvmsSAL);
     virtual ~VMSSubscriber();
 
 protected:
@@ -44,8 +44,10 @@ protected:
 
 private:
     std::map<std::string, std::function<void(void)>> _commands;
+    std::map<std::string, std::function<void(void)>> _events;
 
     void tryCommands();
+    void tryEvents();
 };
 
 }  // namespace VMS

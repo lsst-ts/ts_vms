@@ -26,6 +26,7 @@
 #include <SAL_MTVMS.h>
 
 #include <cRIO/SAL/Command.h>
+#include <cRIO/SAL/Event.h>
 
 #include <VMSPublisher.h>
 
@@ -44,6 +45,8 @@ SAL_COMMAND_CLASS(MTVMS, VMSPublisher::SAL(), standby);
 SAL_COMMAND_CLASS(MTVMS, VMSPublisher::SAL(), exitControl);
 
 SAL_COMMAND_CLASS(MTVMS, VMSPublisher::SAL(), changeSampleRate);
+
+SAL_EVENT_CLASS(MTVMS, VMSPublisher::SAL(), timeSynchronization);
 
 }  // namespace Commands
 }  // namespace VMS

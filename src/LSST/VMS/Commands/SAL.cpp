@@ -64,3 +64,7 @@ void SAL_exitControl::execute() {
 }
 
 void SAL_changeSampleRate::execute() { ackComplete(); }
+
+void SAL_timeSynchronization::received() {
+    std::cerr << "TimeSynchronization " << params.baseClockOffset << std::endl;
+}

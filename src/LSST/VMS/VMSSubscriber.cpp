@@ -36,7 +36,7 @@ constexpr int32_t ACK_INPROGRESS = 301;  /// Acknowledges command reception, com
 constexpr int32_t ACK_COMPLETE = 303;    /// Command is completed.
 constexpr int32_t ACK_FAILED = -302;     /// Command execution failed.
 
-VMSSubscriber::VMSSubscriber(std::shared_ptr<SAL_MTVMS> vmsSAL) {
+VMSSubscriber::VMSSubscriber(std::shared_ptr<SAL_MTVMS> vmsSAL, std::shared_ptr<SAL_MTVMS> allvmsSAL) {
 #define ADD_SAL_COMMAND(name)                                                                   \
     _commands[#name] = [vmsSAL]() {                                                             \
         MTVMS_command_##name##C data;                                                           \
@@ -51,6 +51,16 @@ VMSSubscriber::VMSSubscriber(std::shared_ptr<SAL_MTVMS> vmsSAL) {
     ADD_SAL_COMMAND(standby);
     ADD_SAL_COMMAND(exitControl);
     ADD_SAL_COMMAND(changeSampleRate);
+
+#define ADD_SAL_EVENT(name)                                                               \
+    _events[#name] = [allvmsSAL]() {                                                      \
+        MTVMS_logevent_##name##C data;                                                    \
+        int32_t result = allvmsSAL->getEvent_##name(&data);                               \
+        if (result == SAL__NO_UPDATES) return;                                            \
+        cRIO::ControllerThread::instance().enqueueEvent(new Commands::SAL_##name(&data)); \
+    }
+
+    ADD_SAL_EVENT(timeSynchronization);
 
     _commands["setLogLevel"] = [vmsSAL]() {
         MTVMS_command_setLogLevelC data;
@@ -83,6 +93,12 @@ VMSSubscriber::VMSSubscriber(std::shared_ptr<SAL_MTVMS> vmsSAL) {
         SPDLOG_TRACE("Registering command {}", c.first);
         vmsSAL->salProcessor((char *)("MTVMS_command_" + c.first).c_str());
     }
+
+    // register events
+    for (auto e : _events) {
+        SPDLOG_TRACE("Registering event {}", e.first);
+        allvmsSAL->salTelemetrySub((char *)("MTVMS_logevent_" + e.first).c_str());
+    }
 }
 
 VMSSubscriber::~VMSSubscriber() {}
@@ -90,6 +106,7 @@ VMSSubscriber::~VMSSubscriber() {}
 void VMSSubscriber::run(std::unique_lock<std::mutex> &lock) {
     while (keepRunning) {
         tryCommands();
+        tryEvents();
         runCondition.wait_for(lock, 100us);
     }
 }
@@ -97,5 +114,11 @@ void VMSSubscriber::run(std::unique_lock<std::mutex> &lock) {
 void VMSSubscriber::tryCommands() {
     for (auto c : _commands) {
         c.second();
+    }
+}
+
+void VMSSubscriber::tryEvents() {
+    for (auto e : _events) {
+        e.second();
     }
 }

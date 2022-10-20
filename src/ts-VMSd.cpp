@@ -52,6 +52,9 @@ protected:
 private:
     VMSApplicationSettings _vmsApplicationSettings;
     std::shared_ptr<SAL_MTVMS> _vmsSAL;
+    // SAL object to receive all events from other VMS
+    std::shared_ptr<SAL_MTVMS> _allvmsSAL;
+
     Accelerometer* accelerometer;
 };
 
@@ -78,9 +81,9 @@ void MTVMSd::processArg(int opt, char* optarg) {
     LSST::cRIO::Settings::Path::setRootPath(getConfigRoot());
 
 #ifdef SIMULATOR
-    SPDLOG_WARN("Starting ts_VMS simulator");
+    SPDLOG_WARN("Starting ts-VMSd simulator");
 #else
-    SPDLOG_INFO("Starting ts_VMS");
+    SPDLOG_INFO("Starting ts-VMSd");
 #endif
 
     SPDLOG_INFO("Main: Creating setting reader from {}", getConfigRoot());
@@ -101,6 +104,9 @@ void MTVMSd::init() {
     _vmsSAL = std::make_shared<SAL_MTVMS>(index);
     _vmsSAL->setDebugLevel(getDebugLevelSAL());
 
+    _allvmsSAL = std::make_shared<SAL_MTVMS>(0);
+    _allvmsSAL->setDebugLevel(getDebugLevelSAL());
+
     addSink(std::make_shared<SALSink_mt>(_vmsSAL));
 
     // spdlog::apply_all([&](std::shared_ptr<spdlog::logger> l) { l->flush(); });
@@ -115,7 +121,7 @@ void MTVMSd::init() {
     LSST::cRIO::ControllerThread::instance().start();
 
     SPDLOG_INFO("Creating subscriber");
-    addThread(new VMSSubscriber(_vmsSAL));
+    addThread(new VMSSubscriber(_vmsSAL, _allvmsSAL));
 
     fpga->setTimestamp(VMSPublisher::instance().getTimestamp());
     accelerometer->enableAccelerometers();
