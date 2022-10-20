@@ -3,7 +3,7 @@ ifndef VERBOSE
   co := @
 endif
 
-c_opts := -DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE -DSAL_SUBSYSTEM_ID_IS_KEYED
+c_opts :=  -fdata-sections -ffunction-sections -DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE -DSAL_SUBSYSTEM_ID_IS_KEYED
 
 ifdef DEBUG
   c_opts += -g
