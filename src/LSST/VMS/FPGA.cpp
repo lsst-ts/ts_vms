@@ -35,7 +35,7 @@ namespace VMS {
     _u64ResponseFIFO = NiFpga_VMS_##type##_TargetToHostFifoU64_U64ResponseFIFO; \
     _sglResponseFIFO = NiFpga_VMS_##type##_TargetToHostFifoSgl_SGLResponseFIFO;
 
-FPGA::FPGA(VMSApplicationSettings *vmsApplicationSettings) {
+FPGA::FPGA(VMSApplicationSettings *vmsApplicationSettings) : SimpleFPGA(LSST::cRIO::VMS) {
     SPDLOG_TRACE("FPGA::FPGA()");
     _vmsApplicationSettings = vmsApplicationSettings;
     session = 0;

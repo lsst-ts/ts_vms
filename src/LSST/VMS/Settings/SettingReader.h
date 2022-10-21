@@ -15,18 +15,17 @@ namespace LSST {
 namespace VMS {
 
 class SettingReader {
-private:
-    VMSApplicationSettings vmsApplicationSettings;
-
-    std::string basePath;
-
 public:
     SettingReader(std::string _basePath);
 
-    VMSApplicationSettings *loadVMSApplicationSettings();
+    const VMSApplicationSettings loadVMSApplicationSettings();
 
 private:
     std::string getBasePath(std::string file);
+
+    VMSApplicationSettings vmsApplicationSettings;
+
+    std::string basePath;
 };
 
 } /* namespace VMS */

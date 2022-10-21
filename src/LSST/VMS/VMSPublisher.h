@@ -26,12 +26,21 @@ public:
 
     void setSAL(std::shared_ptr<SAL_MTVMS> sal);
 
+    static std::shared_ptr<SAL_MTVMS> SAL() { return instance()._vmsSAL; }
+
+    void setLogLevel(int newLevel);
+
+    void logSoftwareVersions();
+    void logSimulationMode();
+
     double getTimestamp();
 
-    void putData(MTVMS_dataC *data) { vmsSAL->putSample_data(data); }
+    void putData(MTVMS_dataC *data) { _vmsSAL->putSample_data(data); }
 
 private:
-    std::shared_ptr<SAL_MTVMS> vmsSAL;
+    std::shared_ptr<SAL_MTVMS> _vmsSAL;
+
+    MTVMS_logevent_logLevelC _logLevel;
 };
 
 } /* namespace VMS */

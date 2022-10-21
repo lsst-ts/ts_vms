@@ -10,6 +10,8 @@
 
 #include <NiFpga.h>
 
+#include <cRIO/SimpleFPGA.h>
+
 namespace LSST {
 namespace VMS {
 
@@ -18,14 +20,14 @@ class VMSApplicationSettings;
 /*!
  * The class used to communicate with the FPGA.
  */
-class FPGA {
+class FPGA : public LSST::cRIO::SimpleFPGA {
 public:
     FPGA(VMSApplicationSettings *vmsApplicationSettings);
 
-    void initialize();
-    void open();
-    void close();
-    void finalize();
+    void initialize() override;
+    void open() override;
+    void close() override;
+    void finalize() override;
 
     void setTimestamp(double timestamp);
     float chasisTemperature();
