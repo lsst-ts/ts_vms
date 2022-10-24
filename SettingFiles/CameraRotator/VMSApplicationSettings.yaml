@@ -1,5 +1,5 @@
 Subsystem : "CameraRotator"
-IsMaster : true
+IsController : true
 RIO : "rio://139.229.178.192/RIO"
 XCoefficients : [1.0,1.0,1.0]
 YCoefficients : [1.0,1.0,1.0]

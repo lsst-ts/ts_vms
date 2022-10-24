@@ -9,10 +9,10 @@
 #include <FPGA.h>
 #include <FPGAAddresses.h>
 #include <spdlog/spdlog.h>
-#include <NiFpga_VMS_3_Master.h>
-#include <NiFpga_VMS_3_Slave.h>
-#include <NiFpga_VMS_6_Master.h>
-#include <NiFpga_VMS_6_Slave.h>
+#include <NiFpga_VMS_3_Controller.h>
+#include <NiFpga_VMS_3_Responder.h>
+#include <NiFpga_VMS_6_Controller.h>
+#include <NiFpga_VMS_6_Responder.h>
 #include <NiFpga_VMS_CameraRotator.h>
 #include <Timestamp.h>
 #include <VMSApplicationSettings.h>
@@ -46,10 +46,18 @@ FPGA::FPGA(VMSApplicationSettings *vmsApplicationSettings) : SimpleFPGA(LSST::cR
         POPULATE_FPGA(CameraRotator);
     } else if (_vmsApplicationSettings->Subsystem == "M2") {
         _channels = 6;
-        POPULATE_FPGA(6_Master);
+        if (_vmsApplicationSettings->IsController) {
+            POPULATE_FPGA(6_Controller);
+        } else {
+            POPULATE_FPGA(6_Responder);
+        }
     } else if (_vmsApplicationSettings->Subsystem == "M1M3") {
         _channels = 3;
-        POPULATE_FPGA(3_Master);
+        if (_vmsApplicationSettings->IsController) {
+            POPULATE_FPGA(6_Controller);
+        } else {
+            POPULATE_FPGA(6_Responder);
+        }
     }
 }
 

@@ -1,5 +1,5 @@
 Subsystem : "M1M3"
-IsMaster : true
+IsController : true
 XCoefficients : [1.0,1.0,1.0]
 YCoefficients : [1.0,1.0,1.0]
 ZCoefficients : [1.0,1.0,1.0]

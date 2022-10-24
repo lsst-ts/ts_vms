@@ -20,7 +20,7 @@ void VMSApplicationSettings::load(const std::string &filename) {
         YAML::Node doc = YAML::LoadFile(filename);
 
         Subsystem = doc["Subsystem"].as<std::string>();
-        IsMaster = doc["IsMaster"].as<bool>();
+        IsController = doc["IsController"].as<bool>();
         RIO = doc["RIO"].as<std::string>("RIO0");
         XCoefficients = doc["XCoefficients"].as<std::vector<double>>();
         YCoefficients = doc["YCoefficients"].as<std::vector<double>>();
