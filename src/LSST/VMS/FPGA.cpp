@@ -27,13 +27,10 @@
 namespace LSST {
 namespace VMS {
 
-#define POPULATE_FPGA(type)                                                     \
-    _bitFile = "/var/lib/ts-VMS/" NiFpga_VMS_##type##_Bitfile;                  \
-    _signature = NiFpga_VMS_##type##_Signature;                                 \
-    _commandFIFO = NiFpga_VMS_##type##_HostToTargetFifoU16_CommandFIFO;         \
-    _requestFIFO = NiFpga_VMS_##type##_HostToTargetFifoU16_RequestFIFO;         \
-    _u64ResponseFIFO = NiFpga_VMS_##type##_TargetToHostFifoU64_U64ResponseFIFO; \
-    _sglResponseFIFO = NiFpga_VMS_##type##_TargetToHostFifoSgl_SGLResponseFIFO;
+#define POPULATE_FPGA(type)                                    \
+    _bitFile = "/var/lib/ts-VMS/" NiFpga_VMS_##type##_Bitfile; \
+    _signature = NiFpga_VMS_##type##_Signature;                \
+    _responseFIFO = NiFpga_VMS_##type##_TargetToHostFifoU32_ResponseFIFO;
 
 FPGA::FPGA(VMSApplicationSettings *vmsApplicationSettings) : SimpleFPGA(LSST::cRIO::VMS) {
     SPDLOG_TRACE("FPGA::FPGA()");
@@ -97,92 +94,26 @@ void FPGA::finalize() {
 #endif
 }
 
-void FPGA::setTimestamp(double timestamp) {
-    SPDLOG_TRACE("FPGA: setTimestamp({})", timestamp);
-    uint64_t raw = Timestamp::toRaw(timestamp);
-    uint16_t buffer[5];
-    buffer[0] = FPGAAddresses::Timestamp;
-    // TODO this isn't low or big endian, this is mess. Should be rewritten to
-    // probably big endian (network standard), but need changes in FPGA
-    // (LabView has various bite shifting end ordering blocks, which should be
-    // used instead of self-wired routines). When done, the code can be simplified to:
-    // raw = htobe64(raw);
-    // memcpy(buffer + 1, &raw, 8);
-    buffer[1] = (raw >> 48) & 0xFFFF;
-    buffer[2] = (raw >> 32) & 0xFFFF;
-    buffer[3] = (raw >> 16) & 0xFFFF;
-    buffer[4] = (raw >> 0) & 0xFFFF;
-    writeCommandFIFO(buffer, 5, 0);
-}
-
+#if 0
 float FPGA::chasisTemperature() {
     writeRequestFIFO(FPGAAddresses::ChasisTemperature, 0);
     uint64_t buffer;
     readU64ResponseFIFO(&buffer, 1, 500);
     return static_cast<float>(buffer) / 100.0;
 }
-
-void FPGA::waitForOuterLoopClock(int32_t timeout) {
-    SPDLOG_TRACE("FPGA: waitForOuterLoopClock({})", timeout);
-#ifndef SIMULATOR
-    uint32_t assertedIRQs = 0;
-    uint8_t timedOut = false;
-    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WaitOnIrqs(session, outerLoopIRQContext, NiFpga_Irq_0,
-                                                              timeout, &assertedIRQs, &timedOut));
 #endif
-}
 
-void FPGA::ackOuterLoopClock() {
-    SPDLOG_TRACE("FPGA: ackOuterLoopClock()");
-#ifndef SIMULATOR
-    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_AcknowledgeIrqs(session, NiFpga_Irq_0));
-#endif
-}
-
-void FPGA::writeCommandFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: writeCommandFIFO({})", length);
+void FPGA::readU32ResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs) {
+    SPDLOG_TRACE("FPGA: readU32ResponseFIFO({})", length);
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_WriteFifoU16(session, _commandFIFO, data, length, timeoutInMs, &remaining));
-#endif
-}
-
-void FPGA::writeRequestFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: writeRequestFIFO(Length = {})", length);
-#ifndef SIMULATOR
-    cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_WriteFifoU16(session, _requestFIFO, data, length, timeoutInMs, &remaining));
-#endif
-}
-
-void FPGA::writeRequestFIFO(uint16_t data, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: writeRequestFIFO(Data = {})", data);
-    writeRequestFIFO(&data, 1, timeoutInMs);
-}
-
-void FPGA::readU64ResponseFIFO(uint64_t *data, size_t length, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: readU64ResponseFIFO({})", length);
-#ifndef SIMULATOR
-    cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_ReadFifoU64(session, _u64ResponseFIFO, data, length, timeoutInMs, &remaining));
-#else
-    for (size_t i = 0; i < length; i++) {
-        data[i] = Timestamp::toRaw(VMSPublisher::instance().getTimestamp());
-    }
-#endif
-}
-
-void FPGA::readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: readSGLResponseFIFO({})", length);
-#ifndef SIMULATOR
-    cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_ReadFifoSgl(session, _sglResponseFIFO, data, length, timeoutInMs, &remaining));
+                       NiFpga_ReadFifoU32(session, _u32ResponseFIFO, data, length, timeoutInMs, &remaining));
 // enable this if you are looking for raw, at source accelerometers data
 #if 0
     size_t i = length;
     for (i = 0; i < length; i++) {
         if (data[i] != 0) {
-            SPDLOG_INFO("readSGLResponseFIFO {} {:.12f}", i, data[i]);
+            SPDLOG_INFO("readU32ResponseFIFO {} {:.12f}", i, data[i]);
             break;
         }
     }

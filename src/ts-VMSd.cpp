@@ -97,8 +97,9 @@ void MTVMSd::processArg(int opt, char* optarg) {
 
 void MTVMSd::init() {
     int index = getIndex(_vmsApplicationSettings.Subsystem);
-    SPDLOG_DEBUG("Subsystem: {}, Index: {}, IsController: {}, RIO: {}", _vmsApplicationSettings.Subsystem.c_str(),
-                 index, _vmsApplicationSettings.IsController, _vmsApplicationSettings.RIO);
+    SPDLOG_DEBUG("Subsystem: {}, Index: {}, IsController: {}, RIO: {}",
+                 _vmsApplicationSettings.Subsystem.c_str(), index, _vmsApplicationSettings.IsController,
+                 _vmsApplicationSettings.RIO);
 
     SPDLOG_INFO("Initializing MTVMS SAL");
     _vmsSAL = std::make_shared<SAL_MTVMS>(index);

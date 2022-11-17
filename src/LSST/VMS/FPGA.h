@@ -29,17 +29,9 @@ public:
     void close() override;
     void finalize() override;
 
-    void setTimestamp(double timestamp);
     float chasisTemperature();
 
-    void waitForOuterLoopClock(int32_t timeout);
-    void ackOuterLoopClock();
-
-    void writeCommandFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs);
-    void writeRequestFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs);
-    void writeRequestFIFO(uint16_t data, int32_t timeoutInMs);
-    void readU64ResponseFIFO(uint64_t *data, size_t length, int32_t timeoutInMs);
-    void readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInMs);
+    void readResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs);
 
 private:
     VMSApplicationSettings *_vmsApplicationSettings;
@@ -49,10 +41,7 @@ private:
     uint8_t _channels;
     const char *_bitFile;
     const char *_signature;
-    uint32_t _commandFIFO;
-    uint32_t _requestFIFO;
-    uint32_t _u64ResponseFIFO;
-    uint32_t _sglResponseFIFO;
+    uint32_t _responseFIFO;
 };
 
 }  // namespace VMS
