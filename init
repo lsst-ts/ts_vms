@@ -45,7 +45,7 @@ startdaemon(){
 	done
 	logger -t VMS_start -p user.info "Starting with IP $LSST_DDS_IP"
 	echo -n "Starting TS VMS $1:"
-	start-stop-daemon --start --oknodo --pidfile ${PIDFILE}_$1.pid --startas $DAEMON -- -p ${PIDFILE}_$1.pid -u vms:vms -c $1
+	start-stop-daemon --start --oknodo --pidfile ${PIDFILE}_$1.pid --startas $DAEMON -- -p ${PIDFILE}_$1.pid -u vms:vms $1
 	echo "done"
 }
 stopdaemon(){

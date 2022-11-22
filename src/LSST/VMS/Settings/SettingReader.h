@@ -18,7 +18,7 @@ class SettingReader {
 public:
     SettingReader(std::string _basePath);
 
-    const VMSApplicationSettings loadVMSApplicationSettings();
+    const VMSApplicationSettings loadVMSApplicationSettings(std::string subsystem);
 
 private:
     std::string getBasePath(std::string file);

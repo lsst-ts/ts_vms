@@ -15,6 +15,8 @@
 namespace LSST {
 namespace VMS {
 
+const NiFpga_FxpTypeInfo ResponseFxpTypeInfo = {1, 24, 8};
+
 class VMSApplicationSettings;
 
 /*!
@@ -30,6 +32,9 @@ public:
     void finalize() override;
 
     float chasisTemperature();
+    void setOperate(bool operate);
+    void setPeriod(uint32_t period);
+    void setOutputType(int16_t outputType);
 
     void readResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs);
 
@@ -42,6 +47,11 @@ private:
     const char *_bitFile;
     const char *_signature;
     uint32_t _responseFIFO;
+    uint32_t _chasisTemperatureResource;
+    NiFpga_FxpTypeInfo _chasisTemperatureTypeInfo;
+    uint32_t _operateResource;
+    uint32_t _periodResource;
+    uint32_t _outputTypeResource;
 };
 
 }  // namespace VMS

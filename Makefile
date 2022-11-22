@@ -47,16 +47,16 @@ ts-VMS_$(VERSION)_x64.ipk: ts-VMSd
 	${co}mkdir -p ipk/data/usr/sbin
 	${co}mkdir -p ipk/data/etc/init.d
 	${co}mkdir -p ipk/data/etc/default
-	${co}mkdir -p ipk/data/var/lib/ts-VMS
+	${co}mkdir -p ipk/data/var/lib/MTVMS
 	${co}mkdir -p ipk/control
 	${co}cp ts-VMSd ipk/data/usr/sbin/ts-VMSd
 	${co}cp init ipk/data/etc/init.d/ts-VMS
 	${co}cp default_ts-VMS ipk/data/etc/default/ts-VMS
-	${co}cp -r SettingFiles/* ipk/data/var/lib/ts-VMS
-	${co}cp -r Bitfiles/* ipk/data/var/lib/ts-VMS
+	${co}cp -r SettingFiles/* ipk/data/var/lib/MTVMS
+	${co}cp -r Bitfiles/* ipk/data/var/lib/MTVMS
 	${co}sed s?@VERSION@?$(VERSION)?g control.ipk.in > ipk/control/control
 	${co}cp postinst prerm postrm ipk/control
-	${co}echo -e "/etc/default/ts-VMS\n/var/lib/ts-VMS/M1M3/VMSApplicationSettings.yaml\n/var/lib/ts-VMS/M2/VMSApplicationSettings.yaml\n/var/lib/ts-VMS/CameraRotator/VMSApplicationSettings.yaml" > ipk/control/conffiles
+	${co}echo -e "/etc/default/ts-VMS\n/var/lib/MTVMS/M1M3.yaml\n/var/lib/MTVMS/M2.yaml\n/var/lib/MTVMS/CameraRotator.yaml" > ipk/control/conffiles
 	${co}echo "2.0" > ipk/debian-binary
 	${co}tar czf ipk/data.tar.gz -P --transform "s#^ipk/data#.#" --owner=0 --group=0 ipk/data
 	${co}tar czf ipk/control.tar.gz -P --transform "s#^ipk/control#.#" --owner=0 --group=0 ipk/control

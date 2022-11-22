@@ -27,10 +27,19 @@
 namespace LSST {
 namespace VMS {
 
-#define POPULATE_FPGA(type)                                    \
-    _bitFile = "/var/lib/ts-VMS/" NiFpga_VMS_##type##_Bitfile; \
-    _signature = NiFpga_VMS_##type##_Signature;                \
-    _responseFIFO = NiFpga_VMS_##type##_TargetToHostFifoU32_ResponseFIFO;
+#define NiFpga_VMS_CameraRotator_ControlBool_Operate -1
+#define NiFpga_VMS_6_Responder_ControlBool_Operate -1
+#define NiFpga_VMS_3_Responder_ControlBool_Operate -1
+
+#define POPULATE_FPGA(type)                                                                    \
+    _bitFile = "/var/lib/MTVMS/" NiFpga_VMS_##type##_Bitfile;                                  \
+    _signature = NiFpga_VMS_##type##_Signature;                                                \
+    _responseFIFO = NiFpga_VMS_##type##_TargetToHostFifoU32_ResponseFIFO;                      \
+    _chasisTemperatureResource = NiFpga_VMS_##type##_IndicatorFxp_ChassisTemperature_Resource; \
+    _chasisTemperatureTypeInfo = NiFpga_VMS_##type##_IndicatorFxp_ChassisTemperature_TypeInfo; \
+    _operateResource = NiFpga_VMS_##type##_ControlBool_Operate;                                \
+    _periodResource = NiFpga_VMS_##type##_ControlU32_Periodms;                                 \
+    _outputTypeResource = NiFpga_VMS_##type##_ControlI16_Outputtype;
 
 FPGA::FPGA(VMSApplicationSettings *vmsApplicationSettings) : SimpleFPGA(LSST::cRIO::VMS) {
     SPDLOG_TRACE("FPGA::FPGA()");
@@ -51,9 +60,9 @@ FPGA::FPGA(VMSApplicationSettings *vmsApplicationSettings) : SimpleFPGA(LSST::cR
     } else if (_vmsApplicationSettings->Subsystem == "M1M3") {
         _channels = 3;
         if (_vmsApplicationSettings->IsController) {
-            POPULATE_FPGA(6_Controller);
+            POPULATE_FPGA(3_Controller);
         } else {
-            POPULATE_FPGA(6_Responder);
+            POPULATE_FPGA(3_Responder);
         }
     }
 }
@@ -94,26 +103,52 @@ void FPGA::finalize() {
 #endif
 }
 
-#if 0
 float FPGA::chasisTemperature() {
-    writeRequestFIFO(FPGAAddresses::ChasisTemperature, 0);
-    uint64_t buffer;
-    readU64ResponseFIFO(&buffer, 1, 500);
-    return static_cast<float>(buffer) / 100.0;
-}
+#ifndef SIMULATOR
+    uint64_t temperature;
+    cRIO::NiThrowError(__PRETTY_FUNCTION__,
+                       NiFpga_ReadU64(session, _chasisTemperatureResource, &temperature));
+    return NiFpga_ConvertFromFxpToDouble(_chasisTemperatureTypeInfo, temperature);
+#else
+    return 7.7;
 #endif
+}
 
-void FPGA::readU32ResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: readU32ResponseFIFO({})", length);
+void FPGA::setOperate(bool operate) {
+#ifndef SIMULATOR
+    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WriteBool(session, _operateResource, operate));
+#else
+    // _ready = true;
+#endif
+}
+
+void FPGA::setPeriod(uint32_t period) {
+#ifndef SIMULATOR
+    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WriteU32(session, _periodResource, period));
+#else
+    // _ready = true;
+#endif
+}
+
+void FPGA::setOutputType(int16_t outputType) {
+#ifndef SIMULATOR
+    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WriteI16(session, _outputTypeResource, outputType));
+#else
+    // _ready = true;
+#endif
+}
+
+void FPGA::readResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs) {
+    SPDLOG_TRACE("FPGA: readResponseFIFO({})", length);
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_ReadFifoU32(session, _u32ResponseFIFO, data, length, timeoutInMs, &remaining));
+                       NiFpga_ReadFifoU32(session, _responseFIFO, data, length, timeoutInMs, &remaining));
 // enable this if you are looking for raw, at source accelerometers data
 #if 0
     size_t i = length;
     for (i = 0; i < length; i++) {
         if (data[i] != 0) {
-            SPDLOG_INFO("readU32ResponseFIFO {} {:.12f}", i, data[i]);
+            SPDLOG_INFO("readResponseFIFO {} {:.12f}", i, data[i]);
             break;
         }
     }
@@ -135,7 +170,9 @@ void FPGA::readU32ResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInM
                     1.5 * cos(frequency_to_period(100)) + 2 * sin(frequency_to_period(50)) +
                     4 * sin(frequency_to_period(25)) + 3 * cos(frequency_to_period(12.5));
         for (size_t ch = i; ch < i + channels; ch++) {
-            data[ch] = (((50.0 * static_cast<double>(random()) / RAND_MAX) - 25.0) + pv) / 1000000.0;
+            data[ch] = NiFpga_ConvertFromFloatToFxp(
+                    ResponseFxpTypeInfo,
+                    (((50.0 * static_cast<double>(random()) / RAND_MAX) - 25.0) + pv) / 1000000.0);
         }
         // high counts will be numerically unstable
         // limit must be integer multiple of frequencies introduced
