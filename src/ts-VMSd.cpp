@@ -73,8 +73,6 @@ int getIndex(const std::string subsystem) {
     exit(EXIT_FAILURE);
 }
 
-FPGA* fpga = NULL;
-
 cRIO::command_vec MTVMSd::processArgs(int argc, char* const argv[]) {
     auto ret = CSC::processArgs(argc, argv);
     if (ret.size() != 1) {
@@ -97,7 +95,7 @@ cRIO::command_vec MTVMSd::processArgs(int argc, char* const argv[]) {
     _vmsApplicationSettings = settingReader.loadVMSApplicationSettings(ret[0]);
 
     SPDLOG_INFO("Main: Creating FPGA");
-    fpga = new FPGA(&_vmsApplicationSettings);
+    FPGA::instance().populate(&_vmsApplicationSettings);
 
     return ret;
 }
@@ -119,7 +117,7 @@ void MTVMSd::init() {
 
     // spdlog::apply_all([&](std::shared_ptr<spdlog::logger> l) { l->flush(); });
 
-    accelerometer = new Accelerometer(fpga, &_vmsApplicationSettings);
+    accelerometer = new Accelerometer(&_vmsApplicationSettings);
 
     SPDLOG_INFO("Main: Setting publisher");
     VMSPublisher::instance().setSAL(_vmsSAL);
@@ -165,13 +163,10 @@ int main(int argc, char* const argv[]) {
     csc.processArgs(argc, argv);
 
     try {
-        csc.run(fpga);
+        csc.run(&(FPGA::instance()));
     } catch (LSST::cRIO::NiError& nie) {
         SPDLOG_CRITICAL("Main: Error initializing ThermalFPGA: {}", nie.what());
     }
-
-    delete fpga;
-    fpga = NULL;
 
     return 0;
 }

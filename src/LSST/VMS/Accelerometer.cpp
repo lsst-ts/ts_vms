@@ -22,6 +22,7 @@
  */
 
 #include <Accelerometer.h>
+#include <FPGA.h>
 #include <FPGAAddresses.h>
 #include <VMSPublisher.h>
 #include <spdlog/spdlog.h>
@@ -34,9 +35,8 @@
 namespace LSST {
 namespace VMS {
 
-Accelerometer::Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplicationSettings) {
+Accelerometer::Accelerometer(VMSApplicationSettings *vmsApplicationSettings) {
     SPDLOG_DEBUG("Accelerometer::Accelerometer()");
-    fpga = _fpga;
 
     _vmsApplicationSettings = vmsApplicationSettings;
 
@@ -61,21 +61,22 @@ Accelerometer::Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplication
 void Accelerometer::enableAccelerometers() {
     SPDLOG_INFO("Accelerometer: enableAccelerometers(), period {}, output type {}",
                 _vmsApplicationSettings->period, _vmsApplicationSettings->outputType);
-    fpga->setPeriod(_vmsApplicationSettings->period);
-    fpga->setOutputType(_vmsApplicationSettings->outputType);
-    fpga->setOperate(true);
+    FPGA::instance().setPeriod(_vmsApplicationSettings->period);
+    FPGA::instance().setOutputType(_vmsApplicationSettings->outputType);
+    FPGA::instance().setOperate(true);
 }
 
 void Accelerometer::disableAccelerometers() {
     SPDLOG_INFO("Accelerometer: disableAccelerometers()");
-    fpga->setOperate(false);
+    FPGA::instance().setOperate(false);
 }
 
 void Accelerometer::sampleData() {
     SPDLOG_TRACE("Accelerometer: sampleData()");
     uint32_t buffer[numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH];
 
-    fpga->readResponseFIFO(buffer, numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH, 1000);
+    FPGA::instance().readResponseFIFO(buffer, numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH,
+                                      1000);
 
     MTVMS_dataC data[numberOfSensors];
 

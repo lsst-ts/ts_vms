@@ -11,6 +11,7 @@
 #include <NiFpga.h>
 
 #include <cRIO/SimpleFPGA.h>
+#include <cRIO/Singleton.h>
 
 namespace LSST {
 namespace VMS {
@@ -22,9 +23,11 @@ class VMSApplicationSettings;
 /*!
  * The class used to communicate with the FPGA.
  */
-class FPGA : public LSST::cRIO::SimpleFPGA {
+class FPGA : public LSST::cRIO::SimpleFPGA, public LSST::cRIO::Singleton<FPGA> {
 public:
-    FPGA(VMSApplicationSettings *vmsApplicationSettings);
+    FPGA(token);
+
+    void populate(VMSApplicationSettings *vmsApplicationSettings);
 
     void initialize() override;
     void open() override;

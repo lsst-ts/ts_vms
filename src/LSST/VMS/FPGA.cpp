@@ -27,6 +27,8 @@
 namespace LSST {
 namespace VMS {
 
+FPGA::FPGA(token) : SimpleFPGA(LSST::cRIO::VMS) {}
+
 #define NiFpga_VMS_CameraRotator_ControlBool_Operate -1
 #define NiFpga_VMS_6_Responder_ControlBool_Operate -1
 #define NiFpga_VMS_3_Responder_ControlBool_Operate -1
@@ -41,7 +43,7 @@ namespace VMS {
     _periodResource = NiFpga_VMS_##type##_ControlU32_Periodms;                                 \
     _outputTypeResource = NiFpga_VMS_##type##_ControlI16_Outputtype;
 
-FPGA::FPGA(VMSApplicationSettings *vmsApplicationSettings) : SimpleFPGA(LSST::cRIO::VMS) {
+void FPGA::populate(VMSApplicationSettings *vmsApplicationSettings) {
     SPDLOG_TRACE("FPGA::FPGA()");
     _vmsApplicationSettings = vmsApplicationSettings;
     session = 0;

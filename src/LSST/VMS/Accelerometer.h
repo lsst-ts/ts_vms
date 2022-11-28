@@ -25,7 +25,6 @@
 #define ACCELEROMETER_H_
 
 #include <DataTypes.h>
-#include <FPGA.h>
 #include <SAL_MTVMS.h>
 #include <VMSApplicationSettings.h>
 
@@ -37,7 +36,7 @@ namespace VMS {
  */
 class Accelerometer {
 public:
-    Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplicationSettings);
+    Accelerometer(VMSApplicationSettings* vmsApplicationSettings);
 
     void enableAccelerometers();
     void disableAccelerometers();
@@ -45,8 +44,6 @@ public:
     void sampleData();
 
 private:
-    FPGA *fpga;
-
     enum { M1M3, M2, CameraRotator, TMA } subsystem;
 
     int numberOfSensors;
