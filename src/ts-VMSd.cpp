@@ -131,7 +131,7 @@ void MTVMSd::init() {
     SPDLOG_INFO("Creating subscriber");
     addThread(new VMSSubscriber(_vmsSAL, _allvmsSAL));
 
-    accelerometer->enableAccelerometers(5, 1);
+    accelerometer->enableAccelerometers();
     std::this_thread::sleep_for(1000ms);
 
     daemonOK();

@@ -38,6 +38,8 @@ Accelerometer::Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplication
     SPDLOG_DEBUG("Accelerometer::Accelerometer()");
     fpga = _fpga;
 
+    _vmsApplicationSettings = vmsApplicationSettings;
+
     if (vmsApplicationSettings->Subsystem == "M1M3") {
         subsystem = M1M3;
         numberOfSensors = 3;
@@ -56,10 +58,11 @@ Accelerometer::Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplication
     }
 }
 
-void Accelerometer::enableAccelerometers(uint32_t period, int16_t outputType) {
-    SPDLOG_INFO("Accelerometer: enableAccelerometers()");
-    fpga->setPeriod(period);
-    fpga->setOutputType(outputType);
+void Accelerometer::enableAccelerometers() {
+    SPDLOG_INFO("Accelerometer: enableAccelerometers(), period {}, output type {}",
+                _vmsApplicationSettings->period, _vmsApplicationSettings->outputType);
+    fpga->setPeriod(_vmsApplicationSettings->period);
+    fpga->setOutputType(_vmsApplicationSettings->outputType);
     fpga->setOperate(true);
 }
 

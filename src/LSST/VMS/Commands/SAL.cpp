@@ -59,11 +59,11 @@ void SAL_standby::execute() {
 }
 
 void SAL_exitControl::execute() {
-    LSST::cRIO::ControllerThread::setExitRequested();
+    ControllerThread::setExitRequested();
     ackComplete();
 }
 
-void SAL_changeSampleRate::execute() { ackComplete(); }
+void SAL_changeSamplePeriod::execute() { ackComplete(); }
 
 void SAL_timeSynchronization::received() {
     std::cerr << "TimeSynchronization " << params.baseClockOffset << std::endl;

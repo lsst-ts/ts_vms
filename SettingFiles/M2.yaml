@@ -1,4 +1,6 @@
 Subsystem : "M2"
+Period: 5
+OutputType: 3
 IsController : true
 XCoefficients : [1.0,1.0,1.0]
 YCoefficients : [1.0,1.0,1.0]

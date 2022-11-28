@@ -37,6 +37,8 @@ void VMSApplicationSettings::load(const std::string &filename) {
 
         Subsystem = doc["Subsystem"].as<std::string>();
         IsController = doc["IsController"].as<bool>();
+        period = doc["Period"].as<int32_t>(5);
+        outputType = doc["OutputType"].as<int>(3);
         RIO = doc["RIO"].as<std::string>("RIO0");
         XCoefficients = doc["XCoefficients"].as<std::vector<double>>();
         YCoefficients = doc["YCoefficients"].as<std::vector<double>>();
