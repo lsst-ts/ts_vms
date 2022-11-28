@@ -9,10 +9,10 @@
 #include <FPGA.h>
 #include <FPGAAddresses.h>
 #include <spdlog/spdlog.h>
-#include <NiFpga_VMS_3_Master.h>
-#include <NiFpga_VMS_3_Slave.h>
-#include <NiFpga_VMS_6_Master.h>
-#include <NiFpga_VMS_6_Slave.h>
+#include <NiFpga_VMS_3_Controller.h>
+#include <NiFpga_VMS_3_Responder.h>
+#include <NiFpga_VMS_6_Controller.h>
+#include <NiFpga_VMS_6_Responder.h>
 #include <NiFpga_VMS_CameraRotator.h>
 #include <Timestamp.h>
 #include <VMSApplicationSettings.h>
@@ -27,13 +27,19 @@
 namespace LSST {
 namespace VMS {
 
-#define POPULATE_FPGA(type)                                                     \
-    _bitFile = "/var/lib/ts-VMS/" NiFpga_VMS_##type##_Bitfile;                  \
-    _signature = NiFpga_VMS_##type##_Signature;                                 \
-    _commandFIFO = NiFpga_VMS_##type##_HostToTargetFifoU16_CommandFIFO;         \
-    _requestFIFO = NiFpga_VMS_##type##_HostToTargetFifoU16_RequestFIFO;         \
-    _u64ResponseFIFO = NiFpga_VMS_##type##_TargetToHostFifoU64_U64ResponseFIFO; \
-    _sglResponseFIFO = NiFpga_VMS_##type##_TargetToHostFifoSgl_SGLResponseFIFO;
+#define NiFpga_VMS_CameraRotator_ControlBool_Operate -1
+#define NiFpga_VMS_6_Responder_ControlBool_Operate -1
+#define NiFpga_VMS_3_Responder_ControlBool_Operate -1
+
+#define POPULATE_FPGA(type)                                                                    \
+    _bitFile = "/var/lib/MTVMS/" NiFpga_VMS_##type##_Bitfile;                                  \
+    _signature = NiFpga_VMS_##type##_Signature;                                                \
+    _responseFIFO = NiFpga_VMS_##type##_TargetToHostFifoU32_ResponseFIFO;                      \
+    _chasisTemperatureResource = NiFpga_VMS_##type##_IndicatorFxp_ChassisTemperature_Resource; \
+    _chasisTemperatureTypeInfo = NiFpga_VMS_##type##_IndicatorFxp_ChassisTemperature_TypeInfo; \
+    _operateResource = NiFpga_VMS_##type##_ControlBool_Operate;                                \
+    _periodResource = NiFpga_VMS_##type##_ControlU32_Periodms;                                 \
+    _outputTypeResource = NiFpga_VMS_##type##_ControlI16_Outputtype;
 
 FPGA::FPGA(VMSApplicationSettings *vmsApplicationSettings) : SimpleFPGA(LSST::cRIO::VMS) {
     SPDLOG_TRACE("FPGA::FPGA()");
@@ -46,10 +52,18 @@ FPGA::FPGA(VMSApplicationSettings *vmsApplicationSettings) : SimpleFPGA(LSST::cR
         POPULATE_FPGA(CameraRotator);
     } else if (_vmsApplicationSettings->Subsystem == "M2") {
         _channels = 6;
-        POPULATE_FPGA(6_Master);
+        if (_vmsApplicationSettings->IsController) {
+            POPULATE_FPGA(6_Controller);
+        } else {
+            POPULATE_FPGA(6_Responder);
+        }
     } else if (_vmsApplicationSettings->Subsystem == "M1M3") {
         _channels = 3;
-        POPULATE_FPGA(3_Master);
+        if (_vmsApplicationSettings->IsController) {
+            POPULATE_FPGA(3_Controller);
+        } else {
+            POPULATE_FPGA(3_Responder);
+        }
     }
 }
 
@@ -89,92 +103,52 @@ void FPGA::finalize() {
 #endif
 }
 
-void FPGA::setTimestamp(double timestamp) {
-    SPDLOG_TRACE("FPGA: setTimestamp({})", timestamp);
-    uint64_t raw = Timestamp::toRaw(timestamp);
-    uint16_t buffer[5];
-    buffer[0] = FPGAAddresses::Timestamp;
-    // TODO this isn't low or big endian, this is mess. Should be rewritten to
-    // probably big endian (network standard), but need changes in FPGA
-    // (LabView has various bite shifting end ordering blocks, which should be
-    // used instead of self-wired routines). When done, the code can be simplified to:
-    // raw = htobe64(raw);
-    // memcpy(buffer + 1, &raw, 8);
-    buffer[1] = (raw >> 48) & 0xFFFF;
-    buffer[2] = (raw >> 32) & 0xFFFF;
-    buffer[3] = (raw >> 16) & 0xFFFF;
-    buffer[4] = (raw >> 0) & 0xFFFF;
-    writeCommandFIFO(buffer, 5, 0);
-}
-
 float FPGA::chasisTemperature() {
-    writeRequestFIFO(FPGAAddresses::ChasisTemperature, 0);
-    uint64_t buffer;
-    readU64ResponseFIFO(&buffer, 1, 500);
-    return static_cast<float>(buffer) / 100.0;
-}
-
-void FPGA::waitForOuterLoopClock(int32_t timeout) {
-    SPDLOG_TRACE("FPGA: waitForOuterLoopClock({})", timeout);
 #ifndef SIMULATOR
-    uint32_t assertedIRQs = 0;
-    uint8_t timedOut = false;
-    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WaitOnIrqs(session, outerLoopIRQContext, NiFpga_Irq_0,
-                                                              timeout, &assertedIRQs, &timedOut));
-#endif
-}
-
-void FPGA::ackOuterLoopClock() {
-    SPDLOG_TRACE("FPGA: ackOuterLoopClock()");
-#ifndef SIMULATOR
-    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_AcknowledgeIrqs(session, NiFpga_Irq_0));
-#endif
-}
-
-void FPGA::writeCommandFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: writeCommandFIFO({})", length);
-#ifndef SIMULATOR
+    uint64_t temperature;
     cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_WriteFifoU16(session, _commandFIFO, data, length, timeoutInMs, &remaining));
-#endif
-}
-
-void FPGA::writeRequestFIFO(uint16_t *data, int32_t length, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: writeRequestFIFO(Length = {})", length);
-#ifndef SIMULATOR
-    cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_WriteFifoU16(session, _requestFIFO, data, length, timeoutInMs, &remaining));
-#endif
-}
-
-void FPGA::writeRequestFIFO(uint16_t data, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: writeRequestFIFO(Data = {})", data);
-    writeRequestFIFO(&data, 1, timeoutInMs);
-}
-
-void FPGA::readU64ResponseFIFO(uint64_t *data, size_t length, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: readU64ResponseFIFO({})", length);
-#ifndef SIMULATOR
-    cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_ReadFifoU64(session, _u64ResponseFIFO, data, length, timeoutInMs, &remaining));
+                       NiFpga_ReadU64(session, _chasisTemperatureResource, &temperature));
+    return NiFpga_ConvertFromFxpToDouble(_chasisTemperatureTypeInfo, temperature);
 #else
-    for (size_t i = 0; i < length; i++) {
-        data[i] = Timestamp::toRaw(VMSPublisher::instance().getTimestamp());
-    }
+    return 7.7;
 #endif
 }
 
-void FPGA::readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: readSGLResponseFIFO({})", length);
+void FPGA::setOperate(bool operate) {
+#ifndef SIMULATOR
+    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WriteBool(session, _operateResource, operate));
+#else
+    // _ready = true;
+#endif
+}
+
+void FPGA::setPeriod(uint32_t period) {
+#ifndef SIMULATOR
+    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WriteU32(session, _periodResource, period));
+#else
+    // _ready = true;
+#endif
+}
+
+void FPGA::setOutputType(int16_t outputType) {
+#ifndef SIMULATOR
+    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WriteI16(session, _outputTypeResource, outputType));
+#else
+    // _ready = true;
+#endif
+}
+
+void FPGA::readResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs) {
+    SPDLOG_TRACE("FPGA: readResponseFIFO({})", length);
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_ReadFifoSgl(session, _sglResponseFIFO, data, length, timeoutInMs, &remaining));
+                       NiFpga_ReadFifoU32(session, _responseFIFO, data, length, timeoutInMs, &remaining));
 // enable this if you are looking for raw, at source accelerometers data
 #if 0
     size_t i = length;
     for (i = 0; i < length; i++) {
         if (data[i] != 0) {
-            SPDLOG_INFO("readSGLResponseFIFO {} {:.12f}", i, data[i]);
+            SPDLOG_INFO("readResponseFIFO {} {:.12f}", i, data[i]);
             break;
         }
     }
@@ -196,7 +170,9 @@ void FPGA::readSGLResponseFIFO(float *data, size_t length, int32_t timeoutInMs) 
                     1.5 * cos(frequency_to_period(100)) + 2 * sin(frequency_to_period(50)) +
                     4 * sin(frequency_to_period(25)) + 3 * cos(frequency_to_period(12.5));
         for (size_t ch = i; ch < i + channels; ch++) {
-            data[ch] = (((50.0 * static_cast<double>(random()) / RAND_MAX) - 25.0) + pv) / 1000000.0;
+            data[ch] = NiFpga_ConvertFromFloatToFxp(
+                    ResponseFxpTypeInfo,
+                    (((50.0 * static_cast<double>(random()) / RAND_MAX) - 25.0) + pv) / 1000000.0);
         }
         // high counts will be numerically unstable
         // limit must be integer multiple of frequencies introduced

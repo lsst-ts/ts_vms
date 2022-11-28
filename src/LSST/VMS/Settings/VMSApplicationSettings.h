@@ -17,7 +17,7 @@ namespace VMS {
 class VMSApplicationSettings {
 public:
     std::string Subsystem;
-    bool IsMaster;
+    bool IsController;
     std::string RIO;
     std::vector<double> XCoefficients;
     std::vector<double> YCoefficients;

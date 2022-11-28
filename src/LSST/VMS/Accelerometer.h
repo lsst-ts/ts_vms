@@ -23,7 +23,7 @@ class Accelerometer {
 public:
     Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplicationSettings);
 
-    void enableAccelerometers();
+    void enableAccelerometers(uint32_t period, int16_t outputType);
     void disableAccelerometers();
 
     void sampleData();
@@ -34,8 +34,6 @@ private:
     enum { M1M3, M2, CameraRotator, TMA } subsystem;
 
     int numberOfSensors;
-
-    bool _firstSample;
 };
 
 } /* namespace VMS */

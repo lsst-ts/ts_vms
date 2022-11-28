@@ -38,51 +38,46 @@ Accelerometer::Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplication
         SPDLOG_ERROR("Unknown subsystem: {}", vmsApplicationSettings->Subsystem);
         exit(EXIT_FAILURE);
     }
-
-    _firstSample = true;
 }
 
-void Accelerometer::enableAccelerometers() {
+void Accelerometer::enableAccelerometers(uint32_t period, int16_t outputType) {
     SPDLOG_INFO("Accelerometer: enableAccelerometers()");
-    uint16_t buffer[2] = {FPGAAddresses::Accelerometers, true};
-    fpga->writeCommandFIFO(buffer, 2, 20);
-    _firstSample = true;
+    fpga->setPeriod(period);
+    fpga->setOutputType(outputType);
+    fpga->setOperate(true);
 }
 
 void Accelerometer::disableAccelerometers() {
     SPDLOG_INFO("Accelerometer: disableAccelerometers()");
-    uint16_t buffer[2] = {FPGAAddresses::Accelerometers, false};
-    fpga->writeCommandFIFO(buffer, 2, 20);
+    fpga->setOperate(false);
 }
 
 void Accelerometer::sampleData() {
     SPDLOG_TRACE("Accelerometer: sampleData()");
-    uint64_t u64Buffer[MAX_SAMPLE_PER_PUBLISH];
-    float sglBuffer[numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH];
+    uint32_t buffer[numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH];
 
-    fpga->writeRequestFIFO(FPGAAddresses::Accelerometers, 0);
-    fpga->readU64ResponseFIFO(u64Buffer, MAX_SAMPLE_PER_PUBLISH, _firstSample ? 500 : 70);
-    fpga->readSGLResponseFIFO(sglBuffer, numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH, 10);
-    _firstSample = false;
-
-    double data_timestamp = Timestamp::fromRaw(u64Buffer[0]);
+    fpga->readResponseFIFO(buffer, numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH, 1000);
 
     MTVMS_dataC data[numberOfSensors];
+
+    double data_timestamp = VMSPublisher::instance().getTimestamp();
 
     for (int s = 0; s < numberOfSensors; s++) {
         data[s].timestamp = data_timestamp;
         data[s].sensor = s + 1;
     }
 
-    float *dataBuffer = sglBuffer;
-
+    uint32_t *dataBuffer = buffer;
     for (int i = 0; i < MAX_SAMPLE_PER_PUBLISH; i++) {
         for (int s = 0; s < numberOfSensors; s++) {
-            data[s].accelerationX[i] = G2M_S_2(*dataBuffer);
+            data[s].accelerationX[i] =
+                    G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
             dataBuffer++;
-            data[s].accelerationY[i] = G2M_S_2(*dataBuffer);
+            data[s].accelerationY[i] =
+                    G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
             dataBuffer++;
-            data[s].accelerationZ[i] = G2M_S_2(*dataBuffer);
+            data[s].accelerationZ[i] =
+                    G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
             dataBuffer++;
         }
     }

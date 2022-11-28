@@ -1,8 +1,0 @@
-Subsystem : "M1M3"
-IsMaster : true
-XCoefficients : [1.0,1.0,1.0]
-YCoefficients : [1.0,1.0,1.0]
-ZCoefficients : [1.0,1.0,1.0]
-XOffsets : [0.0,0.0,0.0]
-YOffsets : [0.0,0.0,0.0]
-ZOffsets : [0.0,0.0,0.0]

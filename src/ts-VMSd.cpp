@@ -43,8 +43,9 @@ class MTVMSd : public LSST::cRIO::CSC {
 public:
     MTVMSd(const char* name, const char* description) : CSC(name, description) {}
 
+    cRIO::command_vec processArgs(int argc, char* const argv[]) override;
+
 protected:
-    void processArg(int opt, char* optarg) override;
     void init() override;
     void done() override;
     int runLoop() override;
@@ -74,8 +75,12 @@ int getIndex(const std::string subsystem) {
 
 FPGA* fpga = NULL;
 
-void MTVMSd::processArg(int opt, char* optarg) {
-    CSC::processArg(opt, optarg);
+cRIO::command_vec MTVMSd::processArgs(int argc, char* const argv[]) {
+    auto ret = CSC::processArgs(argc, argv);
+    if (ret.size() != 1) {
+        SPDLOG_CRITICAL("Subsystem (M1M3, M2 or CameraRotator) needs to be provided on command line");
+        exit(EXIT_FAILURE);
+    }
 
     SPDLOG_INFO("Setting root path {}", getConfigRoot());
     LSST::cRIO::Settings::Path::setRootPath(getConfigRoot());
@@ -88,17 +93,20 @@ void MTVMSd::processArg(int opt, char* optarg) {
 
     SPDLOG_INFO("Main: Creating setting reader from {}", getConfigRoot());
     SettingReader settingReader = SettingReader(getConfigRoot());
-    SPDLOG_DEBUG("Main: Loading VMS application settings");
-    _vmsApplicationSettings = settingReader.loadVMSApplicationSettings();
+    SPDLOG_DEBUG("Main: Loading VMS application settings {}", ret[0]);
+    _vmsApplicationSettings = settingReader.loadVMSApplicationSettings(ret[0]);
 
     SPDLOG_INFO("Main: Creating FPGA");
     fpga = new FPGA(&_vmsApplicationSettings);
+
+    return ret;
 }
 
 void MTVMSd::init() {
     int index = getIndex(_vmsApplicationSettings.Subsystem);
-    SPDLOG_DEBUG("Subsystem: {}, Index: {}, IsMaster: {}, RIO: {}", _vmsApplicationSettings.Subsystem.c_str(),
-                 index, _vmsApplicationSettings.IsMaster, _vmsApplicationSettings.RIO);
+    SPDLOG_DEBUG("Subsystem: {}, Index: {}, IsController: {}, RIO: {}",
+                 _vmsApplicationSettings.Subsystem.c_str(), index, _vmsApplicationSettings.IsController,
+                 _vmsApplicationSettings.RIO);
 
     SPDLOG_INFO("Initializing MTVMS SAL");
     _vmsSAL = std::make_shared<SAL_MTVMS>(index);
@@ -123,8 +131,7 @@ void MTVMSd::init() {
     SPDLOG_INFO("Creating subscriber");
     addThread(new VMSSubscriber(_vmsSAL, _allvmsSAL));
 
-    fpga->setTimestamp(VMSPublisher::instance().getTimestamp());
-    accelerometer->enableAccelerometers();
+    accelerometer->enableAccelerometers(5, 1);
     std::this_thread::sleep_for(1000ms);
 
     daemonOK();
@@ -149,7 +156,6 @@ void MTVMSd::done() {
 
 int MTVMSd::runLoop() {
     accelerometer->sampleData();
-    fpga->setTimestamp(VMSPublisher::instance().getTimestamp());
     return LSST::cRIO::ControllerThread::exitRequested() ? 0 : 1;
 }
 

@@ -1,7 +1,7 @@
 /*
- * FPGA Interface C API 16.0 source file.
+ * FPGA Interface C API 19.0 source file.
  *
- * Copyright (c) 2016,
+ * Copyright (c) 2019,
  * National Instruments Corporation.
  * All rights reserved.
  */
@@ -951,6 +951,178 @@ NiFpga_Status NiFpga_ConfigureFifo2(NiFpga_Session session,
         : NiFpga_Status_ResourceNotInitialized;
 }
 
+static NiFpga_Status (NiFpga_CCall *NiFpga_setFifoPropertyU32)(
+                                   NiFpga_Session      session,
+                                   uint32_t            fifo,
+                                   NiFpga_FifoProperty property,
+                                   uint32_t            value) = NULL;
+
+NiFpga_Status NiFpga_SetFifoPropertyU32(NiFpga_Session      session,
+                                        uint32_t            fifo,
+                                        NiFpga_FifoProperty property,
+                                        uint32_t            value)
+{
+   return NiFpga_setFifoPropertyU32
+        ? NiFpga_setFifoPropertyU32(session, fifo, property, value)
+        : NiFpga_Status_VersionMismatch;
+}
+
+static NiFpga_Status (NiFpga_CCall *NiFpga_setFifoPropertyI32)(
+                                   NiFpga_Session      session,
+                                   uint32_t            fifo,
+                                   NiFpga_FifoProperty property,
+                                   int32_t             value) = NULL;
+
+NiFpga_Status NiFpga_SetFifoPropertyI32(NiFpga_Session      session,
+                                        uint32_t            fifo,
+                                        NiFpga_FifoProperty property,
+                                        int32_t             value)
+{
+   return NiFpga_setFifoPropertyI32
+        ? NiFpga_setFifoPropertyI32(session, fifo, property, value)
+        : NiFpga_Status_VersionMismatch;
+}
+
+static NiFpga_Status (NiFpga_CCall *NiFpga_setFifoPropertyU64)(
+                                   NiFpga_Session      session,
+                                   uint32_t            fifo,
+                                   NiFpga_FifoProperty property,
+                                   uint64_t            value) = NULL;
+
+NiFpga_Status NiFpga_SetFifoPropertyU64(NiFpga_Session      session,
+                                        uint32_t            fifo,
+                                        NiFpga_FifoProperty property,
+                                        uint64_t            value)
+{
+   return NiFpga_setFifoPropertyU64
+        ? NiFpga_setFifoPropertyU64(session, fifo, property, value)
+        : NiFpga_Status_VersionMismatch;
+}
+
+static NiFpga_Status (NiFpga_CCall *NiFpga_setFifoPropertyI64)(
+                                   NiFpga_Session      session,
+                                   uint32_t            fifo,
+                                   NiFpga_FifoProperty property,
+                                   int64_t             value) = NULL;
+
+NiFpga_Status NiFpga_SetFifoPropertyI64(NiFpga_Session      session,
+                                        uint32_t            fifo,
+                                        NiFpga_FifoProperty property,
+                                        int64_t             value)
+{
+   return NiFpga_setFifoPropertyI64
+        ? NiFpga_setFifoPropertyI64(session, fifo, property, value)
+        : NiFpga_Status_VersionMismatch;
+}
+
+static NiFpga_Status (NiFpga_CCall *NiFpga_setFifoPropertyPtr)(
+                                   NiFpga_Session      session,
+                                   uint32_t            fifo,
+                                   NiFpga_FifoProperty property,
+                                   void*               value) = NULL;
+
+NiFpga_Status NiFpga_SetFifoPropertyPtr(NiFpga_Session      session,
+                                        uint32_t            fifo,
+                                        NiFpga_FifoProperty property,
+                                        void*               value)
+{
+   return NiFpga_setFifoPropertyPtr
+        ? NiFpga_setFifoPropertyPtr(session, fifo, property, value)
+        : NiFpga_Status_VersionMismatch;
+}
+
+static NiFpga_Status (NiFpga_CCall *NiFpga_getFifoPropertyU32)(
+                                   NiFpga_Session      session,
+                                   uint32_t            fifo,
+                                   NiFpga_FifoProperty property,
+                                   uint32_t*           value) = NULL;
+
+NiFpga_Status NiFpga_GetFifoPropertyU32(NiFpga_Session      session,
+                                        uint32_t            fifo,
+                                        NiFpga_FifoProperty property,
+                                        uint32_t*           value)
+{
+   return NiFpga_getFifoPropertyU32
+        ? NiFpga_getFifoPropertyU32(session, fifo, property, value)
+        : NiFpga_Status_VersionMismatch;
+}
+
+static NiFpga_Status (NiFpga_CCall *NiFpga_getFifoPropertyI32)(
+                                   NiFpga_Session      session,
+                                   uint32_t            fifo,
+                                   NiFpga_FifoProperty property,
+                                   int32_t*            value) = NULL;
+
+NiFpga_Status NiFpga_GetFifoPropertyI32(NiFpga_Session      session,
+                                        uint32_t            fifo,
+                                        NiFpga_FifoProperty property,
+                                        int32_t*            value)
+{
+   return NiFpga_getFifoPropertyI32
+        ? NiFpga_getFifoPropertyI32(session, fifo, property, value)
+        : NiFpga_Status_VersionMismatch;
+}
+
+static NiFpga_Status (NiFpga_CCall *NiFpga_getFifoPropertyU64)(
+                                   NiFpga_Session      session,
+                                   uint32_t            fifo,
+                                   NiFpga_FifoProperty property,
+                                   uint64_t*           value) = NULL;
+
+NiFpga_Status NiFpga_GetFifoPropertyU64(NiFpga_Session      session,
+                                        uint32_t            fifo,
+                                        NiFpga_FifoProperty property,
+                                        uint64_t*           value)
+{
+   return NiFpga_getFifoPropertyU64
+        ? NiFpga_getFifoPropertyU64(session, fifo, property, value)
+        : NiFpga_Status_VersionMismatch;
+}
+
+static NiFpga_Status (NiFpga_CCall *NiFpga_getFifoPropertyI64)(
+                                   NiFpga_Session      session,
+                                   uint32_t            fifo,
+                                   NiFpga_FifoProperty property,
+                                   int64_t*            value) = NULL;
+
+NiFpga_Status NiFpga_GetFifoPropertyI64(NiFpga_Session      session,
+                                        uint32_t            fifo,
+                                        NiFpga_FifoProperty property,
+                                        int64_t*            value)
+{
+   return NiFpga_getFifoPropertyI64
+        ? NiFpga_getFifoPropertyI64(session, fifo, property, value)
+        : NiFpga_Status_VersionMismatch;
+}
+
+static NiFpga_Status (NiFpga_CCall *NiFpga_getFifoPropertyPtr)(
+                                   NiFpga_Session      session,
+                                   uint32_t            fifo,
+                                   NiFpga_FifoProperty property,
+                                   void**              value) = NULL;
+
+NiFpga_Status NiFpga_GetFifoPropertyPtr(NiFpga_Session      session,
+                                        uint32_t            fifo,
+                                        NiFpga_FifoProperty property,
+                                        void**              value)
+{
+   return NiFpga_getFifoPropertyPtr
+        ? NiFpga_getFifoPropertyPtr(session, fifo, property, value)
+        : NiFpga_Status_VersionMismatch;
+}
+
+static NiFpga_Status (NiFpga_CCall *NiFpga_commitFifoConfiguration)(
+                                   NiFpga_Session      session,
+                                   uint32_t            fifo) = NULL;
+
+NiFpga_Status NiFpga_CommitFifoConfiguration(NiFpga_Session      session,
+                                             uint32_t            fifo)
+{
+   return NiFpga_commitFifoConfiguration
+        ? NiFpga_commitFifoConfiguration(session, fifo)
+        : NiFpga_Status_VersionMismatch;
+}
+
 static NiFpga_Status (NiFpga_CCall *NiFpga_startFifo)(
                                NiFpga_Session session,
                                uint32_t       fifo) = NULL;
@@ -1253,6 +1425,34 @@ NiFpga_Status NiFpga_ReadFifoDbl(NiFpga_Session session,
         : NiFpga_Status_ResourceNotInitialized;
 }
 
+static NiFpga_Status (NiFpga_CCall *NiFpga_readFifoComposite)(
+                                 NiFpga_Session session,
+                                 uint32_t       fifo,
+                                 void*          data,
+                                 uint32_t       bytesPerElement,
+                                 size_t         numberOfElements,
+                                 uint32_t       timeout,
+                                 size_t*        elementsRemaining) = NULL;
+
+NiFpga_Status NiFpga_ReadFifoComposite(NiFpga_Session session,
+                                       uint32_t       fifo,
+                                       void*          data,
+                                       uint32_t       bytesPerElement,
+                                       size_t         numberOfElements,
+                                       uint32_t       timeout,
+                                       size_t*        elementsRemaining)
+{
+   return NiFpga_readFifoComposite
+        ? NiFpga_readFifoComposite(session,
+                                   fifo,
+                                   data,
+                                   bytesPerElement,
+                                   numberOfElements,
+                                   timeout,
+                                   elementsRemaining)
+        : NiFpga_Status_VersionMismatch;
+}
+
 /*
  * Functions to write to host-to-target DMA FIFOs.
  */
@@ -1538,6 +1738,35 @@ NiFpga_Status NiFpga_WriteFifoDbl(
                               timeout,
                               emptyElementsRemaining)
         : NiFpga_Status_ResourceNotInitialized;
+}
+
+static NiFpga_Status (NiFpga_CCall *NiFpga_writeFifoComposite)(
+                                 NiFpga_Session session,
+                                 uint32_t       fifo,
+                                 const void*    data,
+                                 uint32_t       bytesPerElement,
+                                 size_t         numberOfElements,
+                                 uint32_t       timeout,
+                                 size_t*        emptyElementsRemaining) = NULL;
+
+NiFpga_Status NiFpga_WriteFifoComposite(
+                                 NiFpga_Session session,
+                                 uint32_t       fifo,
+                                 const void*    data,
+                                 uint32_t       bytesPerElement,
+                                 size_t         numberOfElements,
+                                 uint32_t       timeout,
+                                 size_t*        emptyElementsRemaining)
+{
+   return NiFpga_writeFifoComposite
+        ? NiFpga_writeFifoComposite(session,
+                              fifo,
+                              data,
+                              bytesPerElement,
+                              numberOfElements,
+                              timeout,
+                              emptyElementsRemaining)
+        : NiFpga_Status_VersionMismatch;
 }
 
 static NiFpga_Status (NiFpga_CCall *NiFpga_acquireFifoReadElementsBool)(
@@ -2252,115 +2481,129 @@ static const struct
 {
    const char* const name;
    NiFpga_FunctionPointer* const address;
+   NiFpga_Bool required;
 } NiFpga_functions[] =
 {
-   {"NiFpgaDll_Open",                (NiFpga_FunctionPointer*)&NiFpga_open},
-   {"NiFpgaDll_Close",               (NiFpga_FunctionPointer*)&NiFpga_close},
-   {"NiFpgaDll_Run",                 (NiFpga_FunctionPointer*)&NiFpga_run},
-   {"NiFpgaDll_Abort",               (NiFpga_FunctionPointer*)&NiFpga_abort},
-   {"NiFpgaDll_Reset",               (NiFpga_FunctionPointer*)&NiFpga_reset},
-   {"NiFpgaDll_Download",            (NiFpga_FunctionPointer*)&NiFpga_download},
-   {"NiFpgaDll_ReadBool",            (NiFpga_FunctionPointer*)&NiFpga_readBool},
-   {"NiFpgaDll_ReadI8",              (NiFpga_FunctionPointer*)&NiFpga_readI8},
-   {"NiFpgaDll_ReadU8",              (NiFpga_FunctionPointer*)&NiFpga_readU8},
-   {"NiFpgaDll_ReadI16",             (NiFpga_FunctionPointer*)&NiFpga_readI16},
-   {"NiFpgaDll_ReadU16",             (NiFpga_FunctionPointer*)&NiFpga_readU16},
-   {"NiFpgaDll_ReadI32",             (NiFpga_FunctionPointer*)&NiFpga_readI32},
-   {"NiFpgaDll_ReadU32",             (NiFpga_FunctionPointer*)&NiFpga_readU32},
-   {"NiFpgaDll_ReadI64",             (NiFpga_FunctionPointer*)&NiFpga_readI64},
-   {"NiFpgaDll_ReadU64",             (NiFpga_FunctionPointer*)&NiFpga_readU64},
-   {"NiFpgaDll_ReadSgl",             (NiFpga_FunctionPointer*)&NiFpga_readSgl},
-   {"NiFpgaDll_ReadDbl",             (NiFpga_FunctionPointer*)&NiFpga_readDbl},
-   {"NiFpgaDll_WriteBool",           (NiFpga_FunctionPointer*)&NiFpga_writeBool},
-   {"NiFpgaDll_WriteI8",             (NiFpga_FunctionPointer*)&NiFpga_writeI8},
-   {"NiFpgaDll_WriteU8",             (NiFpga_FunctionPointer*)&NiFpga_writeU8},
-   {"NiFpgaDll_WriteI16",            (NiFpga_FunctionPointer*)&NiFpga_writeI16},
-   {"NiFpgaDll_WriteU16",            (NiFpga_FunctionPointer*)&NiFpga_writeU16},
-   {"NiFpgaDll_WriteI32",            (NiFpga_FunctionPointer*)&NiFpga_writeI32},
-   {"NiFpgaDll_WriteU32",            (NiFpga_FunctionPointer*)&NiFpga_writeU32},
-   {"NiFpgaDll_WriteI64",            (NiFpga_FunctionPointer*)&NiFpga_writeI64},
-   {"NiFpgaDll_WriteU64",            (NiFpga_FunctionPointer*)&NiFpga_writeU64},
-   {"NiFpgaDll_WriteSgl",            (NiFpga_FunctionPointer*)&NiFpga_writeSgl},
-   {"NiFpgaDll_WriteDbl",            (NiFpga_FunctionPointer*)&NiFpga_writeDbl},
-   {"NiFpgaDll_ReadArrayBool",       (NiFpga_FunctionPointer*)&NiFpga_readArrayBool},
-   {"NiFpgaDll_ReadArrayI8",         (NiFpga_FunctionPointer*)&NiFpga_readArrayI8},
-   {"NiFpgaDll_ReadArrayU8",         (NiFpga_FunctionPointer*)&NiFpga_readArrayU8},
-   {"NiFpgaDll_ReadArrayI16",        (NiFpga_FunctionPointer*)&NiFpga_readArrayI16},
-   {"NiFpgaDll_ReadArrayU16",        (NiFpga_FunctionPointer*)&NiFpga_readArrayU16},
-   {"NiFpgaDll_ReadArrayI32",        (NiFpga_FunctionPointer*)&NiFpga_readArrayI32},
-   {"NiFpgaDll_ReadArrayU32",        (NiFpga_FunctionPointer*)&NiFpga_readArrayU32},
-   {"NiFpgaDll_ReadArrayI64",        (NiFpga_FunctionPointer*)&NiFpga_readArrayI64},
-   {"NiFpgaDll_ReadArrayU64",        (NiFpga_FunctionPointer*)&NiFpga_readArrayU64},
-   {"NiFpgaDll_ReadArraySgl",        (NiFpga_FunctionPointer*)&NiFpga_readArraySgl},
-   {"NiFpgaDll_ReadArrayDbl",        (NiFpga_FunctionPointer*)&NiFpga_readArrayDbl},
-   {"NiFpgaDll_WriteArrayBool",      (NiFpga_FunctionPointer*)&NiFpga_writeArrayBool},
-   {"NiFpgaDll_WriteArrayI8",        (NiFpga_FunctionPointer*)&NiFpga_writeArrayI8},
-   {"NiFpgaDll_WriteArrayU8",        (NiFpga_FunctionPointer*)&NiFpga_writeArrayU8},
-   {"NiFpgaDll_WriteArrayI16",       (NiFpga_FunctionPointer*)&NiFpga_writeArrayI16},
-   {"NiFpgaDll_WriteArrayU16",       (NiFpga_FunctionPointer*)&NiFpga_writeArrayU16},
-   {"NiFpgaDll_WriteArrayI32",       (NiFpga_FunctionPointer*)&NiFpga_writeArrayI32},
-   {"NiFpgaDll_WriteArrayU32",       (NiFpga_FunctionPointer*)&NiFpga_writeArrayU32},
-   {"NiFpgaDll_WriteArrayI64",       (NiFpga_FunctionPointer*)&NiFpga_writeArrayI64},
-   {"NiFpgaDll_WriteArrayU64",       (NiFpga_FunctionPointer*)&NiFpga_writeArrayU64},
-   {"NiFpgaDll_WriteArraySgl",       (NiFpga_FunctionPointer*)&NiFpga_writeArraySgl},
-   {"NiFpgaDll_WriteArrayDbl",       (NiFpga_FunctionPointer*)&NiFpga_writeArrayDbl},
-   {"NiFpgaDll_ReserveIrqContext",   (NiFpga_FunctionPointer*)&NiFpga_reserveIrqContext},
-   {"NiFpgaDll_UnreserveIrqContext", (NiFpga_FunctionPointer*)&NiFpga_unreserveIrqContext},
-   {"NiFpgaDll_WaitOnIrqs",          (NiFpga_FunctionPointer*)&NiFpga_waitOnIrqs},
-   {"NiFpgaDll_AcknowledgeIrqs",     (NiFpga_FunctionPointer*)&NiFpga_acknowledgeIrqs},
-   {"NiFpgaDll_ConfigureFifo",       (NiFpga_FunctionPointer*)&NiFpga_configureFifo},
-   {"NiFpgaDll_ConfigureFifo2",      (NiFpga_FunctionPointer*)&NiFpga_configureFifo2},
-   {"NiFpgaDll_StartFifo",           (NiFpga_FunctionPointer*)&NiFpga_startFifo},
-   {"NiFpgaDll_StopFifo",            (NiFpga_FunctionPointer*)&NiFpga_stopFifo},
-   {"NiFpgaDll_ReadFifoBool",        (NiFpga_FunctionPointer*)&NiFpga_readFifoBool},
-   {"NiFpgaDll_ReadFifoI8",          (NiFpga_FunctionPointer*)&NiFpga_readFifoI8},
-   {"NiFpgaDll_ReadFifoU8",          (NiFpga_FunctionPointer*)&NiFpga_readFifoU8},
-   {"NiFpgaDll_ReadFifoI16",         (NiFpga_FunctionPointer*)&NiFpga_readFifoI16},
-   {"NiFpgaDll_ReadFifoU16",         (NiFpga_FunctionPointer*)&NiFpga_readFifoU16},
-   {"NiFpgaDll_ReadFifoI32",         (NiFpga_FunctionPointer*)&NiFpga_readFifoI32},
-   {"NiFpgaDll_ReadFifoU32",         (NiFpga_FunctionPointer*)&NiFpga_readFifoU32},
-   {"NiFpgaDll_ReadFifoI64",         (NiFpga_FunctionPointer*)&NiFpga_readFifoI64},
-   {"NiFpgaDll_ReadFifoU64",         (NiFpga_FunctionPointer*)&NiFpga_readFifoU64},
-   {"NiFpgaDll_ReadFifoSgl",         (NiFpga_FunctionPointer*)&NiFpga_readFifoSgl},
-   {"NiFpgaDll_ReadFifoDbl",         (NiFpga_FunctionPointer*)&NiFpga_readFifoDbl},
-   {"NiFpgaDll_WriteFifoBool",       (NiFpga_FunctionPointer*)&NiFpga_writeFifoBool},
-   {"NiFpgaDll_WriteFifoI8",         (NiFpga_FunctionPointer*)&NiFpga_writeFifoI8},
-   {"NiFpgaDll_WriteFifoU8",         (NiFpga_FunctionPointer*)&NiFpga_writeFifoU8},
-   {"NiFpgaDll_WriteFifoI16",        (NiFpga_FunctionPointer*)&NiFpga_writeFifoI16},
-   {"NiFpgaDll_WriteFifoU16",        (NiFpga_FunctionPointer*)&NiFpga_writeFifoU16},
-   {"NiFpgaDll_WriteFifoI32",        (NiFpga_FunctionPointer*)&NiFpga_writeFifoI32},
-   {"NiFpgaDll_WriteFifoU32",        (NiFpga_FunctionPointer*)&NiFpga_writeFifoU32},
-   {"NiFpgaDll_WriteFifoI64",        (NiFpga_FunctionPointer*)&NiFpga_writeFifoI64},
-   {"NiFpgaDll_WriteFifoU64",        (NiFpga_FunctionPointer*)&NiFpga_writeFifoU64},
-   {"NiFpgaDll_WriteFifoSgl",        (NiFpga_FunctionPointer*)&NiFpga_writeFifoSgl},
-   {"NiFpgaDll_WriteFifoDbl",        (NiFpga_FunctionPointer*)&NiFpga_writeFifoDbl},
-   {"NiFpgaDll_AcquireFifoReadElementsBool",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsBool},
-   {"NiFpgaDll_AcquireFifoReadElementsI8",    (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsI8},
-   {"NiFpgaDll_AcquireFifoReadElementsU8",    (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsU8},
-   {"NiFpgaDll_AcquireFifoReadElementsI16",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsI16},
-   {"NiFpgaDll_AcquireFifoReadElementsU16",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsU16},
-   {"NiFpgaDll_AcquireFifoReadElementsI32",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsI32},
-   {"NiFpgaDll_AcquireFifoReadElementsU32",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsU32},
-   {"NiFpgaDll_AcquireFifoReadElementsI64",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsI64},
-   {"NiFpgaDll_AcquireFifoReadElementsU64",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsU64},
-   {"NiFpgaDll_AcquireFifoReadElementsSgl",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsSgl},
-   {"NiFpgaDll_AcquireFifoReadElementsDbl",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsDbl},
-   {"NiFpgaDll_AcquireFifoWriteElementsBool", (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsBool},
-   {"NiFpgaDll_AcquireFifoWriteElementsI8",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsI8},
-   {"NiFpgaDll_AcquireFifoWriteElementsU8",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsU8},
-   {"NiFpgaDll_AcquireFifoWriteElementsI16",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsI16},
-   {"NiFpgaDll_AcquireFifoWriteElementsU16",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsU16},
-   {"NiFpgaDll_AcquireFifoWriteElementsI32",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsI32},
-   {"NiFpgaDll_AcquireFifoWriteElementsU32",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsU32},
-   {"NiFpgaDll_AcquireFifoWriteElementsI64",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsI64},
-   {"NiFpgaDll_AcquireFifoWriteElementsU64",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsU64},
-   {"NiFpgaDll_AcquireFifoWriteElementsSgl",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsSgl},
-   {"NiFpgaDll_AcquireFifoWriteElementsDbl",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsDbl},
-   {"NiFpgaDll_ReleaseFifoElements",          (NiFpga_FunctionPointer*)&NiFpga_releaseFifoElements},
-   {"NiFpgaDll_GetPeerToPeerFifoEndpoint",    (NiFpga_FunctionPointer*)&NiFpga_getPeerToPeerFifoEndpoint},
-   {"NiFpgaDll_GetBitfileContents",           (NiFpga_FunctionPointer*)&NiFpga_getBitfileContents},
-   {"NiFpgaDll_ClientFunctionCall",           (NiFpga_FunctionPointer*)&NiFpga_clientFunctionCall},
-   {NULL, NULL}
+   {"NiFpgaDll_Open",                (NiFpga_FunctionPointer*)&NiFpga_open, 1},
+   {"NiFpgaDll_Close",               (NiFpga_FunctionPointer*)&NiFpga_close, 1},
+   {"NiFpgaDll_Run",                 (NiFpga_FunctionPointer*)&NiFpga_run, 1},
+   {"NiFpgaDll_Abort",               (NiFpga_FunctionPointer*)&NiFpga_abort, 1},
+   {"NiFpgaDll_Reset",               (NiFpga_FunctionPointer*)&NiFpga_reset, 1},
+   {"NiFpgaDll_Download",            (NiFpga_FunctionPointer*)&NiFpga_download, 1},
+   {"NiFpgaDll_ReadBool",            (NiFpga_FunctionPointer*)&NiFpga_readBool, 1},
+   {"NiFpgaDll_ReadI8",              (NiFpga_FunctionPointer*)&NiFpga_readI8, 1},
+   {"NiFpgaDll_ReadU8",              (NiFpga_FunctionPointer*)&NiFpga_readU8, 1},
+   {"NiFpgaDll_ReadI16",             (NiFpga_FunctionPointer*)&NiFpga_readI16, 1},
+   {"NiFpgaDll_ReadU16",             (NiFpga_FunctionPointer*)&NiFpga_readU16, 1},
+   {"NiFpgaDll_ReadI32",             (NiFpga_FunctionPointer*)&NiFpga_readI32, 1},
+   {"NiFpgaDll_ReadU32",             (NiFpga_FunctionPointer*)&NiFpga_readU32, 1},
+   {"NiFpgaDll_ReadI64",             (NiFpga_FunctionPointer*)&NiFpga_readI64, 1},
+   {"NiFpgaDll_ReadU64",             (NiFpga_FunctionPointer*)&NiFpga_readU64, 1},
+   {"NiFpgaDll_ReadSgl",             (NiFpga_FunctionPointer*)&NiFpga_readSgl, 1},
+   {"NiFpgaDll_ReadDbl",             (NiFpga_FunctionPointer*)&NiFpga_readDbl, 1},
+   {"NiFpgaDll_WriteBool",           (NiFpga_FunctionPointer*)&NiFpga_writeBool, 1},
+   {"NiFpgaDll_WriteI8",             (NiFpga_FunctionPointer*)&NiFpga_writeI8, 1},
+   {"NiFpgaDll_WriteU8",             (NiFpga_FunctionPointer*)&NiFpga_writeU8, 1},
+   {"NiFpgaDll_WriteI16",            (NiFpga_FunctionPointer*)&NiFpga_writeI16, 1},
+   {"NiFpgaDll_WriteU16",            (NiFpga_FunctionPointer*)&NiFpga_writeU16, 1},
+   {"NiFpgaDll_WriteI32",            (NiFpga_FunctionPointer*)&NiFpga_writeI32, 1},
+   {"NiFpgaDll_WriteU32",            (NiFpga_FunctionPointer*)&NiFpga_writeU32, 1},
+   {"NiFpgaDll_WriteI64",            (NiFpga_FunctionPointer*)&NiFpga_writeI64, 1},
+   {"NiFpgaDll_WriteU64",            (NiFpga_FunctionPointer*)&NiFpga_writeU64, 1},
+   {"NiFpgaDll_WriteSgl",            (NiFpga_FunctionPointer*)&NiFpga_writeSgl, 1},
+   {"NiFpgaDll_WriteDbl",            (NiFpga_FunctionPointer*)&NiFpga_writeDbl, 1},
+   {"NiFpgaDll_ReadArrayBool",       (NiFpga_FunctionPointer*)&NiFpga_readArrayBool, 1},
+   {"NiFpgaDll_ReadArrayI8",         (NiFpga_FunctionPointer*)&NiFpga_readArrayI8, 1},
+   {"NiFpgaDll_ReadArrayU8",         (NiFpga_FunctionPointer*)&NiFpga_readArrayU8, 1},
+   {"NiFpgaDll_ReadArrayI16",        (NiFpga_FunctionPointer*)&NiFpga_readArrayI16, 1},
+   {"NiFpgaDll_ReadArrayU16",        (NiFpga_FunctionPointer*)&NiFpga_readArrayU16, 1},
+   {"NiFpgaDll_ReadArrayI32",        (NiFpga_FunctionPointer*)&NiFpga_readArrayI32, 1},
+   {"NiFpgaDll_ReadArrayU32",        (NiFpga_FunctionPointer*)&NiFpga_readArrayU32, 1},
+   {"NiFpgaDll_ReadArrayI64",        (NiFpga_FunctionPointer*)&NiFpga_readArrayI64, 1},
+   {"NiFpgaDll_ReadArrayU64",        (NiFpga_FunctionPointer*)&NiFpga_readArrayU64, 1},
+   {"NiFpgaDll_ReadArraySgl",        (NiFpga_FunctionPointer*)&NiFpga_readArraySgl, 1},
+   {"NiFpgaDll_ReadArrayDbl",        (NiFpga_FunctionPointer*)&NiFpga_readArrayDbl, 1},
+   {"NiFpgaDll_WriteArrayBool",      (NiFpga_FunctionPointer*)&NiFpga_writeArrayBool, 1},
+   {"NiFpgaDll_WriteArrayI8",        (NiFpga_FunctionPointer*)&NiFpga_writeArrayI8, 1},
+   {"NiFpgaDll_WriteArrayU8",        (NiFpga_FunctionPointer*)&NiFpga_writeArrayU8, 1},
+   {"NiFpgaDll_WriteArrayI16",       (NiFpga_FunctionPointer*)&NiFpga_writeArrayI16, 1},
+   {"NiFpgaDll_WriteArrayU16",       (NiFpga_FunctionPointer*)&NiFpga_writeArrayU16, 1},
+   {"NiFpgaDll_WriteArrayI32",       (NiFpga_FunctionPointer*)&NiFpga_writeArrayI32, 1},
+   {"NiFpgaDll_WriteArrayU32",       (NiFpga_FunctionPointer*)&NiFpga_writeArrayU32, 1},
+   {"NiFpgaDll_WriteArrayI64",       (NiFpga_FunctionPointer*)&NiFpga_writeArrayI64, 1},
+   {"NiFpgaDll_WriteArrayU64",       (NiFpga_FunctionPointer*)&NiFpga_writeArrayU64, 1},
+   {"NiFpgaDll_WriteArraySgl",       (NiFpga_FunctionPointer*)&NiFpga_writeArraySgl, 1},
+   {"NiFpgaDll_WriteArrayDbl",       (NiFpga_FunctionPointer*)&NiFpga_writeArrayDbl, 1},
+   {"NiFpgaDll_ReserveIrqContext",   (NiFpga_FunctionPointer*)&NiFpga_reserveIrqContext, 1},
+   {"NiFpgaDll_UnreserveIrqContext", (NiFpga_FunctionPointer*)&NiFpga_unreserveIrqContext, 1},
+   {"NiFpgaDll_WaitOnIrqs",          (NiFpga_FunctionPointer*)&NiFpga_waitOnIrqs, 1},
+   {"NiFpgaDll_AcknowledgeIrqs",     (NiFpga_FunctionPointer*)&NiFpga_acknowledgeIrqs, 1},
+   {"NiFpgaDll_ConfigureFifo",       (NiFpga_FunctionPointer*)&NiFpga_configureFifo, 1},
+   {"NiFpgaDll_ConfigureFifo2",      (NiFpga_FunctionPointer*)&NiFpga_configureFifo2, 1},
+   {"NiFpgaDll_SetFifoPropertyU32",  (NiFpga_FunctionPointer*)&NiFpga_setFifoPropertyU32, 0},
+   {"NiFpgaDll_SetFifoPropertyI32",  (NiFpga_FunctionPointer*)&NiFpga_setFifoPropertyI32, 0},
+   {"NiFpgaDll_SetFifoPropertyU64",  (NiFpga_FunctionPointer*)&NiFpga_setFifoPropertyU64, 0},
+   {"NiFpgaDll_SetFifoPropertyI64",  (NiFpga_FunctionPointer*)&NiFpga_setFifoPropertyI64, 0},
+   {"NiFpgaDll_SetFifoPropertyPtr",  (NiFpga_FunctionPointer*)&NiFpga_setFifoPropertyPtr, 0},
+   {"NiFpgaDll_GetFifoPropertyU32",  (NiFpga_FunctionPointer*)&NiFpga_getFifoPropertyU32, 0},
+   {"NiFpgaDll_GetFifoPropertyI32",  (NiFpga_FunctionPointer*)&NiFpga_getFifoPropertyI32, 0},
+   {"NiFpgaDll_GetFifoPropertyU64",  (NiFpga_FunctionPointer*)&NiFpga_getFifoPropertyU64, 0},
+   {"NiFpgaDll_GetFifoPropertyI64",  (NiFpga_FunctionPointer*)&NiFpga_getFifoPropertyI64, 0},
+   {"NiFpgaDll_GetFifoPropertyPtr",  (NiFpga_FunctionPointer*)&NiFpga_getFifoPropertyPtr, 0},
+   {"NiFpgaDll_CommitFifoConfiguration", (NiFpga_FunctionPointer*)&NiFpga_commitFifoConfiguration, 0},
+   {"NiFpgaDll_StartFifo",           (NiFpga_FunctionPointer*)&NiFpga_startFifo, 1},
+   {"NiFpgaDll_StopFifo",            (NiFpga_FunctionPointer*)&NiFpga_stopFifo, 1},
+   {"NiFpgaDll_ReadFifoBool",        (NiFpga_FunctionPointer*)&NiFpga_readFifoBool, 1},
+   {"NiFpgaDll_ReadFifoI8",          (NiFpga_FunctionPointer*)&NiFpga_readFifoI8, 1},
+   {"NiFpgaDll_ReadFifoU8",          (NiFpga_FunctionPointer*)&NiFpga_readFifoU8, 1},
+   {"NiFpgaDll_ReadFifoI16",         (NiFpga_FunctionPointer*)&NiFpga_readFifoI16, 1},
+   {"NiFpgaDll_ReadFifoU16",         (NiFpga_FunctionPointer*)&NiFpga_readFifoU16, 1},
+   {"NiFpgaDll_ReadFifoI32",         (NiFpga_FunctionPointer*)&NiFpga_readFifoI32, 1},
+   {"NiFpgaDll_ReadFifoU32",         (NiFpga_FunctionPointer*)&NiFpga_readFifoU32, 1},
+   {"NiFpgaDll_ReadFifoI64",         (NiFpga_FunctionPointer*)&NiFpga_readFifoI64, 1},
+   {"NiFpgaDll_ReadFifoU64",         (NiFpga_FunctionPointer*)&NiFpga_readFifoU64, 1},
+   {"NiFpgaDll_ReadFifoSgl",         (NiFpga_FunctionPointer*)&NiFpga_readFifoSgl, 1},
+   {"NiFpgaDll_ReadFifoDbl",         (NiFpga_FunctionPointer*)&NiFpga_readFifoDbl, 1},
+   {"NiFpgaDll_ReadFifoComposite",   (NiFpga_FunctionPointer*)&NiFpga_readFifoComposite, 0},
+   {"NiFpgaDll_WriteFifoBool",       (NiFpga_FunctionPointer*)&NiFpga_writeFifoBool, 1},
+   {"NiFpgaDll_WriteFifoI8",         (NiFpga_FunctionPointer*)&NiFpga_writeFifoI8, 1},
+   {"NiFpgaDll_WriteFifoU8",         (NiFpga_FunctionPointer*)&NiFpga_writeFifoU8, 1},
+   {"NiFpgaDll_WriteFifoI16",        (NiFpga_FunctionPointer*)&NiFpga_writeFifoI16, 1},
+   {"NiFpgaDll_WriteFifoU16",        (NiFpga_FunctionPointer*)&NiFpga_writeFifoU16, 1},
+   {"NiFpgaDll_WriteFifoI32",        (NiFpga_FunctionPointer*)&NiFpga_writeFifoI32, 1},
+   {"NiFpgaDll_WriteFifoU32",        (NiFpga_FunctionPointer*)&NiFpga_writeFifoU32, 1},
+   {"NiFpgaDll_WriteFifoI64",        (NiFpga_FunctionPointer*)&NiFpga_writeFifoI64, 1},
+   {"NiFpgaDll_WriteFifoU64",        (NiFpga_FunctionPointer*)&NiFpga_writeFifoU64, 1},
+   {"NiFpgaDll_WriteFifoSgl",        (NiFpga_FunctionPointer*)&NiFpga_writeFifoSgl, 1},
+   {"NiFpgaDll_WriteFifoDbl",        (NiFpga_FunctionPointer*)&NiFpga_writeFifoDbl, 1},
+   {"NiFpgaDll_WriteFifoComposite",  (NiFpga_FunctionPointer*)&NiFpga_writeFifoComposite, 0},
+   {"NiFpgaDll_AcquireFifoReadElementsBool",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsBool, 1},
+   {"NiFpgaDll_AcquireFifoReadElementsI8",    (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsI8, 1},
+   {"NiFpgaDll_AcquireFifoReadElementsU8",    (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsU8, 1},
+   {"NiFpgaDll_AcquireFifoReadElementsI16",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsI16, 1},
+   {"NiFpgaDll_AcquireFifoReadElementsU16",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsU16, 1},
+   {"NiFpgaDll_AcquireFifoReadElementsI32",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsI32, 1},
+   {"NiFpgaDll_AcquireFifoReadElementsU32",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsU32, 1},
+   {"NiFpgaDll_AcquireFifoReadElementsI64",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsI64, 1},
+   {"NiFpgaDll_AcquireFifoReadElementsU64",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsU64, 1},
+   {"NiFpgaDll_AcquireFifoReadElementsSgl",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsSgl, 1},
+   {"NiFpgaDll_AcquireFifoReadElementsDbl",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsDbl, 1},
+   {"NiFpgaDll_AcquireFifoWriteElementsBool", (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsBool, 1},
+   {"NiFpgaDll_AcquireFifoWriteElementsI8",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsI8, 1},
+   {"NiFpgaDll_AcquireFifoWriteElementsU8",   (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsU8, 1},
+   {"NiFpgaDll_AcquireFifoWriteElementsI16",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsI16, 1},
+   {"NiFpgaDll_AcquireFifoWriteElementsU16",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsU16, 1},
+   {"NiFpgaDll_AcquireFifoWriteElementsI32",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsI32, 1},
+   {"NiFpgaDll_AcquireFifoWriteElementsU32",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsU32, 1},
+   {"NiFpgaDll_AcquireFifoWriteElementsI64",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsI64, 1},
+   {"NiFpgaDll_AcquireFifoWriteElementsU64",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsU64, 1},
+   {"NiFpgaDll_AcquireFifoWriteElementsSgl",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsSgl, 1},
+   {"NiFpgaDll_AcquireFifoWriteElementsDbl",  (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsDbl, 1},
+   {"NiFpgaDll_ReleaseFifoElements",          (NiFpga_FunctionPointer*)&NiFpga_releaseFifoElements, 1},
+   {"NiFpgaDll_GetPeerToPeerFifoEndpoint",    (NiFpga_FunctionPointer*)&NiFpga_getPeerToPeerFifoEndpoint, 1},
+   {"NiFpgaDll_GetBitfileContents",           (NiFpga_FunctionPointer*)&NiFpga_getBitfileContents, 1},
+   {"NiFpgaDll_ClientFunctionCall",           (NiFpga_FunctionPointer*)&NiFpga_clientFunctionCall, 1},
+   {NULL, NULL, 0}
 };
 
 NiFpga_Status NiFpga_Initialize(void)
@@ -2397,18 +2640,19 @@ NiFpga_Status NiFpga_Initialize(void)
          #if NiFpga_Windows
             *address = (NiFpga_FunctionPointer)GetProcAddress(NiFpga_library,
                                                               name);
-            if (!*address)
+            if (!*address && NiFpga_functions[i].required)
                return NiFpga_Status_VersionMismatch;
          #elif NiFpga_VxWorks
             SYM_TYPE type;
-            if (symFindByName(sysSymTbl,
-                              (char*)name,
-                              (char**)address,
-                              &type) != OK)
+            STATUS symFindStatus = symFindByName(sysSymTbl,
+                                                (char*)name,
+                                                (char**)address,
+                                                &type);
+            if (symFindStatus!= OK && NiFpga_functions[i].required)
                return NiFpga_Status_VersionMismatch;
          #elif NiFpga_Linux || NiFpga_MacOsX
-            *address = dlsym(NiFpga_library, name);
-            if (!*address)
+            *address = (NiFpga_FunctionPointer)dlsym(NiFpga_library, name);
+            if (!*address && NiFpga_functions[i].required)
                return NiFpga_Status_VersionMismatch;
          #else
             #error

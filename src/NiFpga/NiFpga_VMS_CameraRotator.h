@@ -23,7 +23,7 @@
 /**
  * The signature of the FPGA bitfile.
  */
-static const char* const NiFpga_VMS_CameraRotator_Signature = "7DBD2986B84801AFAAA39B3952D3A0E3";
+static const char* const NiFpga_VMS_CameraRotator_Signature = "AAEC67B4A471512FF978E2EADA9FD38B";
 
 #if NiFpga_Cpp
 extern "C"
@@ -32,19 +32,47 @@ extern "C"
 
 typedef enum
 {
-   NiFpga_VMS_CameraRotator_TargetToHostFifoU64_U64ResponseFIFO = 0,
-} NiFpga_VMS_CameraRotator_TargetToHostFifoU64;
+   NiFpga_VMS_CameraRotator_IndicatorBool_FIFOfull = 0x8132,
+   NiFpga_VMS_CameraRotator_IndicatorBool_Ready = 0x8142,
+   NiFpga_VMS_CameraRotator_IndicatorBool_Stopped = 0x812E,
+   NiFpga_VMS_CameraRotator_IndicatorBool_Timeouted = 0x813E,
+} NiFpga_VMS_CameraRotator_IndicatorBool;
 
 typedef enum
 {
-   NiFpga_VMS_CameraRotator_TargetToHostFifoSgl_SGLResponseFIFO = 1,
-} NiFpga_VMS_CameraRotator_TargetToHostFifoSgl;
+   NiFpga_VMS_CameraRotator_IndicatorU64_Ticks = 0x8128,
+} NiFpga_VMS_CameraRotator_IndicatorU64;
 
 typedef enum
 {
-   NiFpga_VMS_CameraRotator_HostToTargetFifoU16_CommandFIFO = 3,
-   NiFpga_VMS_CameraRotator_HostToTargetFifoU16_RequestFIFO = 2,
-} NiFpga_VMS_CameraRotator_HostToTargetFifoU16;
+   NiFpga_VMS_CameraRotator_ControlI16_Outputtype = 0x8136,
+} NiFpga_VMS_CameraRotator_ControlI16;
+
+typedef enum
+{
+   NiFpga_VMS_CameraRotator_ControlU32_Periodms = 0x8138,
+} NiFpga_VMS_CameraRotator_ControlU32;
+
+typedef enum
+{
+   NiFpga_VMS_CameraRotator_TargetToHostFifoU32_ResponseFIFO = 0,
+} NiFpga_VMS_CameraRotator_TargetToHostFifoU32;
+
+#if !NiFpga_VxWorks
+
+/* Indicator: ChassisTemperature */
+const NiFpga_FxpTypeInfo NiFpga_VMS_CameraRotator_IndicatorFxp_ChassisTemperature_TypeInfo =
+{
+   1,
+   64,
+   32
+};
+
+/* Use NiFpga_ReadU64() to access ChassisTemperature */
+const uint32_t NiFpga_VMS_CameraRotator_IndicatorFxp_ChassisTemperature_Resource = 0x8124;
+
+
+#endif /* !NiFpga_VxWorks */
 
 
 #if NiFpga_Cpp
