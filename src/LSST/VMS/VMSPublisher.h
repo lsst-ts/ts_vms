@@ -37,8 +37,16 @@ public:
 
     void putData(MTVMS_dataC *data) { _vmsSAL->putSample_data(data); }
 
+    void putMiscellaneous(float chassisTemperature, int64_t ticks) {
+        _miscellaneous.chassisTemperature = chassisTemperature;
+        _miscellaneous.ticks = ticks;
+        _vmsSAL->putSample_miscellaneous(&_miscellaneous);
+    }
+
 private:
     std::shared_ptr<SAL_MTVMS> _vmsSAL;
+
+    MTVMS_miscellaneousC _miscellaneous;
 
     MTVMS_logevent_logLevelC _logLevel;
 };

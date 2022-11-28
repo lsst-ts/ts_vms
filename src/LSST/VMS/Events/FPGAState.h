@@ -1,5 +1,5 @@
 /*
- * SAL commands
+ * AcquisitionPeriod event handling class.
  *
  * Developed for the Vera C. Rubin Observatory Telescope & Site Software Systems.
  * This product includes software developed by the Vera C.Rubin Observatory Project
@@ -20,36 +20,45 @@
  * this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _VMS_Command_SAL
-#define _VMS_Command_SAL
+#ifndef _VMS_Event_AcqusitionPeriod_
+#define _VMS_Event_AcqusitionPeriod_
 
 #include <SAL_MTVMS.h>
-
-#include <cRIO/SAL/Command.h>
-#include <cRIO/SAL/Event.h>
+#include <cRIO/Singleton.h>
 
 #include <VMSPublisher.h>
 
+#include <spdlog/spdlog.h>
+#include <mutex>
+
 namespace LSST {
 namespace VMS {
-namespace Commands {
+namespace Events {
 
-SAL_COMMAND_CLASS(MTVMS, VMSPublisher::SAL(), start);
+/**
+ * Acquistion Period handling class.
+ */
+class FPGAState final : MTVMS_logevent_fpgaStateC, public cRIO::Singleton<FPGAState> {
+public:
+    FPGAState(token);
 
-SAL_COMMAND_CLASS(MTVMS, VMSPublisher::SAL(), enable);
+    void setPeriodOutputType(int32_t newPeriod, int newOutputType);
+    void setMisc(bool newReady, bool newTimeouted, bool newStopped, bool newFIFOFull);
 
-SAL_COMMAND_CLASS(MTVMS, VMSPublisher::SAL(), disable);
+    int32_t getPeriod() {
+        std::lock_guard<std::mutex> lockG(_stateMutex);
+        return period;
+    }
 
-SAL_COMMAND_CLASS(MTVMS, VMSPublisher::SAL(), standby);
+    static void send();
 
-SAL_COMMAND_CLASS(MTVMS, VMSPublisher::SAL(), exitControl);
+private:
+    bool _updated;
+    std::mutex _stateMutex;
+};
 
-SAL_COMMAND_CLASS_validate(MTVMS, VMSPublisher::SAL(), changeSamplePeriod);
-
-SAL_EVENT_CLASS(MTVMS, VMSPublisher::SAL(), timeSynchronization);
-
-}  // namespace Commands
+}  // namespace Events
 }  // namespace VMS
 }  // namespace LSST
 
-#endif  //! _VMS_Command_SAL
+#endif  //! _VMS_Event_AcqusitionPeriod_

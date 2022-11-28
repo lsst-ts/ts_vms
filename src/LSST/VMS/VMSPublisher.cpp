@@ -25,6 +25,7 @@ void VMSPublisher::setSAL(std::shared_ptr<SAL_MTVMS> sal) {
 
     SPDLOG_DEBUG("VMSPublisher: Initializing SAL Telemetry");
     _vmsSAL->salTelemetryPub((char *)"MTVMS_data");
+    _vmsSAL->salTelemetryPub((char *)"MTVMS_miscellaneous");
 
     SPDLOG_DEBUG("VMSPublisher: Initializing SAL Events");
     _vmsSAL->salEventPub((char *)"MTVMS_logevent_heartbeat");
@@ -32,6 +33,7 @@ void VMSPublisher::setSAL(std::shared_ptr<SAL_MTVMS> sal) {
     _vmsSAL->salEventPub((char *)"MTVMS_logevent_summaryState");
     _vmsSAL->salEventPub((char *)"MTVMS_logevent_softwareVersions");
     _vmsSAL->salEventPub((char *)"MTVMS_logevent_simulationMode");
+    _vmsSAL->salEventPub((char *)"MTVMS_logevent_fpgaState");
 }
 
 void VMSPublisher::setLogLevel(int newLevel) {

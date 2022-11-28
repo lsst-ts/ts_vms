@@ -1,4 +1,4 @@
 *.o
 *.d
-ts_MTVMS
+ts-VMSd
 *.a

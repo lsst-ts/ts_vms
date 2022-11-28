@@ -63,7 +63,17 @@ void SAL_exitControl::execute() {
     ackComplete();
 }
 
-void SAL_changeSamplePeriod::execute() { ackComplete(); }
+bool SAL_changeSamplePeriod::validate() {
+    if (Events::SummaryState::instance().enabled() == false) {
+        return false;
+    }
+    return true;
+}
+
+void SAL_changeSamplePeriod::execute() {
+    FPGA::instance().setOperate(false);
+    ackComplete();
+}
 
 void SAL_timeSynchronization::received() {
     std::cerr << "TimeSynchronization " << params.baseClockOffset << std::endl;

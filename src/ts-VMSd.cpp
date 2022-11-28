@@ -21,6 +21,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <chrono>
+
 #include <cRIO/ControllerThread.h>
 #include <cRIO/CSC.h>
 #include <cRIO/NiError.h>
@@ -34,8 +36,11 @@
 #include <FPGA.h>
 #include <Accelerometer.h>
 #include <FPGAAddresses.h>
+#include <Commands/Update.h>
+#include <Commands/EnterControl.h>
 
 using namespace std::chrono;
+using namespace std::chrono_literals;
 using namespace LSST;
 using namespace LSST::VMS;
 
@@ -132,6 +137,8 @@ void MTVMSd::init() {
     accelerometer->enableAccelerometers();
     std::this_thread::sleep_for(1000ms);
 
+    LSST::cRIO::ControllerThread::instance().enqueue(new Commands::EnterControl());
+
     daemonOK();
 }
 
@@ -153,6 +160,12 @@ void MTVMSd::done() {
 }
 
 int MTVMSd::runLoop() {
+    static auto last = steady_clock::now() - 10s;
+    auto now = steady_clock::now();
+    if (now - last > 1s) {
+        LSST::cRIO::ControllerThread::instance().enqueue(new Commands::Update());
+    }
+     
     accelerometer->sampleData();
     return LSST::cRIO::ControllerThread::exitRequested() ? 0 : 1;
 }

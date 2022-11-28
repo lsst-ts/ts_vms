@@ -1,5 +1,5 @@
 /*
- * SAL commands
+ * EnterControl command.
  *
  * Developed for the Vera C. Rubin Observatory Telescope & Site Software Systems.
  * This product includes software developed by the Vera C.Rubin Observatory Project
@@ -20,36 +20,31 @@
  * this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _VMS_Command_SAL
-#define _VMS_Command_SAL
+#ifndef _VMS_Command_EnterControl_
+#define _VMS_Command_ENterControl_
 
+#include <cRIO/Command.h>
 #include <SAL_MTVMS.h>
-
-#include <cRIO/SAL/Command.h>
-#include <cRIO/SAL/Event.h>
-
 #include <VMSPublisher.h>
+
+#include <Events/SummaryState.h>
 
 namespace LSST {
 namespace VMS {
 namespace Commands {
 
-SAL_COMMAND_CLASS(MTVMS, VMSPublisher::SAL(), start);
-
-SAL_COMMAND_CLASS(MTVMS, VMSPublisher::SAL(), enable);
-
-SAL_COMMAND_CLASS(MTVMS, VMSPublisher::SAL(), disable);
-
-SAL_COMMAND_CLASS(MTVMS, VMSPublisher::SAL(), standby);
-
-SAL_COMMAND_CLASS(MTVMS, VMSPublisher::SAL(), exitControl);
-
-SAL_COMMAND_CLASS_validate(MTVMS, VMSPublisher::SAL(), changeSamplePeriod);
-
-SAL_EVENT_CLASS(MTVMS, VMSPublisher::SAL(), timeSynchronization);
+class EnterControl : public cRIO::Command {
+public:
+    void execute() override {
+        SPDLOG_DEBUG("EnterControl");
+        VMSPublisher::instance().logSoftwareVersions();
+        VMSPublisher::instance().logSimulationMode();
+        Events::SummaryState::setState(MTVMS::MTVMS_shared_SummaryStates_StandbyState);
+    }
+};
 
 }  // namespace Commands
 }  // namespace VMS
 }  // namespace LSST
 
-#endif  //! _VMS_Command_SAL
+#endif  // !_VMS_Command_EnterControl_

@@ -1,14 +1,39 @@
 /*
- * FPGA.cpp
+ * This file is part of LSST MT VMS package.
  *
- *  Created on: Sep 28, 2017
- *      Author: ccontaxis
+ * Developed for the Vera C. Rubin Telescope and Site System.
+ * This product includes software developed by the LSST Project
+ * (https://www.lsst.org).
+ * See the COPYRIGHT file at the top-level directory of this distribution
+ * for details of code ownership.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <spdlog/spdlog.h>
+#include <unistd.h>
+#include <chrono>
+
+#ifdef SIMULATOR
+#include <math.h>
+#include <Events/FPGAState.h>
+#endif
+
 #include <cRIO/NiError.h>
+#include <Events/FPGAState.h>
 #include <FPGA.h>
 #include <FPGAAddresses.h>
-#include <spdlog/spdlog.h>
 #include <NiFpga_VMS_3_Controller.h>
 #include <NiFpga_VMS_3_Responder.h>
 #include <NiFpga_VMS_6_Controller.h>
@@ -17,12 +42,6 @@
 #include <Timestamp.h>
 #include <VMSApplicationSettings.h>
 #include <VMSPublisher.h>
-#include <unistd.h>
-#include <chrono>
-
-#ifdef SIMULATOR
-#include <math.h>
-#endif
 
 namespace LSST {
 namespace VMS {
@@ -37,11 +56,16 @@ FPGA::FPGA(token) : SimpleFPGA(LSST::cRIO::VMS) {}
     _bitFile = "/var/lib/MTVMS/" NiFpga_VMS_##type##_Bitfile;                                  \
     _signature = NiFpga_VMS_##type##_Signature;                                                \
     _responseFIFO = NiFpga_VMS_##type##_TargetToHostFifoU32_ResponseFIFO;                      \
-    _chasisTemperatureResource = NiFpga_VMS_##type##_IndicatorFxp_ChassisTemperature_Resource; \
-    _chasisTemperatureTypeInfo = NiFpga_VMS_##type##_IndicatorFxp_ChassisTemperature_TypeInfo; \
     _operateResource = NiFpga_VMS_##type##_ControlBool_Operate;                                \
     _periodResource = NiFpga_VMS_##type##_ControlU32_Periodms;                                 \
-    _outputTypeResource = NiFpga_VMS_##type##_ControlI16_Outputtype;
+    _outputTypeResource = NiFpga_VMS_##type##_ControlI16_Outputtype;                           \
+    _readyResource = NiFpga_VMS_##type##_IndicatorBool_Ready;                                  \
+    _stoppedResource = NiFpga_VMS_##type##_IndicatorBool_Stopped;                              \
+    _timeoutedResource = NiFpga_VMS_##type##_IndicatorBool_Timeouted;                          \
+    _fifoFullResource = NiFpga_VMS_##type##_IndicatorBool_FIFOfull;                            \
+    _chasisTemperatureResource = NiFpga_VMS_##type##_IndicatorFxp_ChassisTemperature_Resource; \
+    _chasisTemperatureTypeInfo = NiFpga_VMS_##type##_IndicatorFxp_ChassisTemperature_TypeInfo; \
+    _ticksResource = NiFpga_VMS_##type##_IndicatorU64_Ticks;
 
 void FPGA::populate(VMSApplicationSettings *vmsApplicationSettings) {
     SPDLOG_TRACE("FPGA::FPGA()");
@@ -105,14 +129,25 @@ void FPGA::finalize() {
 #endif
 }
 
-float FPGA::chasisTemperature() {
+float FPGA::chassisTemperature() {
 #ifndef SIMULATOR
     uint64_t temperature;
     cRIO::NiThrowError(__PRETTY_FUNCTION__,
                        NiFpga_ReadU64(session, _chasisTemperatureResource, &temperature));
-    return NiFpga_ConvertFromFxpToDouble(_chasisTemperatureTypeInfo, temperature);
+    return NiFpga_ConvertFromFxpToFloat(_chasisTemperatureTypeInfo, temperature);
 #else
-    return 7.7;
+    return 7.7 + 2.0 * (static_cast<float>(random()) / RAND_MAX);
+#endif
+}
+
+uint64_t FPGA::chassisTicks() {
+#ifndef SIMULATOR
+    uint64_t ticks;
+    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_ReadU64(session, _ticksResource, &ticks));
+    return ticks;
+#else
+    static uint64_t ticks = 0;
+    return ticks++;
 #endif
 }
 
@@ -120,7 +155,7 @@ void FPGA::setOperate(bool operate) {
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WriteBool(session, _operateResource, operate));
 #else
-    // _ready = true;
+    Events::FPGAState::instance().setMisc(operate, false, false, false);
 #endif
 }
 
@@ -141,7 +176,7 @@ void FPGA::setOutputType(int16_t outputType) {
 }
 
 void FPGA::readResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: readResponseFIFO({})", length);
+    SPDLOG_TRACE("FPGA: readResponseFIFO({}, {})", length, timeoutInMs);
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__,
                        NiFpga_ReadFifoU32(session, _responseFIFO, data, length, timeoutInMs, &remaining));
@@ -164,9 +199,11 @@ void FPGA::readResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs) 
     int channels = _channels * 3;
     for (size_t i = 0; i < length; i += channels) {
         double cv = M_PI * static_cast<double>(count++);
-        // data are produced at 1kHz (see sleep_until) / 1 ms period
+        // data are produced at Events::FPGAState::instance().getPeriod() ms period
         // scales target frequency into 0..2pi sin/cos period
-        auto frequency_to_period = [cv](double frequency) { return cv / (((1 / frequency) / 2) * 1000.0); };
+        auto frequency_to_period = [cv](double frequency) {
+            return cv / (((Events::FPGAState::instance().getPeriod() / frequency) / 2) * 1000.0);
+        };
         // introduce periodic signals with frequencies of 400, 200, 100, 50, 25 and 12.5 Hz
         double pv = 2.7 * sin(frequency_to_period(400)) + 6 * sin(frequency_to_period(200)) +
                     1.5 * cos(frequency_to_period(100)) + 2 * sin(frequency_to_period(50)) +
