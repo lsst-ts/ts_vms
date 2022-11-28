@@ -21,38 +21,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef ACCELEROMETER_H_
-#define ACCELEROMETER_H_
+#ifndef VMSAPPLICATIONSETTINGS_H_
+#define VMSAPPLICATIONSETTINGS_H_
 
-#include <DataTypes.h>
-#include <FPGA.h>
-#include <SAL_MTVMS.h>
-#include <VMSApplicationSettings.h>
+#include <string>
+#include <vector>
 
 namespace LSST {
 namespace VMS {
 
-/**
- * VMS Accelerometer sampling.
- */
-class Accelerometer {
+class VMSApplicationSettings {
 public:
-    Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplicationSettings);
+    std::string Subsystem;
+    bool IsController;
+    int32_t period;
+    int outputType;
+    std::string RIO;
+    std::vector<double> XCoefficients;
+    std::vector<double> YCoefficients;
+    std::vector<double> ZCoefficients;
+    std::vector<double> XOffsets;
+    std::vector<double> YOffsets;
+    std::vector<double> ZOffsets;
 
-    void enableAccelerometers(uint32_t period, int16_t outputType);
-    void disableAccelerometers();
-
-    void sampleData();
-
-private:
-    FPGA *fpga;
-
-    enum { M1M3, M2, CameraRotator, TMA } subsystem;
-
-    int numberOfSensors;
+    void load(const std::string &filename);
 };
 
 } /* namespace VMS */
 } /* namespace LSST */
 
-#endif /* ACCELEROMETER_H_ */
+#endif /* VMSAPPLICATIONSETTINGS_H_ */

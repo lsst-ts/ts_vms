@@ -21,38 +21,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef ACCELEROMETER_H_
-#define ACCELEROMETER_H_
-
-#include <DataTypes.h>
-#include <FPGA.h>
-#include <SAL_MTVMS.h>
-#include <VMSApplicationSettings.h>
+#include <spdlog/spdlog.h>
+#include <SettingReader.h>
 
 namespace LSST {
 namespace VMS {
 
-/**
- * VMS Accelerometer sampling.
- */
-class Accelerometer {
-public:
-    Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplicationSettings);
+SettingReader::SettingReader(std::string _basePath) {
+    SPDLOG_INFO("SettingReader::SettingReader(\"{}\")", _basePath);
+    basePath = _basePath;
+}
 
-    void enableAccelerometers(uint32_t period, int16_t outputType);
-    void disableAccelerometers();
+const VMSApplicationSettings SettingReader::loadVMSApplicationSettings(std::string subsystem) {
+    std::string applicationSettingsFile = getBasePath("/" + subsystem + ".yaml");
+    SPDLOG_DEBUG("SettingReader: loadVMSApplicationSettings({})", applicationSettingsFile);
+    vmsApplicationSettings.load(applicationSettingsFile);
+    return vmsApplicationSettings;
+}
 
-    void sampleData();
-
-private:
-    FPGA *fpga;
-
-    enum { M1M3, M2, CameraRotator, TMA } subsystem;
-
-    int numberOfSensors;
-};
+std::string SettingReader::getBasePath(std::string file) { return this->basePath + file; }
 
 } /* namespace VMS */
 } /* namespace LSST */
-
-#endif /* ACCELEROMETER_H_ */

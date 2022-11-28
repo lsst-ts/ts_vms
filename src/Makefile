@@ -21,7 +21,6 @@ CPPFLAGS += -I. \
 	-I"LSST/VMS" \
 	-I"LSST/VMS/Include" \
 	-I"LSST/VMS/Logging" \
-	-I"LSST/VMS/Settings" \
 	-I"LSST/VMS/Utility" \
 	-I"NiFpga" \
 	-DVERSION="\"$(VERSION)\""
