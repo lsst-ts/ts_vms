@@ -165,7 +165,7 @@ int MTVMSd::runLoop() {
     if (now - last > 1s) {
         LSST::cRIO::ControllerThread::instance().enqueue(new Commands::Update());
     }
-     
+
     accelerometer->sampleData();
     return LSST::cRIO::ControllerThread::exitRequested() ? 0 : 1;
 }

@@ -22,7 +22,7 @@
  */
 
 #ifndef _VMS__Commands_UPDATE_H_
-#define _VMS__Commands_UPDATE_H_ 
+#define _VMS__Commands_UPDATE_H_
 
 #include <mutex>
 

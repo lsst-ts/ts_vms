@@ -23,7 +23,7 @@
 /**
  * The signature of the FPGA bitfile.
  */
-static const char* const NiFpga_VMS_CameraRotator_Signature = "AAEC67B4A471512FF978E2EADA9FD38B";
+static const char* const NiFpga_VMS_CameraRotator_Signature = "1B593DCAE0D4094C7D75DB0B5841F6F9";
 
 #if NiFpga_Cpp
 extern "C"
@@ -64,11 +64,11 @@ typedef enum
 const NiFpga_FxpTypeInfo NiFpga_VMS_CameraRotator_IndicatorFxp_ChassisTemperature_TypeInfo =
 {
    1,
-   64,
-   32
+   32,
+   16
 };
 
-/* Use NiFpga_ReadU64() to access ChassisTemperature */
+/* Use NiFpga_ReadU32() to access ChassisTemperature */
 const uint32_t NiFpga_VMS_CameraRotator_IndicatorFxp_ChassisTemperature_Resource = 0x8124;
 
 

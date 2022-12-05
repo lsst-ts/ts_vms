@@ -76,7 +76,7 @@ void Accelerometer::sampleData() {
     uint32_t buffer[numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH];
 
     FPGA::instance().readResponseFIFO(buffer, numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH,
-                                      1000);
+                                      _vmsApplicationSettings->period * (MAX_SAMPLE_PER_PUBLISH + 10));
 
     MTVMS_dataC data[numberOfSensors];
 
