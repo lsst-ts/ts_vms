@@ -39,7 +39,6 @@
 #include <NiFpga_VMS_6_Controller.h>
 #include <NiFpga_VMS_6_Responder.h>
 #include <NiFpga_VMS_CameraRotator.h>
-#include <Timestamp.h>
 #include <VMSApplicationSettings.h>
 #include <VMSPublisher.h>
 

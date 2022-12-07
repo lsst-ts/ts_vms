@@ -24,7 +24,6 @@
 #ifndef ACCELEROMETER_H_
 #define ACCELEROMETER_H_
 
-#include <DataTypes.h>
 #include <SAL_MTVMS.h>
 #include <VMSApplicationSettings.h>
 

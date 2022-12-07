@@ -21,12 +21,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <spdlog/spdlog.h>
+
 #include <Accelerometer.h>
 #include <FPGA.h>
 #include <FPGAAddresses.h>
 #include <VMSPublisher.h>
-#include <spdlog/spdlog.h>
-#include <Timestamp.h>
 
 #define AXIS_PER_SENSOR 3
 #define MAX_SAMPLE_PER_PUBLISH 50
