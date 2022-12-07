@@ -24,7 +24,7 @@ node {
     def SALUSER_HOME = "/home/saluser"
     def BRANCH = (env.CHANGE_BRANCH != null) ? env.CHANGE_BRANCH : env.BRANCH_NAME
     def SAME_CRIO_BRANCH = ["main"]
-    def XML_BRANCH = BRANCH in ["main", "tickets/DM-37100"] ? BRANCH : "develop"
+    def XML_BRANCH = BRANCH in ["main"] ? BRANCH : "develop"
 
     stage('Cloning sources')
     {
@@ -54,14 +54,14 @@ node {
                  """
                  }
                  sh """
-                    source $SALUSER_HOME/.setup_salobj.sh
+                    source $SALUSER_HOME/.crio_setup.sh
     
-                    export PATH=\$CONDA_PREFIX/bin:$PATH
                     cd $WORKSPACE/ts_cRIOcpp
                     make
     
                     cd $WORKSPACE/ts_vms
-                    LIBS_FLAGS="-L\$CONDA_PREFIX/lib" make simulator
+                    make simulator
+                    LSST_DDS_PARTITION_PREFIX=test make junit || true
                  """
              }
         }
@@ -71,7 +71,7 @@ node {
     {
          VMSsim.inside("--entrypoint=''") {
              sh """
-                source $SALUSER_HOME/.setup_salobj.sh
+                source $SALUSER_HOME/.crio_setup.sh
                 cd $WORKSPACE/ts_vms
                 make doc
              """
@@ -83,7 +83,7 @@ node {
         withEnv(["SALUSER_HOME=" + SALUSER_HOME]){
             VMSsim.inside("--entrypoint=''") {
                 sh """
-                    source $SALUSER_HOME/.setup_salobj.sh
+                    source $SALUSER_HOME/.crio_setup.sh
 
                     export LSST_DDS_PARTITION_PREFIX=test
     
@@ -109,7 +109,7 @@ node {
             withCredentials([usernamePassword(credentialsId: 'lsst-io', usernameVariable: 'LTD_USERNAME', passwordVariable: 'LTD_PASSWORD')]) {
                 M1M3sim.inside("--entrypoint=''") {
                     sh """
-                        source $SALUSER_HOME/.setup_salobj.sh
+                        source $SALUSER_HOME/.crio_setup.sh
                         ltd upload --product ts-vms --git-ref """ + BRANCH + """ --dir $WORKSPACE/ts_vms/doc/html
                     """
                 }

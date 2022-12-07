@@ -24,24 +24,28 @@
 #ifndef SETTINGREADER_H_
 #define SETTINGREADER_H_
 
-#include <VMSApplicationSettings.h>
 #include <string>
+
+#include <cRIO/Singleton.h>
+
+#include <VMSApplicationSettings.h>
 
 namespace LSST {
 namespace VMS {
 
-class SettingReader {
+class SettingReader : public cRIO::Singleton<SettingReader> {
 public:
-    SettingReader(std::string _basePath);
+    SettingReader(token) : _rootPath("UNDEFINED") {}
+    void setRootPath(std::string rootPath);
 
     const VMSApplicationSettings loadVMSApplicationSettings(std::string subsystem);
 
 private:
-    std::string getBasePath(std::string file);
+    std::string _getBasePath(std::string file);
 
-    VMSApplicationSettings vmsApplicationSettings;
+    VMSApplicationSettings _vmsApplicationSettings;
 
-    std::string basePath;
+    std::string _rootPath;
 };
 
 } /* namespace VMS */

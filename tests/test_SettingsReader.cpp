@@ -1,7 +1,7 @@
 /*
- * This file is part of LSST MT VMS package.
+ * This file is part of LSST VMS test suite. Tests SafetyController.
  *
- * Developed for the Vera C. Rubin Telescope and Site System.
+ * Developed for the LSST Telescope and Site Systems.
  * This product includes software developed by the LSST Project
  * (https://www.lsst.org).
  * See the COPYRIGHT file at the top-level directory of this distribution
@@ -21,26 +21,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <spdlog/spdlog.h>
+#include <catch2/catch_test_macros.hpp>
 
 #include <SettingReader.h>
 
-namespace LSST {
-namespace VMS {
+using namespace LSST::VMS;
 
-void SettingReader::setRootPath(std::string rootPath) {
-    SPDLOG_DEBUG("SettingReader: setRootPath(\"{}\")", rootPath);
-    _rootPath = rootPath;
+TEST_CASE("List available settings", "[SettingReader]") {
+    SettingReader::instance().setRootPath("../SettingFiles/");
+    auto _vmsApplicationSettings = SettingReader::instance().loadVMSApplicationSettings("M1M3");
+    REQUIRE(_vmsApplicationSettings.Subsystem == "M1M3");
 }
-
-const VMSApplicationSettings SettingReader::loadVMSApplicationSettings(std::string subsystem) {
-    std::string applicationSettingsFile = _getBasePath("/" + subsystem + ".yaml");
-    SPDLOG_DEBUG("SettingReader: loadVMSApplicationSettings({})", applicationSettingsFile);
-    _vmsApplicationSettings.load(applicationSettingsFile);
-    return _vmsApplicationSettings;
-}
-
-std::string SettingReader::_getBasePath(std::string file) { return _rootPath + file; }
-
-} /* namespace VMS */
-} /* namespace LSST */

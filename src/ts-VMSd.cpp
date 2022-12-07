@@ -95,9 +95,9 @@ cRIO::command_vec MTVMSd::processArgs(int argc, char* const argv[]) {
 #endif
 
     SPDLOG_INFO("Main: Creating setting reader from {}", getConfigRoot());
-    SettingReader settingReader = SettingReader(getConfigRoot());
+    SettingReader::instance().setRootPath(getConfigRoot());
     SPDLOG_DEBUG("Main: Loading VMS application settings {}", ret[0]);
-    _vmsApplicationSettings = settingReader.loadVMSApplicationSettings(ret[0]);
+    _vmsApplicationSettings = SettingReader::instance().loadVMSApplicationSettings(ret[0]);
 
     SPDLOG_INFO("Main: Creating FPGA");
     FPGA::instance().populate(&_vmsApplicationSettings);
