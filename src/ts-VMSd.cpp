@@ -21,6 +21,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <chrono>
+
 #include <cRIO/ControllerThread.h>
 #include <cRIO/CSC.h>
 #include <cRIO/NiError.h>
@@ -34,8 +36,11 @@
 #include <FPGA.h>
 #include <Accelerometer.h>
 #include <FPGAAddresses.h>
+#include <Commands/Update.h>
+#include <Commands/EnterControl.h>
 
 using namespace std::chrono;
+using namespace std::chrono_literals;
 using namespace LSST;
 using namespace LSST::VMS;
 
@@ -73,8 +78,6 @@ int getIndex(const std::string subsystem) {
     exit(EXIT_FAILURE);
 }
 
-FPGA* fpga = NULL;
-
 cRIO::command_vec MTVMSd::processArgs(int argc, char* const argv[]) {
     auto ret = CSC::processArgs(argc, argv);
     if (ret.size() != 1) {
@@ -92,12 +95,12 @@ cRIO::command_vec MTVMSd::processArgs(int argc, char* const argv[]) {
 #endif
 
     SPDLOG_INFO("Main: Creating setting reader from {}", getConfigRoot());
-    SettingReader settingReader = SettingReader(getConfigRoot());
+    SettingReader::instance().setRootPath(getConfigRoot());
     SPDLOG_DEBUG("Main: Loading VMS application settings {}", ret[0]);
-    _vmsApplicationSettings = settingReader.loadVMSApplicationSettings(ret[0]);
+    _vmsApplicationSettings = SettingReader::instance().loadVMSApplicationSettings(ret[0]);
 
     SPDLOG_INFO("Main: Creating FPGA");
-    fpga = new FPGA(&_vmsApplicationSettings);
+    FPGA::instance().populate(&_vmsApplicationSettings);
 
     return ret;
 }
@@ -119,7 +122,7 @@ void MTVMSd::init() {
 
     // spdlog::apply_all([&](std::shared_ptr<spdlog::logger> l) { l->flush(); });
 
-    accelerometer = new Accelerometer(fpga, &_vmsApplicationSettings);
+    accelerometer = new Accelerometer(&_vmsApplicationSettings);
 
     SPDLOG_INFO("Main: Setting publisher");
     VMSPublisher::instance().setSAL(_vmsSAL);
@@ -131,8 +134,10 @@ void MTVMSd::init() {
     SPDLOG_INFO("Creating subscriber");
     addThread(new VMSSubscriber(_vmsSAL, _allvmsSAL));
 
-    accelerometer->enableAccelerometers(5, 1);
+    accelerometer->enableAccelerometers();
     std::this_thread::sleep_for(1000ms);
+
+    LSST::cRIO::ControllerThread::instance().enqueue(new Commands::EnterControl());
 
     daemonOK();
 }
@@ -155,6 +160,12 @@ void MTVMSd::done() {
 }
 
 int MTVMSd::runLoop() {
+    static auto last = steady_clock::now() - 10s;
+    auto now = steady_clock::now();
+    if (now - last > 1s) {
+        LSST::cRIO::ControllerThread::instance().enqueue(new Commands::Update());
+    }
+
     accelerometer->sampleData();
     return LSST::cRIO::ControllerThread::exitRequested() ? 0 : 1;
 }
@@ -165,13 +176,10 @@ int main(int argc, char* const argv[]) {
     csc.processArgs(argc, argv);
 
     try {
-        csc.run(fpga);
+        csc.run(&(FPGA::instance()));
     } catch (LSST::cRIO::NiError& nie) {
         SPDLOG_CRITICAL("Main: Error initializing ThermalFPGA: {}", nie.what());
     }
-
-    delete fpga;
-    fpga = NULL;
 
     return 0;
 }

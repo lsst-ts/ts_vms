@@ -23,7 +23,7 @@
 /**
  * The signature of the FPGA bitfile.
  */
-static const char* const NiFpga_VMS_6_Responder_Signature = "8581FD1478422ED03E8940F463189D5E";
+static const char* const NiFpga_VMS_6_Responder_Signature = "BF60D31B1858EEFD155660346089640D";
 
 #if NiFpga_Cpp
 extern "C"
@@ -64,11 +64,11 @@ typedef enum
 const NiFpga_FxpTypeInfo NiFpga_VMS_6_Responder_IndicatorFxp_ChassisTemperature_TypeInfo =
 {
    1,
-   64,
-   32
+   32,
+   16
 };
 
-/* Use NiFpga_ReadU64() to access ChassisTemperature */
+/* Use NiFpga_ReadU32() to access ChassisTemperature */
 const uint32_t NiFpga_VMS_6_Responder_IndicatorFxp_ChassisTemperature_Resource = 0x18034;
 
 

@@ -1,15 +1,32 @@
 /*
- * Accelerometer.cpp
+ * This file is part of LSST MT VMS package.
  *
- *  Created on: Nov 1, 2017
- *      Author: ccontaxis
+ * Developed for the Vera C. Rubin Telescope and Site System.
+ * This product includes software developed by the LSST Project
+ * (https://www.lsst.org).
+ * See the COPYRIGHT file at the top-level directory of this distribution
+ * for details of code ownership.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <spdlog/spdlog.h>
+
 #include <Accelerometer.h>
+#include <FPGA.h>
 #include <FPGAAddresses.h>
 #include <VMSPublisher.h>
-#include <spdlog/spdlog.h>
-#include <Timestamp.h>
 
 #define AXIS_PER_SENSOR 3
 #define MAX_SAMPLE_PER_PUBLISH 50
@@ -18,9 +35,10 @@
 namespace LSST {
 namespace VMS {
 
-Accelerometer::Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplicationSettings) {
+Accelerometer::Accelerometer(VMSApplicationSettings *vmsApplicationSettings) {
     SPDLOG_DEBUG("Accelerometer::Accelerometer()");
-    fpga = _fpga;
+
+    _vmsApplicationSettings = vmsApplicationSettings;
 
     if (vmsApplicationSettings->Subsystem == "M1M3") {
         subsystem = M1M3;
@@ -40,23 +58,25 @@ Accelerometer::Accelerometer(FPGA *_fpga, VMSApplicationSettings *vmsApplication
     }
 }
 
-void Accelerometer::enableAccelerometers(uint32_t period, int16_t outputType) {
-    SPDLOG_INFO("Accelerometer: enableAccelerometers()");
-    fpga->setPeriod(period);
-    fpga->setOutputType(outputType);
-    fpga->setOperate(true);
+void Accelerometer::enableAccelerometers() {
+    SPDLOG_INFO("Accelerometer: enableAccelerometers(), period {}, output type {}",
+                _vmsApplicationSettings->period, _vmsApplicationSettings->outputType);
+    FPGA::instance().setPeriod(_vmsApplicationSettings->period);
+    FPGA::instance().setOutputType(_vmsApplicationSettings->outputType);
+    FPGA::instance().setOperate(true);
 }
 
 void Accelerometer::disableAccelerometers() {
     SPDLOG_INFO("Accelerometer: disableAccelerometers()");
-    fpga->setOperate(false);
+    FPGA::instance().setOperate(false);
 }
 
 void Accelerometer::sampleData() {
     SPDLOG_TRACE("Accelerometer: sampleData()");
     uint32_t buffer[numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH];
 
-    fpga->readResponseFIFO(buffer, numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH, 1000);
+    FPGA::instance().readResponseFIFO(buffer, numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH,
+                                      _vmsApplicationSettings->period * (MAX_SAMPLE_PER_PUBLISH + 10));
 
     MTVMS_dataC data[numberOfSensors];
 

@@ -1,8 +1,24 @@
 /*
- * FPGA.h
+ * This file is part of LSST MT VMS package.
  *
- *  Created on: Sep 28, 2017
- *      Author: ccontaxis
+ * Developed for the Vera C. Rubin Telescope and Site System.
+ * This product includes software developed by the LSST Project
+ * (https://www.lsst.org).
+ * See the COPYRIGHT file at the top-level directory of this distribution
+ * for details of code ownership.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 #ifndef FPGA_H_
@@ -11,6 +27,7 @@
 #include <NiFpga.h>
 
 #include <cRIO/SimpleFPGA.h>
+#include <cRIO/Singleton.h>
 
 namespace LSST {
 namespace VMS {
@@ -22,16 +39,19 @@ class VMSApplicationSettings;
 /*!
  * The class used to communicate with the FPGA.
  */
-class FPGA : public LSST::cRIO::SimpleFPGA {
+class FPGA : public LSST::cRIO::SimpleFPGA, public LSST::cRIO::Singleton<FPGA> {
 public:
-    FPGA(VMSApplicationSettings *vmsApplicationSettings);
+    FPGA(token);
+
+    void populate(VMSApplicationSettings *vmsApplicationSettings);
 
     void initialize() override;
     void open() override;
     void close() override;
     void finalize() override;
 
-    float chasisTemperature();
+    float chassisTemperature();
+    uint64_t chassisTicks();
     void setOperate(bool operate);
     void setPeriod(uint32_t period);
     void setOutputType(int16_t outputType);
@@ -50,8 +70,13 @@ private:
     uint32_t _chasisTemperatureResource;
     NiFpga_FxpTypeInfo _chasisTemperatureTypeInfo;
     uint32_t _operateResource;
+    uint32_t _readyResource;
     uint32_t _periodResource;
     uint32_t _outputTypeResource;
+    uint32_t _stoppedResource;
+    uint32_t _timeoutedResource;
+    uint32_t _fifoFullResource;
+    uint32_t _ticksResource;
 };
 
 }  // namespace VMS

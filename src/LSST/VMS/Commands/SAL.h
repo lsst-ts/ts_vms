@@ -44,7 +44,7 @@ SAL_COMMAND_CLASS(MTVMS, VMSPublisher::SAL(), standby);
 
 SAL_COMMAND_CLASS(MTVMS, VMSPublisher::SAL(), exitControl);
 
-SAL_COMMAND_CLASS(MTVMS, VMSPublisher::SAL(), changeSampleRate);
+SAL_COMMAND_CLASS_validate(MTVMS, VMSPublisher::SAL(), changeSamplePeriod);
 
 SAL_EVENT_CLASS(MTVMS, VMSPublisher::SAL(), timeSynchronization);
 

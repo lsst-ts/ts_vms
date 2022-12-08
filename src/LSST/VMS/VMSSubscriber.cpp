@@ -50,7 +50,7 @@ VMSSubscriber::VMSSubscriber(std::shared_ptr<SAL_MTVMS> vmsSAL, std::shared_ptr<
     ADD_SAL_COMMAND(disable);
     ADD_SAL_COMMAND(standby);
     ADD_SAL_COMMAND(exitControl);
-    ADD_SAL_COMMAND(changeSampleRate);
+    ADD_SAL_COMMAND(changeSamplePeriod);
 
 #define ADD_SAL_EVENT(name)                                                               \
     _events[#name] = [allvmsSAL]() {                                                      \
