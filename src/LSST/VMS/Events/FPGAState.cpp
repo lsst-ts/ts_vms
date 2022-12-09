@@ -20,6 +20,7 @@
  * this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <FPGA.h>
 #include <Events/FPGAState.h>
 
 #include <spdlog/fmt/fmt.h>
@@ -62,4 +63,10 @@ void FPGAState::setMisc(bool newReady, bool newTimeouted, bool newStopped, bool 
     stopped = newStopped;
     fifoFull = newFIFOFull;
     _updated = true;
+}
+
+void FPGAState::checkState() {
+    setMisc(FPGA::instance().ready(), FPGA::instance().timeouted(), FPGA::instance().stopped(),
+            FPGA::instance().FIFOFull());
+    send();
 }

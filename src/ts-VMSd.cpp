@@ -38,6 +38,7 @@
 #include <FPGAAddresses.h>
 #include <Commands/Update.h>
 #include <Commands/EnterControl.h>
+#include <Events/FPGAState.h>
 
 using namespace std::chrono;
 using namespace std::chrono_literals;
@@ -164,9 +165,12 @@ int MTVMSd::runLoop() {
     auto now = steady_clock::now();
     if (now - last > 1s) {
         LSST::cRIO::ControllerThread::instance().enqueue(new Commands::Update());
+        last = now;
     }
 
     accelerometer->sampleData();
+    Events::FPGAState::instance().checkState();
+
     return LSST::cRIO::ControllerThread::exitRequested() ? 0 : 1;
 }
 

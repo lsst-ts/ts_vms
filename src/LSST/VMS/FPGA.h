@@ -56,6 +56,11 @@ public:
     void setPeriod(uint32_t period);
     void setOutputType(int16_t outputType);
 
+    bool ready();
+    bool timeouted();
+    bool stopped();
+    bool FIFOFull();
+
     void readResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs);
 
 private:

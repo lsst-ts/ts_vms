@@ -45,6 +45,11 @@ public:
     void setPeriodOutputType(int32_t newPeriod, int newOutputType);
     void setMisc(bool newReady, bool newTimeouted, bool newStopped, bool newFIFOFull);
 
+    /***
+     * Readout state from FPGA, sends updates if data were changed
+     */
+    void checkState();
+
     int32_t getPeriod() {
         std::lock_guard<std::mutex> lockG(_stateMutex);
         return period;
