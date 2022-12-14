@@ -9,7 +9,7 @@ ARG XML_BRANCH=develop
 WORKDIR /home/saluser
 
 RUN source ~/.setup.sh \
-    && mamba install -y readline yaml-cpp boost-cpp catch2 spdlog \
+    && mamba install -y readline yaml-cpp boost-cpp catch2 spdlog fftw \
     && echo > .crio_setup.sh -e \
 echo "Configuring cRIO development environment" \\n\
 export SHELL=bash \\n\
