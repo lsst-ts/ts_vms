@@ -174,6 +174,46 @@ void FPGA::setOutputType(int16_t outputType) {
 #endif
 }
 
+bool FPGA::ready() {
+#ifndef SIMULATOR
+    NiFpga_Bool ret = false;
+    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_ReadBool(session, _readyResource, &ret));
+    return ret;
+#else
+    return true;
+#endif
+}
+
+bool FPGA::timeouted() {
+#ifndef SIMULATOR
+    NiFpga_Bool ret = false;
+    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_ReadBool(session, _timeoutedResource, &ret));
+    return ret;
+#else
+    return false;
+#endif
+}
+
+bool FPGA::stopped() {
+#ifndef SIMULATOR
+    NiFpga_Bool ret = false;
+    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_ReadBool(session, _stoppedResource, &ret));
+    return ret;
+#else
+    return false;
+#endif
+}
+
+bool FPGA::FIFOFull() {
+#ifndef SIMULATOR
+    NiFpga_Bool ret = false;
+    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_ReadBool(session, _fifoFullResource, &ret));
+    return ret;
+#else
+    return false;
+#endif
+}
+
 void FPGA::readResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs) {
     SPDLOG_TRACE("FPGA: readResponseFIFO({}, {})", length, timeoutInMs);
 #ifndef SIMULATOR

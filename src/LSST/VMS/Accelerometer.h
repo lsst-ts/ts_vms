@@ -36,6 +36,7 @@ namespace VMS {
 class Accelerometer {
 public:
     Accelerometer(VMSApplicationSettings* vmsApplicationSettings);
+    virtual ~Accelerometer(void);
 
     void enableAccelerometers();
     void disableAccelerometers();
@@ -43,9 +44,11 @@ public:
     void sampleData();
 
 private:
-    enum { M1M3, M2, CameraRotator, TMA } subsystem;
+    enum { M1M3, M2, CameraRotator, TMA } _subsystem;
 
-    int numberOfSensors;
+    int _numberOfSensors;
+    int _dataIndex;
+    MTVMS_dataC* _sampleData;
     VMSApplicationSettings* _vmsApplicationSettings;
 };
 

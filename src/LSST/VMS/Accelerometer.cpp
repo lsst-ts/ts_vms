@@ -41,22 +41,30 @@ Accelerometer::Accelerometer(VMSApplicationSettings *vmsApplicationSettings) {
     _vmsApplicationSettings = vmsApplicationSettings;
 
     if (vmsApplicationSettings->Subsystem == "M1M3") {
-        subsystem = M1M3;
-        numberOfSensors = 3;
+        _subsystem = M1M3;
+        _numberOfSensors = 3;
     } else if (vmsApplicationSettings->Subsystem == "M2") {
-        subsystem = M2;
-        numberOfSensors = 6;
+        _subsystem = M2;
+        _numberOfSensors = 6;
     } else if (vmsApplicationSettings->Subsystem == "CameraRotator") {
-        subsystem = CameraRotator;
-        numberOfSensors = 3;
+        _subsystem = CameraRotator;
+        _numberOfSensors = 3;
     } else if (vmsApplicationSettings->Subsystem == "TMA") {
-        subsystem = TMA;
-        numberOfSensors = 3;
+        _subsystem = TMA;
+        _numberOfSensors = 3;
     } else {
         SPDLOG_ERROR("Unknown subsystem: {}", vmsApplicationSettings->Subsystem);
         exit(EXIT_FAILURE);
     }
+    _sampleData = new MTVMS_dataC[_numberOfSensors];
+    _dataIndex = 0;
+
+    for (int s = 0; s < _numberOfSensors; s++) {
+        _sampleData[s].sensor = s + 1;
+    }
 }
+
+Accelerometer::~Accelerometer(void) { delete[] _sampleData; }
 
 void Accelerometer::enableAccelerometers() {
     SPDLOG_INFO("Accelerometer: enableAccelerometers(), period {}, output type {}",
@@ -72,38 +80,40 @@ void Accelerometer::disableAccelerometers() {
 }
 
 void Accelerometer::sampleData() {
-    SPDLOG_TRACE("Accelerometer: sampleData()");
-    uint32_t buffer[numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH];
+    SPDLOG_TRACE("Accelerometer: sampleData() count {}", _dataIndex);
+    uint32_t buffer[_numberOfSensors * AXIS_PER_SENSOR];
 
-    FPGA::instance().readResponseFIFO(buffer, numberOfSensors * AXIS_PER_SENSOR * MAX_SAMPLE_PER_PUBLISH,
-                                      _vmsApplicationSettings->period * (MAX_SAMPLE_PER_PUBLISH + 10));
+    FPGA::instance().readResponseFIFO(buffer, _numberOfSensors * AXIS_PER_SENSOR,
+                                      _vmsApplicationSettings->period * 2);
 
-    MTVMS_dataC data[numberOfSensors];
+    if (_dataIndex == 0) {
+        double data_timestamp = VMSPublisher::instance().getTimestamp();
 
-    double data_timestamp = VMSPublisher::instance().getTimestamp();
-
-    for (int s = 0; s < numberOfSensors; s++) {
-        data[s].timestamp = data_timestamp;
-        data[s].sensor = s + 1;
-    }
-
-    uint32_t *dataBuffer = buffer;
-    for (int i = 0; i < MAX_SAMPLE_PER_PUBLISH; i++) {
-        for (int s = 0; s < numberOfSensors; s++) {
-            data[s].accelerationX[i] =
-                    G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
-            dataBuffer++;
-            data[s].accelerationY[i] =
-                    G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
-            dataBuffer++;
-            data[s].accelerationZ[i] =
-                    G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
-            dataBuffer++;
+        for (int s = 0; s < _numberOfSensors; s++) {
+            _sampleData[s].timestamp = data_timestamp;
         }
     }
 
-    for (int s = 0; s < numberOfSensors; s++) {
-        VMSPublisher::instance().putData(&(data[s]));
+    uint32_t *dataBuffer = buffer;
+    for (int s = 0; s < _numberOfSensors; s++) {
+        _sampleData[s].accelerationX[_dataIndex] =
+                G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
+        dataBuffer++;
+        _sampleData[s].accelerationY[_dataIndex] =
+                G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
+        dataBuffer++;
+        _sampleData[s].accelerationZ[_dataIndex] =
+                G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
+        dataBuffer++;
+    }
+
+    _dataIndex++;
+
+    if (_dataIndex >= MAX_SAMPLE_PER_PUBLISH) {
+        for (int s = 0; s < _numberOfSensors; s++) {
+            VMSPublisher::instance().putData(&(_sampleData[s]));
+        }
+        _dataIndex = 0;
     }
 }
 
