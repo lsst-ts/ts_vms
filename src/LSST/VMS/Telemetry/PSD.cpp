@@ -20,7 +20,12 @@
  * this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <spdlog/fmt/fmt.h>
+
 #include "PSD.h"
+
+// length of PSD array is defined in XML
+constexpr size_t MAX_DATAPOINTS = 200;
 
 using namespace LSST::VMS::Telemetry;
 
@@ -29,9 +34,11 @@ PSD::PSD(short int _sensor) {
     interval = 1;
     sensor = _sensor;
 
-    numDataPoints = 500;
-    minPSDFrequency = 1;
-    maxPSDFrequency = 50;
+    numDataPoints = 0;
+    interval = NAN;
+    _samplingPeriod = NAN;
+    minPSDFrequency = NAN;
+    maxPSDFrequency = NAN;
 
     for (int i = 0; i < 200; i++) {
         accelerationPSDX[i] = NAN;
@@ -40,9 +47,9 @@ PSD::PSD(short int _sensor) {
     }
 
     for (int i = 0; i < 3; i++) {
-        _cache[i] = fftw_alloc_real(numDataPoints);
-        _output[i] = fftw_alloc_complex(numDataPoints);
-        _plans[i] = fftw_plan_dft_r2c_1d(numDataPoints, _cache[i], _output[i], FFTW_MEASURE);
+        _cache[i] = NULL;
+        _output[i] = NULL;
+        _plans[i] = NULL;
     }
 
     _cache_size = 0;
@@ -50,32 +57,73 @@ PSD::PSD(short int _sensor) {
 
 PSD::~PSD(void) {
     for (int i = 0; i < 3; i++) {
-        fftw_destroy_plan(_plans[i]);
-        fftw_free(_output[i]);
-        fftw_free(_cache[i]);
+        if (_plans[i] != NULL) {
+            fftw_destroy_plan(_plans[i]);
+            _plans[i] = NULL;
+        }
+        if (_output[i] != NULL) {
+            fftw_free(_output[i]);
+            _output[i] = NULL;
+        }
+        if (_cache[i] != NULL) {
+            fftw_free(_cache[i]);
+            _cache[i] = NULL;
+        }
+    }
+}
+
+void PSD::configure(size_t dataPoints, float samplingPeriod) {
+    // maximal number of datapoints is defined in XML
+    numDataPoints = std::min(dataPoints, MAX_DATAPOINTS);
+    _samplingPeriod = samplingPeriod;
+    interval = _samplingPeriod * dataPoints;
+    minPSDFrequency = frequency(0);
+    maxPSDFrequency = frequency(numDataPoints);
+    _cache_size = 0;
+
+    for (int i = 0; i < 3; i++) {
+        if (_cache[i] != NULL) {
+            fftw_free(_cache[i]);
+        }
+        _cache[i] = fftw_alloc_real(numDataPoints * 2);
+
+        if (_output[i] != NULL) {
+            fftw_free(_output[i]);
+        }
+        _output[i] = fftw_alloc_complex(numDataPoints + 1);
+
+        if (_plans[i] != NULL) {
+            fftw_free(_plans[i]);
+        }
+        _plans[i] = fftw_plan_dft_r2c_1d(numDataPoints * 2, _cache[i], _output[i], FFTW_MEASURE);
     }
 }
 
 void PSD::append(float x, float y, float z) {
+    if (_cache[0] == NULL) {
+        throw std::runtime_error(fmt::format("unconfigured PSD for sensor {}", sensor));
+    }
     _cache[0][_cache_size] = x;
     _cache[1][_cache_size] = y;
     _cache[2][_cache_size] = z;
 
     _cache_size++;
 
-    float *tels[3] = {accelerationPSDX, accelerationPSDY, accelerationPSDZ};
+    if (_cache_size >= static_cast<size_t>(numDataPoints) * 2) {
+        float *tels[3] = {accelerationPSDX, accelerationPSDY, accelerationPSDZ};
 
-    if (_cache_size >= static_cast<std::make_unsigned_t<int>>(numDataPoints)) {
         for (int i = 0; i < 3; i++) {
             fftw_execute(_plans[i]);
 
             float *tel_out = tels[i];
 
             fftw_complex *cur_out = _output[i];
-            for (int j = 0; j < numDataPoints && j < 200; j++, cur_out++, tel_out++) {
+            for (int j = 0; j < numDataPoints; j++, cur_out++, tel_out++) {
                 *tel_out = std::norm(std::complex<double>((*cur_out)[0], (*cur_out)[1]));
             }
         }
         _cache_size = 0;
     }
 }
+
+float PSD::frequency(size_t index) { return index * (1 / _samplingPeriod) / numDataPoints; }

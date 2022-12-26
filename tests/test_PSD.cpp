@@ -33,12 +33,12 @@
 using Catch::Approx;
 using namespace LSST::VMS::Telemetry;
 
-void test_peaks(std::vector<float> vec, std::vector<int> peaks, float margin = 10e-3) {
+void test_peaks(std::vector<float> vec, std::vector<int> peaks, float margin = 10e-3, float min_psd = 1000) {
     for (auto p : peaks) {
         auto m = std::max_element(vec.begin(), vec.end());
-        REQUIRE(*m > 1000);
+        REQUIRE(*m > min_psd);
         REQUIRE(std::distance(vec.begin(), m) == p);
-        vec[p] = 0.0;
+        *m = 0.0;
     }
 
     for (auto v : vec) {
@@ -46,20 +46,66 @@ void test_peaks(std::vector<float> vec, std::vector<int> peaks, float margin = 1
     }
 }
 
-TEST_CASE("Calculate PSD", "[PSD]") {
+TEST_CASE("Calculate PSD @ 200 Hz sampling", "[PSD]") {
     PSD psd(1);
+    psd.configure(100, 0.005);
 
-    for (float i = 0; i < psd.numDataPoints; i++) {
-        REQUIRE(isnan(psd.accelerationPSDX[0]));
-        double theta = 2 * M_PI * i / psd.numDataPoints;
-        psd.append(1.0 * sin(5 * theta) + 0.5 * cos(13 * theta),
-                   1.0 * cos(40 * theta) + 0.5 * sin(50 * theta),
-                   1.0 * sin(13.6 * theta) + 0.5 * cos(10.2 * theta) + 0.25 * sin(22 * theta));
+    REQUIRE(psd.frequency(0) == 0);
+    REQUIRE(psd.frequency(50) == 100.0);
+    REQUIRE(psd.frequency(100) == 200.0);
+
+    for (size_t i = 0; i < 50; i++) {
+        REQUIRE(isnan(psd.accelerationPSDX[i]));
+        REQUIRE(isnan(psd.accelerationPSDY[i]));
+        REQUIRE(isnan(psd.accelerationPSDZ[i]));
     }
 
-    test_peaks(std::vector<float>(std::begin(psd.accelerationPSDX), std::end(psd.accelerationPSDX)), {5, 13});
-    test_peaks(std::vector<float>(std::begin(psd.accelerationPSDY), std::end(psd.accelerationPSDY)),
-               {40, 50});
-    test_peaks(std::vector<float>(std::begin(psd.accelerationPSDZ), std::end(psd.accelerationPSDZ)),
-               {14, 10, 13, 22, 15, 12, 9, 16}, 900);
+    for (float i = 0; i < psd.numDataPoints * 2; i++) {
+        double theta = 2 * M_PI * i / psd.numDataPoints;
+        psd.append(1.0 * sin(5 * theta) + 0.5 * cos(13 * theta), 1.0 * cos(40 * theta) + 0.5 * sin(2 * theta),
+                   1.0 * sin(13.6 * theta) + 0.5 * cos(10.2 * theta) + 0.4 * sin(22 * theta));
+    }
+
+    test_peaks(std::vector<float>(std::begin(psd.accelerationPSDX),
+                                  std::begin(psd.accelerationPSDX) + psd.numDataPoints),
+               {10, 26});
+    test_peaks(std::vector<float>(std::begin(psd.accelerationPSDY),
+                                  std::begin(psd.accelerationPSDY) + psd.numDataPoints),
+               {80, 4});
+    test_peaks(std::vector<float>(std::begin(psd.accelerationPSDZ),
+                                  std::begin(psd.accelerationPSDZ) + psd.numDataPoints),
+               {27, 44, 20, 21, 28, 26, 22, 25}, 100, 100);
+}
+
+TEST_CASE("Calculate PSD @ 50 Hz sampling", "[PSD]") {
+    PSD psd(1);
+    psd.configure(200, 0.02);
+
+    REQUIRE(psd.frequency(0) == 0);
+    REQUIRE(psd.frequency(1) == 0.25);
+    REQUIRE(psd.frequency(20) == 5);
+    REQUIRE(psd.frequency(200) == 50);
+
+    for (size_t i = 0; i < 50; i++) {
+        REQUIRE(isnan(psd.accelerationPSDX[i]));
+        REQUIRE(isnan(psd.accelerationPSDY[i]));
+        REQUIRE(isnan(psd.accelerationPSDZ[i]));
+    }
+
+    for (float i = 0; i < psd.numDataPoints * 2; i++) {
+        double theta = M_PI * i * 0.02;
+        psd.append(1.0 * sin(5 * theta) + 0.5 * cos(13 * theta), 1.0 * cos(40 * theta) + 0.5 * sin(2 * theta),
+                   1.0 * sin(13.6 * theta) + 0.5 * cos(10.2 * theta) + 0.4 * sin(22 * theta));
+    }
+
+    test_peaks(std::vector<float>(std::begin(psd.accelerationPSDX),
+                                  std::begin(psd.accelerationPSDX) + psd.numDataPoints),
+               {20, 52});
+    test_peaks(std::vector<float>(std::begin(psd.accelerationPSDY),
+                                  std::begin(psd.accelerationPSDY) + psd.numDataPoints),
+               {160, 8});
+    test_peaks(std::vector<float>(std::begin(psd.accelerationPSDZ),
+                                  std::begin(psd.accelerationPSDZ) + psd.numDataPoints),
+               {54, 55, 41, 88, 53, 56, 52, 57, 42, 51, 40, 50, 58, 43, 49, 48, 59, 44, 47, 45, 46}, 100,
+               100);
 }

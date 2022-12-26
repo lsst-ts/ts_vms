@@ -69,8 +69,8 @@ Accelerometer::~Accelerometer(void) { delete[] _sampleData; }
 void Accelerometer::enableAccelerometers() {
     SPDLOG_INFO("Accelerometer: enableAccelerometers(), period {}, output type {}",
                 _vmsApplicationSettings->period, _vmsApplicationSettings->outputType);
-    FPGA::instance().setPeriod(_vmsApplicationSettings->period);
-    FPGA::instance().setOutputType(_vmsApplicationSettings->outputType);
+    FPGA::instance().setPeriodOutputType(_vmsApplicationSettings->period,
+                                         _vmsApplicationSettings->outputType);
     FPGA::instance().setOperate(true);
 }
 

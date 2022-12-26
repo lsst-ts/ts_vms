@@ -46,6 +46,18 @@ public:
     ~PSD(void);
 
     /**
+     * Sets PSD configuration.
+     *
+     * @param dataPoints Number of points in PSD. According to Nyquist theorem,
+     * at least dataPoints * 2 samples must be provided (with append call) to
+     * compute PSD
+     *
+     * @param samplingFrequency sample frequency. Converts indices in output
+     * FFT into frequencies.
+     */
+    void configure(size_t dataPoints, float samplingFrequency);
+
+    /**
      * Append new data point.
      *
      * @param x measured X acceleration
@@ -54,7 +66,17 @@ public:
      */
     void append(float x, float y, float z);
 
+    /**
+     * Calculate frequency from given index in the PSD array.
+     *
+     * @param index index of member in PSD
+     *
+     * @return frequency corresponding to the input index
+     */
+    float frequency(size_t index);
+
 private:
+    float _samplingPeriod;
     // axis cache
     size_t _cache_size;
     double* _cache[3];

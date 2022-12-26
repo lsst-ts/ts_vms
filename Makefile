@@ -38,7 +38,7 @@ doc:
 	${co}doxygen Doxyfile
 
 simulator:
-	@${MAKE} SIMULATOR=1
+	@${MAKE} SIMULATOR=1 DEBUG=1
 
 ipk: ts-VMS_$(VERSION)_x64.ipk
 

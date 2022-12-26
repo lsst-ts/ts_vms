@@ -29,18 +29,14 @@ using namespace LSST::VMS;
 using namespace LSST::VMS::Events;
 using namespace MTVMS;
 
-FPGAState::FPGAState(token) : _updated(false) { period = 0; }
+FPGAState::FPGAState(token) { period = 0; }
 
 void FPGAState::send() {
-    if (instance()._updated == false) {
-        return;
-    }
     salReturn ret = VMSPublisher::SAL()->putSample_logevent_fpgaState(&instance());
     if (ret != SAL__OK) {
         SPDLOG_WARN("Can not send fpgaState: {}", ret);
         return;
     }
-    instance()._updated = false;
 }
 
 void FPGAState::setPeriodOutputType(int32_t newPeriod, int newOutputType) {
@@ -50,7 +46,7 @@ void FPGAState::setPeriodOutputType(int32_t newPeriod, int newOutputType) {
     }
     period = newPeriod;
     outputType = newOutputType;
-    _updated = true;
+    send();
 }
 
 void FPGAState::setMisc(bool newReady, bool newTimeouted, bool newStopped, bool newFIFOFull) {
@@ -62,7 +58,7 @@ void FPGAState::setMisc(bool newReady, bool newTimeouted, bool newStopped, bool 
     timeouted = newTimeouted;
     stopped = newStopped;
     fifoFull = newFIFOFull;
-    _updated = true;
+    send();
 }
 
 void FPGAState::checkState() {
