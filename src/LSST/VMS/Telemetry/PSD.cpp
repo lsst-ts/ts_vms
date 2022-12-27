@@ -22,6 +22,7 @@
 
 #include <spdlog/fmt/fmt.h>
 
+#include "VMSPublisher.h"
 #include "PSD.h"
 
 // length of PSD array is defined in XML
@@ -29,10 +30,10 @@ constexpr size_t MAX_DATAPOINTS = 200;
 
 using namespace LSST::VMS::Telemetry;
 
-PSD::PSD(short int _sensor) {
+PSD::PSD() {
     timestamp = 0;
     interval = 1;
-    sensor = _sensor;
+    sensor = -1;
 
     numDataPoints = 0;
     interval = NAN;
@@ -40,11 +41,7 @@ PSD::PSD(short int _sensor) {
     minPSDFrequency = NAN;
     maxPSDFrequency = NAN;
 
-    for (int i = 0; i < 200; i++) {
-        accelerationPSDX[i] = NAN;
-        accelerationPSDY[i] = NAN;
-        accelerationPSDZ[i] = NAN;
-    }
+    _clearPSDs();
 
     for (int i = 0; i < 3; i++) {
         _cache[i] = NULL;
@@ -72,7 +69,8 @@ PSD::~PSD(void) {
     }
 }
 
-void PSD::configure(size_t dataPoints, float samplingPeriod) {
+void PSD::configure(short int sensorId, size_t dataPoints, float samplingPeriod) {
+    sensor = sensorId;
     // maximal number of datapoints is defined in XML
     numDataPoints = std::min(dataPoints, MAX_DATAPOINTS);
     _samplingPeriod = samplingPeriod;
@@ -122,8 +120,20 @@ void PSD::append(float x, float y, float z) {
                 *tel_out = std::norm(std::complex<double>((*cur_out)[0], (*cur_out)[1]));
             }
         }
+
+        VMSPublisher::instance().putPsd(this);
+        _clearPSDs();
+
         _cache_size = 0;
     }
 }
 
-float PSD::frequency(size_t index) { return index * (1 / _samplingPeriod) / numDataPoints; }
+float PSD::frequency(size_t index) { return index * (1 / (2.0f * _samplingPeriod)) / numDataPoints; }
+
+void PSD::_clearPSDs() {
+    for (size_t i = 0; i < MAX_DATAPOINTS; i++) {
+        accelerationPSDX[i] = NAN;
+        accelerationPSDY[i] = NAN;
+        accelerationPSDZ[i] = NAN;
+    }
+}

@@ -42,11 +42,13 @@ namespace Telemetry {
  */
 class PSD final : public MTVMS_psdC {
 public:
-    PSD(short int sensor);
+    PSD();
     ~PSD(void);
 
     /**
      * Sets PSD configuration.
+     *
+     * @param sensorId
      *
      * @param dataPoints Number of points in PSD. According to Nyquist theorem,
      * at least dataPoints * 2 samples must be provided (with append call) to
@@ -55,7 +57,7 @@ public:
      * @param samplingFrequency sample frequency. Converts indices in output
      * FFT into frequencies.
      */
-    void configure(size_t dataPoints, float samplingFrequency);
+    void configure(short int sensorId, size_t dataPoints, float samplingFrequency);
 
     /**
      * Append new data point.
@@ -82,6 +84,8 @@ private:
     double* _cache[3];
     fftw_complex* _output[3];
     fftw_plan _plans[3];
+
+    void _clearPSDs();
 };
 
 }  // namespace Telemetry

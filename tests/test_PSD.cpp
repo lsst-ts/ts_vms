@@ -47,8 +47,8 @@ void test_peaks(std::vector<float> vec, std::vector<int> peaks, float margin = 1
 }
 
 TEST_CASE("Calculate PSD @ 200 Hz sampling", "[PSD]") {
-    PSD psd(1);
-    psd.configure(100, 0.005);
+    PSD psd;
+    psd.configure(1, 100, 0.005);
 
     REQUIRE(psd.frequency(0) == 0);
     REQUIRE(psd.frequency(50) == 100.0);
@@ -78,8 +78,8 @@ TEST_CASE("Calculate PSD @ 200 Hz sampling", "[PSD]") {
 }
 
 TEST_CASE("Calculate PSD @ 50 Hz sampling", "[PSD]") {
-    PSD psd(1);
-    psd.configure(200, 0.02);
+    PSD psd;
+    psd.configure(1, 200, 0.02);
 
     REQUIRE(psd.frequency(0) == 0);
     REQUIRE(psd.frequency(1) == 0.25);

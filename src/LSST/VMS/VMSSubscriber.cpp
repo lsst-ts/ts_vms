@@ -97,7 +97,7 @@ VMSSubscriber::VMSSubscriber(std::shared_ptr<SAL_MTVMS> vmsSAL, std::shared_ptr<
     // register events
     for (auto e : _events) {
         SPDLOG_TRACE("Registering event {}", e.first);
-        allvmsSAL->salTelemetrySub((char *)("MTVMS_logevent_" + e.first).c_str());
+        allvmsSAL->salEventSub((char *)("MTVMS_logevent_" + e.first).c_str());
     }
 }
 
@@ -105,9 +105,9 @@ VMSSubscriber::~VMSSubscriber() {}
 
 void VMSSubscriber::run(std::unique_lock<std::mutex> &lock) {
     while (keepRunning) {
+        runCondition.wait_for(lock, 100ms);
         tryCommands();
         tryEvents();
-        runCondition.wait_for(lock, 100us);
     }
 }
 

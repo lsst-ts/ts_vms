@@ -26,6 +26,7 @@
 
 #include <SAL_MTVMS.h>
 #include <VMSApplicationSettings.h>
+#include <Telemetry/PSD.h>
 
 namespace LSST {
 namespace VMS {
@@ -49,6 +50,7 @@ private:
     int _numberOfSensors;
     int _dataIndex;
     MTVMS_dataC* _sampleData;
+    Telemetry::PSD* _psds;
     VMSApplicationSettings* _vmsApplicationSettings;
 };
 

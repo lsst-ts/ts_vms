@@ -130,7 +130,7 @@ void MTVMSd::init() {
     VMSPublisher::instance().setLogLevel(getSpdLogLogLevel() * 10);
 
     SPDLOG_INFO("Starting controller thread");
-    LSST::cRIO::ControllerThread::instance().start();
+    LSST::cRIO::ControllerThread::instance().start(10s);
 
     SPDLOG_INFO("Creating subscriber");
     addThread(new VMSSubscriber(_vmsSAL, _allvmsSAL));
