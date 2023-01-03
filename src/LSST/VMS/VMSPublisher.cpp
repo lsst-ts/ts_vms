@@ -26,6 +26,7 @@ void VMSPublisher::setSAL(std::shared_ptr<SAL_MTVMS> sal) {
     SPDLOG_DEBUG("VMSPublisher: Initializing SAL Telemetry");
     _vmsSAL->salTelemetryPub((char *)"MTVMS_data");
     _vmsSAL->salTelemetryPub((char *)"MTVMS_miscellaneous");
+    _vmsSAL->salTelemetryPub((char *)"MTVMS_psd");
 
     SPDLOG_DEBUG("VMSPublisher: Initializing SAL Events");
     _vmsSAL->salEventPub((char *)"MTVMS_logevent_heartbeat");

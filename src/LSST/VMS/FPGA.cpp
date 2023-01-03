@@ -154,24 +154,18 @@ void FPGA::setOperate(bool operate) {
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WriteBool(session, _operateResource, operate));
 #else
-    Events::FPGAState::instance().setMisc(operate, false, false, false);
 #endif
+    Events::FPGAState::instance().setMisc(operate, false, false, false);
 }
 
-void FPGA::setPeriod(uint32_t period) {
+void FPGA::setPeriodOutputType(uint32_t period, int16_t outputType) {
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WriteU32(session, _periodResource, period));
-#else
-    // _ready = true;
-#endif
-}
-
-void FPGA::setOutputType(int16_t outputType) {
-#ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WriteI16(session, _outputTypeResource, outputType));
 #else
     // _ready = true;
 #endif
+    Events::FPGAState::instance().setPeriodOutputType(period, outputType);
 }
 
 bool FPGA::ready() {
@@ -235,29 +229,31 @@ void FPGA::readResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs) 
 #else
     static long count = 0;
     static auto start = std::chrono::steady_clock::now();
-    int channels = _channels * 3;
+    size_t channels = _channels * 3;
+    int period = Events::FPGAState::instance().getPeriod();
     for (size_t i = 0; i < length; i += channels) {
-        double cv = M_PI * static_cast<double>(count++);
+        double cv = (2 * M_PI * period * static_cast<double>(count++)) / 1000.0f;
         // data are produced at Events::FPGAState::instance().getPeriod() ms period
         // scales target frequency into 0..2pi sin/cos period
-        auto frequency_to_period = [cv](double frequency) {
-            return cv / (((Events::FPGAState::instance().getPeriod() / frequency) / 2) * 1000.0);
-        };
-        // introduce periodic signals with frequencies of 400, 200, 100, 50, 25 and 12.5 Hz
-        double pv = 2.7 * sin(frequency_to_period(400)) + 6 * sin(frequency_to_period(200)) +
-                    1.5 * cos(frequency_to_period(100)) + 2 * sin(frequency_to_period(50)) +
-                    4 * sin(frequency_to_period(25)) + 3 * cos(frequency_to_period(12.5));
-        for (size_t ch = i; ch < i + channels; ch++) {
-            data[ch] = NiFpga_ConvertFromFloatToFxp(
-                    ResponseFxpTypeInfo,
-                    (((50.0 * static_cast<double>(random()) / RAND_MAX) - 25.0) + pv) / 1000000.0);
+        auto frequency_to_period = [cv](double frequency) { return (cv * frequency); };
+        for (size_t j = 0; j < channels; j++) {
+            size_t ch_index = i + j;
+            // introduce periodic signals with frequencies of 61.3, 50.2 +
+            // channel, 30.9 - channel and 17.5  Hz
+            double pv = 1.5 * cos(frequency_to_period(61.3)) +
+                        ((20 + j) / 10.0) * sin(frequency_to_period(50 + j)) +
+                        ((channels + 20 - j) / 10.0) * sin(frequency_to_period(30 - j)) +
+                        3 * cos(frequency_to_period(17.5));
+            float d = ((0.0002 * static_cast<double>(random()) / RAND_MAX) - 0.0001) + pv / 10.0;
+            uint64_t fxp = NiFpga_ConvertFromFloatToFxp(ResponseFxpTypeInfo, d);
+            data[ch_index] = fxp;
+#if 0
+            std::cout << pv << " " << count << " ch_index " << ch_index << " " << fxp << " " << d << " "
+                      << data[ch_index] << " " << Events::FPGAState::instance().getPeriod() << " "
+                      << frequency_to_period(200) << std::endl;
+#endif
         }
-        // high counts will be numerically unstable
-        // limit must be integer multiple of frequencies introduced
-        if (count == 40000) {
-            count = 0;
-        }
-        start += std::chrono::microseconds(1000);
+        start += std::chrono::milliseconds(period);
         std::this_thread::sleep_until(start);
     }
 #endif

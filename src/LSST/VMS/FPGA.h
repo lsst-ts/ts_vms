@@ -53,8 +53,7 @@ public:
     float chassisTemperature();
     uint64_t chassisTicks();
     void setOperate(bool operate);
-    void setPeriod(uint32_t period);
-    void setOutputType(int16_t outputType);
+    void setPeriodOutputType(uint32_t period, int16_t outputType);
 
     bool ready();
     bool timeouted();

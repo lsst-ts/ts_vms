@@ -57,20 +57,27 @@ Accelerometer::Accelerometer(VMSApplicationSettings *vmsApplicationSettings) {
         exit(EXIT_FAILURE);
     }
     _sampleData = new MTVMS_dataC[_numberOfSensors];
+    _psds = new Telemetry::PSD[_numberOfSensors];
     _dataIndex = 0;
+
+    float _periodInS = _vmsApplicationSettings->period / 1000.0f;
 
     for (int s = 0; s < _numberOfSensors; s++) {
         _sampleData[s].sensor = s + 1;
+        _psds[s].configure(s + 1, 1.0f / (2.0f * _periodInS), _periodInS);
     }
 }
 
-Accelerometer::~Accelerometer(void) { delete[] _sampleData; }
+Accelerometer::~Accelerometer(void) {
+    delete[] _psds;
+    delete[] _sampleData;
+}
 
 void Accelerometer::enableAccelerometers() {
     SPDLOG_INFO("Accelerometer: enableAccelerometers(), period {}, output type {}",
                 _vmsApplicationSettings->period, _vmsApplicationSettings->outputType);
-    FPGA::instance().setPeriod(_vmsApplicationSettings->period);
-    FPGA::instance().setOutputType(_vmsApplicationSettings->outputType);
+    FPGA::instance().setPeriodOutputType(_vmsApplicationSettings->period,
+                                         _vmsApplicationSettings->outputType);
     FPGA::instance().setOperate(true);
 }
 
@@ -96,15 +103,18 @@ void Accelerometer::sampleData() {
 
     uint32_t *dataBuffer = buffer;
     for (int s = 0; s < _numberOfSensors; s++) {
-        _sampleData[s].accelerationX[_dataIndex] =
-                G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
+        float acc_x = G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
         dataBuffer++;
-        _sampleData[s].accelerationY[_dataIndex] =
-                G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
+        float acc_y = G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
         dataBuffer++;
-        _sampleData[s].accelerationZ[_dataIndex] =
-                G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
+        float acc_z = G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
         dataBuffer++;
+
+        _sampleData[s].accelerationX[_dataIndex] = acc_x;
+        _sampleData[s].accelerationY[_dataIndex] = acc_y;
+        _sampleData[s].accelerationZ[_dataIndex] = acc_z;
+
+        _psds[s].append(acc_x, acc_y, acc_z);
     }
 
     _dataIndex++;

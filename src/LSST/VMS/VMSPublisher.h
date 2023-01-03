@@ -36,6 +36,7 @@ public:
     double getTimestamp();
 
     void putData(MTVMS_dataC *data) { _vmsSAL->putSample_data(data); }
+    void putPsd(MTVMS_psdC *psd) { _vmsSAL->putSample_psd(psd); }
 
     void putMiscellaneous(float chassisTemperature, int64_t ticks) {
         _miscellaneous.chassisTemperature = chassisTemperature;

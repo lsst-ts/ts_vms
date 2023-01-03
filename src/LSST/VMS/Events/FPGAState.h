@@ -58,7 +58,6 @@ public:
     static void send();
 
 private:
-    bool _updated;
     std::mutex _stateMutex;
 };
 
