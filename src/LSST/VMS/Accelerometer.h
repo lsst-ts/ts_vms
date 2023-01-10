@@ -53,7 +53,7 @@ private:
     Telemetry::PSD* _psds;
     VMSApplicationSettings* _vmsApplicationSettings;
 
-    float _convert(uint32_t **data);
+    float _convert(uint32_t** data);
 };
 
 } /* namespace VMS */
