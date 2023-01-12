@@ -7,4 +7,4 @@ Maintainer: Petr Kubánek <pkubanek@lsst.org>
 License: GPL-3.0+
 Architecture: x64
 Homepage: https://github.com/lsst-ts/ts_VMS
-Depends:
+Depends: libfftw

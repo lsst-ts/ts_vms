@@ -66,7 +66,6 @@ private:
     VMSApplicationSettings *_vmsApplicationSettings;
     uint32_t session;
     size_t remaining;
-    NiFpga_IrqContext outerLoopIRQContext;
     uint8_t _channels;
     const char *_bitFile;
     const char *_signature;

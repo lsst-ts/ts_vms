@@ -29,7 +29,13 @@ using namespace LSST::VMS;
 using namespace LSST::VMS::Events;
 using namespace MTVMS;
 
-FPGAState::FPGAState(token) { period = 0; }
+FPGAState::FPGAState(token) {
+    period = 0;
+    ready = false;
+    timeouted = false;
+    stopped = true;
+    fifoFull = false;
+}
 
 void FPGAState::send() {
     salReturn ret = VMSPublisher::SAL()->putSample_logevent_fpgaState(&instance());
@@ -64,5 +70,4 @@ void FPGAState::setMisc(bool newReady, bool newTimeouted, bool newStopped, bool 
 void FPGAState::checkState() {
     setMisc(FPGA::instance().ready(), FPGA::instance().timeouted(), FPGA::instance().stopped(),
             FPGA::instance().FIFOFull());
-    send();
 }

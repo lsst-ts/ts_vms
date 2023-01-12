@@ -71,7 +71,6 @@ void FPGA::populate(VMSApplicationSettings *vmsApplicationSettings) {
     _vmsApplicationSettings = vmsApplicationSettings;
     session = 0;
     remaining = 0;
-    outerLoopIRQContext = 0;
     if (_vmsApplicationSettings->Subsystem == "CameraRotator") {
         _channels = 3;
         POPULATE_FPGA(CameraRotator);
@@ -104,19 +103,15 @@ void FPGA::open() {
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Open(_bitFile, _signature,
                                                         _vmsApplicationSettings->RIO.c_str(), 0, &(session)));
-    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Abort(session));
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Download(session));
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Reset(session));
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Run(session, 0));
-    std::this_thread::sleep_for(std::chrono::seconds(_channels == 3 ? 1 : 3));
-    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_ReserveIrqContext(session, &outerLoopIRQContext));
 #endif
 }
 
 void FPGA::close() {
     SPDLOG_DEBUG("FPGA: close()");
 #ifndef SIMULATOR
-    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_UnreserveIrqContext(session, outerLoopIRQContext));
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Close(session, 0));
 #endif
 }

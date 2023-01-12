@@ -52,6 +52,8 @@ private:
     MTVMS_dataC* _sampleData;
     Telemetry::PSD* _psds;
     VMSApplicationSettings* _vmsApplicationSettings;
+
+    float _convert(uint32_t** data);
 };
 
 } /* namespace VMS */

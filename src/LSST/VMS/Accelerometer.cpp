@@ -103,12 +103,9 @@ void Accelerometer::sampleData() {
 
     uint32_t *dataBuffer = buffer;
     for (int s = 0; s < _numberOfSensors; s++) {
-        float acc_x = G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
-        dataBuffer++;
-        float acc_y = G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
-        dataBuffer++;
-        float acc_z = G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, *dataBuffer));
-        dataBuffer++;
+        float acc_x = _convert(&dataBuffer);
+        float acc_y = _convert(&dataBuffer);
+        float acc_z = _convert(&dataBuffer);
 
         _sampleData[s].accelerationX[_dataIndex] = acc_x;
         _sampleData[s].accelerationY[_dataIndex] = acc_y;
@@ -124,6 +121,31 @@ void Accelerometer::sampleData() {
             VMSPublisher::instance().putData(&(_sampleData[s]));
         }
         _dataIndex = 0;
+    }
+}
+
+float Accelerometer::_convert(uint32_t **data) {
+    union {
+        uint32_t i;
+        float f;
+    } u32float;
+    switch (_vmsApplicationSettings->outputType) {
+        case 1:
+        case 2:
+            u32float.f = G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, **data));
+            ++*data;
+            return u32float.f;
+        case 3:
+            u32float.i = **data;
+            ++*data;
+            return u32float.f;
+        case 50:
+            *data += 3;
+            u32float.i = **data;
+            ++*data;
+            return u32float.f;
+        default:
+            return NAN;
     }
 }
 
