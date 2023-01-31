@@ -107,7 +107,7 @@ node {
         stage('Publish documentation')
         {
             withCredentials([usernamePassword(credentialsId: 'lsst-io', usernameVariable: 'LTD_USERNAME', passwordVariable: 'LTD_PASSWORD')]) {
-                M1M3sim.inside("--entrypoint=''") {
+                VMSsim.inside("--entrypoint=''") {
                     sh """
                         source $SALUSER_HOME/.crio_setup.sh
                         ltd upload --product ts-vms --git-ref """ + BRANCH + """ --dir $WORKSPACE/ts_vms/doc/html
