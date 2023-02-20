@@ -1,6 +1,7 @@
 # define to "" to produce verbose output
 ifndef VERBOSE
   co := @
+  silence := --silence-errors
 endif
 
 c_opts := -DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE
@@ -22,9 +23,23 @@ endif
 CRIOCPP := ../ts_cRIOcpp/
 
 BOOST_CPPFLAGS := -I/usr/include/boost169
-SAL_CPPFLAGS := $(shell pkg-config yaml-cpp --cflags) $(shell pkg-config fftw3 --cflags) -I${OSPL_HOME}/include -I${OSPL_HOME}/include/sys -I${OSPL_HOME}/include/dcps/C++/SACPP -I${SAL_WORK_DIR}/MTVMS/cpp/src -I${SAL_WORK_DIR}/include -I${SAL_HOME}/include -I${LSST_SDK_INSTALL}/include
+SAL_CPPFLAGS := $(shell pkg-config yaml-cpp --cflags $(silence)) \
+        $(shell pkg-config spdlog --cflags $(silence)) \
+        $(shell pkg-config fftw3 --cflags) \
+        -I${OSPL_HOME}/include -I${OSPL_HOME}/include/sys \
+        -I${OSPL_HOME}/include/dcps/C++/SACPP \
+        -I${SAL_WORK_DIR}/MTVMS/cpp/src \
+        -I${SAL_WORK_DIR}/include \
+        -I${SAL_HOME}/include \
+        -I${LSST_SDK_INSTALL}/include
 
-LIBS := $(shell pkg-config yaml-cpp --libs) $(shell pkg-config fftw3 --libs) -ldl -ldcpssacpp -ldcpsgapi -lddsuser -lddskernel -lpthread -lddsserialization -lddsconfparser -lddsconf -lddsdatabase -lddsutil -lddsos ${SAL_WORK_DIR}/lib/libSAL_MTVMS.a
+LIBS := $(shell pkg-config yaml-cpp --libs $(silence)) \
+        $(shell pkg-config spdlog --libs $(silence)) \
+        $(shell pkg-config fftw3 --libs $(silence)) \
+        -ldl -ldcpssacpp -ldcpsgapi -lddsuser -lddskernel \
+        -lpthread -lddsserialization -lddsconfparser -lddsconf \
+        -lddsdatabase -lddsutil -lddsos \
+        ${SAL_WORK_DIR}/lib/libSAL_MTVMS.a
 
 LIBS_FLAGS += -L"${OSPL_HOME}/lib" -L"${LSST_SDK_INSTALL}/lib"
 
