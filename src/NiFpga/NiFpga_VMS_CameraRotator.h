@@ -23,7 +23,7 @@
 /**
  * The signature of the FPGA bitfile.
  */
-static const char* const NiFpga_VMS_CameraRotator_Signature = "1B593DCAE0D4094C7D75DB0B5841F6F9";
+static const char* const NiFpga_VMS_CameraRotator_Signature = "E93A26E996D3EC1D81D0C490AD5EE3D1";
 
 #if NiFpga_Cpp
 extern "C"
@@ -42,6 +42,11 @@ typedef enum
 {
    NiFpga_VMS_CameraRotator_IndicatorU64_Ticks = 0x8128,
 } NiFpga_VMS_CameraRotator_IndicatorU64;
+
+typedef enum
+{
+   NiFpga_VMS_CameraRotator_ControlBool_Operate = 0x8146,
+} NiFpga_VMS_CameraRotator_ControlBool;
 
 typedef enum
 {

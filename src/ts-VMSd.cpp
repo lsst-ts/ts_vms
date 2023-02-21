@@ -182,7 +182,7 @@ int main(int argc, char* const argv[]) {
     try {
         csc.run(&(FPGA::instance()));
     } catch (LSST::cRIO::NiError& nie) {
-        SPDLOG_CRITICAL("Main: Error initializing ThermalFPGA: {}", nie.what());
+        SPDLOG_CRITICAL("Main: Error initializing VMS FPGA: {}", nie.what());
     }
 
     return 0;

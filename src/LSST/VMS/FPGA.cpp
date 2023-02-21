@@ -47,7 +47,6 @@ namespace VMS {
 
 FPGA::FPGA(token) : SimpleFPGA(LSST::cRIO::VMS) {}
 
-#define NiFpga_VMS_CameraRotator_ControlBool_Operate -1
 #define NiFpga_VMS_6_Responder_ControlBool_Operate -1
 #define NiFpga_VMS_3_Responder_ControlBool_Operate -1
 
