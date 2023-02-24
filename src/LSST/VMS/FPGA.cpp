@@ -24,6 +24,7 @@
 #include <spdlog/spdlog.h>
 #include <unistd.h>
 #include <chrono>
+#include <thread>
 
 #ifdef SIMULATOR
 #include <math.h>
