@@ -31,6 +31,9 @@ if [ -z "$VMS" ]; then
 fi
 
 startdaemon(){
+	# CSC runs with shmem config, requires ospl daemon
+	sudo -E -u vms -g vms LD_LIBRARY_PATH=$OSPL_HOME/lib PATH=$PATH:$OSPL_HOME/bin $OSPL_HOME/bin/ospl start
+
 	# make sure network is up and running
 	attemps=0
 	export LSST_DDS_IP=`ip route get 1 | awk '{print $7;exit}'`
@@ -51,6 +54,7 @@ startdaemon(){
 stopdaemon(){
 	echo -n "Stopping TS VMS $1:"
 	start-stop-daemon --stop --oknodo --remove-pidfile --retry 5 -p ${PIDFILE}_$1.pid
+	sudo -E -u vms -g vms LD_LIBRARY_PATH=$OSPL_HOME/lib PATH=$PATH:$OSPL_HOME/bin $OSPL_HOME/bin/ospl stop
 	echo "done"
 }
 startall(){
@@ -76,6 +80,7 @@ case "$1" in
 	startall
 	;;
   status)
+	sudo -E -u vms -g vms LD_LIBRARY_PATH=$OSPL_HOME/lib PATH=$PATH:$OSPL_HOME/bin $OSPL_HOME/bin/ospl status
 	status $DAEMON
 	exit $?
 	;;

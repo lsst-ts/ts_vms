@@ -1,5 +1,6 @@
 #!/bin/sh
 useradd -r -U vms
-chown -R vms:vms /var/lib/MTVMS/*.lvbitx
+mkdir -p /var/log/vms
+chown -R vms:vms /var/lib/MTVMS/*.lvbitx /var/log/vms
 update-rc.d ts-VMS defaults
 /etc/init.d/ts-VMS start
