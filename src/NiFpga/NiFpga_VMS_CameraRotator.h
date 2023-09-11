@@ -6,7 +6,7 @@
 #define __NiFpga_VMS_CameraRotator_h__
 
 #ifndef NiFpga_Version
-   #define NiFpga_Version 190
+#define NiFpga_Version 190
 #endif
 
 #include "NiFpga.h"
@@ -26,59 +26,45 @@
 static const char* const NiFpga_VMS_CameraRotator_Signature = "E93A26E996D3EC1D81D0C490AD5EE3D1";
 
 #if NiFpga_Cpp
-extern "C"
-{
+extern "C" {
 #endif
 
-typedef enum
-{
-   NiFpga_VMS_CameraRotator_IndicatorBool_FIFOfull = 0x8132,
-   NiFpga_VMS_CameraRotator_IndicatorBool_Ready = 0x8142,
-   NiFpga_VMS_CameraRotator_IndicatorBool_Stopped = 0x812E,
-   NiFpga_VMS_CameraRotator_IndicatorBool_Timeouted = 0x813E,
+typedef enum {
+    NiFpga_VMS_CameraRotator_IndicatorBool_FIFOfull = 0x8132,
+    NiFpga_VMS_CameraRotator_IndicatorBool_Ready = 0x8142,
+    NiFpga_VMS_CameraRotator_IndicatorBool_Stopped = 0x812E,
+    NiFpga_VMS_CameraRotator_IndicatorBool_Timeouted = 0x813E,
 } NiFpga_VMS_CameraRotator_IndicatorBool;
 
-typedef enum
-{
-   NiFpga_VMS_CameraRotator_IndicatorU64_Ticks = 0x8128,
+typedef enum {
+    NiFpga_VMS_CameraRotator_IndicatorU64_Ticks = 0x8128,
 } NiFpga_VMS_CameraRotator_IndicatorU64;
 
-typedef enum
-{
-   NiFpga_VMS_CameraRotator_ControlBool_Operate = 0x8146,
+typedef enum {
+    NiFpga_VMS_CameraRotator_ControlBool_Operate = 0x8146,
 } NiFpga_VMS_CameraRotator_ControlBool;
 
-typedef enum
-{
-   NiFpga_VMS_CameraRotator_ControlI16_Outputtype = 0x8136,
+typedef enum {
+    NiFpga_VMS_CameraRotator_ControlI16_Outputtype = 0x8136,
 } NiFpga_VMS_CameraRotator_ControlI16;
 
-typedef enum
-{
-   NiFpga_VMS_CameraRotator_ControlU32_Periodms = 0x8138,
+typedef enum {
+    NiFpga_VMS_CameraRotator_ControlU32_Periodms = 0x8138,
 } NiFpga_VMS_CameraRotator_ControlU32;
 
-typedef enum
-{
-   NiFpga_VMS_CameraRotator_TargetToHostFifoU32_ResponseFIFO = 0,
+typedef enum {
+    NiFpga_VMS_CameraRotator_TargetToHostFifoU32_ResponseFIFO = 0,
 } NiFpga_VMS_CameraRotator_TargetToHostFifoU32;
 
 #if !NiFpga_VxWorks
 
 /* Indicator: ChassisTemperature */
-const NiFpga_FxpTypeInfo NiFpga_VMS_CameraRotator_IndicatorFxp_ChassisTemperature_TypeInfo =
-{
-   1,
-   32,
-   16
-};
+const NiFpga_FxpTypeInfo NiFpga_VMS_CameraRotator_IndicatorFxp_ChassisTemperature_TypeInfo = {1, 32, 16};
 
 /* Use NiFpga_ReadU32() to access ChassisTemperature */
 const uint32_t NiFpga_VMS_CameraRotator_IndicatorFxp_ChassisTemperature_Resource = 0x8124;
 
-
 #endif /* !NiFpga_VxWorks */
-
 
 #if NiFpga_Cpp
 }

@@ -1,4 +1,4 @@
-FROM lsstts/develop-env:c0026.010 as crio-develop
+FROM lsstts/develop-env:develop as crio-develop
 
 USER root
 RUN chmod a+rwX -R /home/saluser/
@@ -9,7 +9,7 @@ ARG XML_BRANCH=develop
 WORKDIR /home/saluser
 
 RUN source ~/.setup.sh \
-    && mamba install -y readline yaml-cpp boost-cpp catch2 spdlog fftw \
+    && mamba install -y readline yaml-cpp boost-cpp catch2 spdlog fmt fftw \
     && echo > .crio_setup.sh -e \
 echo "Configuring cRIO development environment" \\n\
 export SHELL=bash \\n\
