@@ -39,7 +39,8 @@
 #include <NiFpga_VMS_3_Responder.h>
 #include <NiFpga_VMS_6_Controller.h>
 #include <NiFpga_VMS_6_Responder.h>
-#include <NiFpga_VMS_CameraRotator.h>
+#include <NiFpga_VMS_CameraRotator_Controller.h>
+#include <NiFpga_VMS_CameraRotator_Responder.h>
 #include <VMSApplicationSettings.h>
 #include <VMSPublisher.h>
 
@@ -50,6 +51,7 @@ FPGA::FPGA(token) : SimpleFPGA(LSST::cRIO::VMS) {}
 
 #define NiFpga_VMS_6_Responder_ControlBool_Operate -1
 #define NiFpga_VMS_3_Responder_ControlBool_Operate -1
+#define NiFpga_VMS_CameraRotator_Responder_ControlBool_Operate -1
 
 #define POPULATE_FPGA(type)                                                                    \
     _bitFile = "/var/lib/MTVMS/" NiFpga_VMS_##type##_Bitfile;                                  \
@@ -73,7 +75,11 @@ void FPGA::populate(VMSApplicationSettings *vmsApplicationSettings) {
     remaining = 0;
     if (_vmsApplicationSettings->Subsystem == "CameraRotator") {
         _channels = 3;
-        POPULATE_FPGA(CameraRotator);
+        if (_vmsApplicationSettings->IsController) {
+            POPULATE_FPGA(CameraRotator_Controller);
+        } else {
+            POPULATE_FPGA(CameraRotator_Responder);
+        }
     } else if (_vmsApplicationSettings->Subsystem == "M2") {
         _channels = 6;
         if (_vmsApplicationSettings->IsController) {
@@ -99,7 +105,7 @@ void FPGA::initialize() {
 }
 
 void FPGA::open() {
-    SPDLOG_DEBUG("FPGA: open({},{},{})", _bitFile, _signature, _vmsApplicationSettings->RIO);
+    SPDLOG_INFO("FPGA: open({},{},{})", _bitFile, _signature, _vmsApplicationSettings->RIO);
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_Open(_bitFile, _signature,
                                                         _vmsApplicationSettings->RIO.c_str(), 0, &(session)));
