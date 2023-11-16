@@ -18,7 +18,7 @@ ts-VMSd: src/ts-VMSd.cpp.o src/libVMS.a
 
 # Other Targets
 clean:
-	@$(foreach file,ts_MTVMS src/ts_MTVMS.cpp.o doc *.ipk ipk, echo '[RM ] ${file}'; $(RM) -r $(file);)
+	@$(foreach file,ts_MTVMS src/ts_MTVMS.cpp.o *.ipk ipk, echo '[RM ] ${file}'; $(RM) -r $(file);)
 	@$(foreach dir,src tests,$(MAKE) -C ${dir} $@;)
 
 # file targets
