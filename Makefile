@@ -14,7 +14,7 @@ src/libVMS.a: FORCE
 # Tool invocations
 ts-VMSd: src/ts-VMSd.cpp.o src/libVMS.a
 	@echo '[LD ] $@'
-	${co}$(CPP) $(LIBS_FLAGS) -o $@ $^ $(LIBS) ${CRIOCPP}/lib/libcRIOcpp.a
+	${co}$(CPP) $(LIBS_FLAGS) -o $@ $^ ${CRIOCPP}/lib/libcRIOcpp.a $(LIBS)
 
 # Other Targets
 clean:
