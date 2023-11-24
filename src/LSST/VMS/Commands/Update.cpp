@@ -22,15 +22,12 @@
  */
 
 #include <Commands/Update.h>
-#include <Events/Heartbeat.h>
 #include <FPGA.h>
 #include <VMSPublisher.h>
 
-using namespace LSST::VMS;
 using namespace LSST::VMS::Commands;
 
 void Update::execute() {
     VMSPublisher::instance().putMiscellaneous(FPGA::instance().chassisTemperature(),
                                               FPGA::instance().chassisTicks());
-    Events::Heartbeat::instance().tryToggle();
 }

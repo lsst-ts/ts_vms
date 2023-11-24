@@ -45,7 +45,8 @@ public:
     Heartbeat(token);
 
     /**
-     * Sets heartbeat, publish data if the last heartbeat was send more than 500ms in past.
+     * Sets heartbeat, publish data if the last heartbeat was send more than 500ms
+     * in past.
      */
     void tryToggle();
 
@@ -53,6 +54,8 @@ private:
     double _lastToggleTimestamp;
 };
 
-}}}
+}  // namespace Events
+}  // namespace VMS
+}  // namespace LSST
 
 #endif  // LSST_INTERLOCKSTATUS_H

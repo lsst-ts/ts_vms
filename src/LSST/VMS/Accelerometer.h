@@ -25,8 +25,8 @@
 #define ACCELEROMETER_H_
 
 #include <SAL_MTVMS.h>
-#include <VMSApplicationSettings.h>
 #include <Telemetry/PSD.h>
+#include <VMSApplicationSettings.h>
 
 namespace LSST {
 namespace VMS {
@@ -36,7 +36,7 @@ namespace VMS {
  */
 class Accelerometer {
 public:
-    Accelerometer(VMSApplicationSettings* vmsApplicationSettings);
+    Accelerometer(VMSApplicationSettings *vmsApplicationSettings);
     virtual ~Accelerometer(void);
 
     void enableAccelerometers();
@@ -49,11 +49,11 @@ private:
 
     int _numberOfSensors;
     int _dataIndex;
-    MTVMS_dataC* _sampleData;
-    Telemetry::PSD* _psds;
-    VMSApplicationSettings* _vmsApplicationSettings;
+    MTVMS_dataC *_sampleData;
+    Telemetry::PSD *_psds;
+    VMSApplicationSettings *_vmsApplicationSettings;
 
-    float _convert(uint32_t** data);
+    float _convert(uint32_t **data);
 };
 
 } /* namespace VMS */

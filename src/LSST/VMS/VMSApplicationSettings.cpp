@@ -22,8 +22,8 @@
  */
 
 #include <VMSApplicationSettings.h>
-#include <yaml-cpp/yaml.h>
 #include <spdlog/spdlog.h>
+#include <yaml-cpp/yaml.h>
 
 #include <vector>
 
