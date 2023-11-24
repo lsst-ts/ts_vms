@@ -1,5 +1,5 @@
 /*
- * Update loop for VMS.
+ * This file is part of the LSST M1M3 thermal system package.
  *
  * Developed for the Vera C. Rubin Telescope and Site System.
  * This product includes software developed by the LSST Project
@@ -21,16 +21,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <Commands/Update.h>
-#include <Events/Heartbeat.h>
-#include <FPGA.h>
-#include <VMSPublisher.h>
+#ifndef LSST_HEARTBEAT_H
+#define LSST_HEARTBEAT_H
 
-using namespace LSST::VMS;
-using namespace LSST::VMS::Commands;
+#include <chrono>
 
-void Update::execute() {
-    VMSPublisher::instance().putMiscellaneous(FPGA::instance().chassisTemperature(),
-                                              FPGA::instance().chassisTicks());
-    Events::Heartbeat::instance().tryToggle();
-}
+#include <SAL_MTVMS.h>
+
+#include <cRIO/Singleton.h>
+
+namespace LSST {
+namespace VMS {
+namespace Events {
+
+/**
+ * Wrapper object for MTM1M3_logevent_heartbeatStatusC.
+ */
+class Heartbeat : public MTVMS_logevent_heartbeatC, public cRIO::Singleton<Heartbeat> {
+public:
+    /**
+     * Construct new InterlockStatus
+     */
+    Heartbeat(token);
+
+    /**
+     * Sets heartbeat, publish data if the last heartbeat was send more than 500ms in past.
+     */
+    void tryToggle();
+
+private:
+    double _lastToggleTimestamp;
+};
+
+}}}
+
+#endif  // LSST_INTERLOCKSTATUS_H

@@ -60,7 +60,7 @@ node {
                     make
     
                     cd $WORKSPACE/ts_vms
-                    make simulator
+                    make SIMULATOR=1
                     LSST_DDS_PARTITION_PREFIX=test make junit || true
                  """
              }

@@ -23,7 +23,7 @@
 #include <FPGA.h>
 #include <Events/FPGAState.h>
 
-#include <spdlog/fmt/fmt.h>
+#include <spdlog/spdlog.h>
 
 using namespace LSST::VMS;
 using namespace LSST::VMS::Events;
