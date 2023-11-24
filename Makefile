@@ -14,11 +14,11 @@ src/libVMS.a: FORCE
 # Tool invocations
 ts-VMSd: src/ts-VMSd.cpp.o src/libVMS.a
 	@echo '[LD ] $@'
-	${co}$(CPP) $(LIBS_FLAGS) -o $@ $^ $(LIBS) ${CRIOCPP}/lib/libcRIOcpp.a
+	${co}$(CPP) $(LIBS_FLAGS) -o $@ $^ ${CRIOCPP}/lib/libcRIOcpp.a $(LIBS)
 
 # Other Targets
 clean:
-	@$(foreach file,ts_MTVMS src/ts_MTVMS.cpp.o doc *.ipk ipk, echo '[RM ] ${file}'; $(RM) -r $(file);)
+	@$(foreach file,ts_MTVMS src/ts_MTVMS.cpp.o *.ipk ipk, echo '[RM ] ${file}'; $(RM) -r $(file);)
 	@$(foreach dir,src tests,$(MAKE) -C ${dir} $@;)
 
 # file targets
