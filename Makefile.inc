@@ -8,54 +8,47 @@ c_opts := -DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE
 
 ifdef DEBUG
   c_opts += -g
+  silence := --silence-errors
 else
   c_opts += -O3
 endif
 
 CRIOCPP := ../ts_cRIOcpp/
 
-BOOST_CPPFLAGS := -I/usr/include/boost169
-SAL_CPPFLAGS := $(shell pkg-config yaml-cpp --cflags $(silence)) \
-        $(shell pkg-config fmt --cflags $(silence)) \
-        $(shell pkg-config spdlog --cflags $(silence)) \
-        $(shell pkg-config fftw3 --cflags $(silence)) \
-        -I${OSPL_HOME}/include -I${OSPL_HOME}/include/sys \
-        -I${OSPL_HOME}/include/dcps/C++/SACPP \
-        -I${SAL_WORK_DIR}/MTVMS/cpp/src \
-        -I${SAL_WORK_DIR}/include \
-        -I${SAL_HOME}/include \
-        -I${LSST_SDK_INSTALL}/include
+PKG_CPPFLAGS := \
+	$(shell pkg-config yaml-cpp --cflags $(silence)) \
+	$(shell pkg-config spdlog --cflags $(silence)) \
+	$(shell pkg-config fmt --cflags $(silence)) \
+	$(shell pkg-config fftw3 --cflags $(silence))
 
-LIBS := $(shell pkg-config yaml-cpp --libs $(silence)) \
-        $(shell pkg-config fmt --libs $(silence)) \
-        $(shell pkg-config fftw3 --libs $(silence)) \
-        -ldl -ldcpssacpp -ldcpsgapi -lddsuser -lddskernel \
-        -lpthread -lddsserialization -lddsconfparser -lddsconf \
-        -lddsdatabase -lddsutil -lddsos \
-        ${SAL_WORK_DIR}/lib/libSAL_MTVMS.a \
-        -lreadline
+SAL_CPPFLAGS += $(PKG_CPPFLAGS) \
+	-I${OSPL_HOME}/include -I${OSPL_HOME}/include/sys -I${OSPL_HOME}/include/dcps/C++/SACPP \
+	-I${SAL_WORK_DIR}/MTM1M3/cpp/src -I${SAL_WORK_DIR}/MTMount/cpp/src -I${SAL_WORK_DIR}/include \
+	-I${SAL_HOME}/include -I${LSST_SDK_INSTALL}/include
 
-C := gcc -Wall ${c_opts}
-CPP := g++ --std=c++17 -Wall -fPIE ${c_opts}
+PKG_LIBS := \
+	$(shell pkg-config yaml-cpp --libs $(silence)) \
+	$(shell pkg-config fftw3 --libs $(silence)) \
 
-# Simulator is dynamicaly linked, distribution uses static linking
+CPP := g++ -std=c++17 -Wall -fPIE ${c_opts}
+
 ifdef SIMULATOR
+  C := gcc -Wall ${c_opts}
   CPP += -pedantic -DSIMULATOR
-  LIBS += $(shell pkg-config spdlog --libs $(silence))
+  PKG_LIBS += $(shell pkg-config spdlog --libs $(silence))
 else
-  C += -fmessage-length=0
-  CPP += -fmessage-length=0 -ldl
-  LIBS += $(shell pkg-config spdlog --libs $(silence) | sed -E 's/-l([a-z0-9]*)/-l:lib\1.a/g')
+  C := gcc -Wall -fmessage-length=0 ${c_opts}
+  CPP += -fmessage-length=0
+  # static linkage for cRIO binary
+  PKG_LIBS += $(shell pkg-config spdlog --libs $(silence) | sed -E 's/-l([a-z0-9]*)/-l:lib\1.a/g')
 endif
 
-LIBS_FLAGS += -L"${OSPL_HOME}/lib" -L"${LSST_SDK_INSTALL}/lib"
+LIBS += $(PKG_LIBS) -ldl -ldcpssacpp -ldcpsgapi -lddsuser -lddskernel \
+	-lpthread -lddsserialization -lddsconfparser -lddsconf \
+	-lddsdatabase -lddsutil -lddsos \
+	${SAL_WORK_DIR}/lib/libSAL_MTVMS.a
 
-GIT := $(shell command -v git 2> /dev/null)
+LIBS_FLAGS += -L${OSPL_HOME}/lib -L${LSST_SDK_INSTALL}/lib
 
-ifndef GIT
-   VERSION := "v0.0.0-None"
-   GIT_HASH := "xxxx-NONE"
-else
-   VERSION := $(shell git describe --tags --dirty)
-   GIT_HASH := $(shell git rev-parse HEAD)
-endif
+VERSION := $(shell git describe --tags --dirty 2>/dev/null || echo "unknown:non-git")
+GIT_HASH := $(shell git rev-parse HEAD 2>/dev/null || echo "unknown-non-git")

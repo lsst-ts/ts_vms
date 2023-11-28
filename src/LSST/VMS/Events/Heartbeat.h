@@ -1,5 +1,5 @@
 /*
- * This file is part of LSST MT VMS package.
+ * This file is part of the LSST M1M3 thermal system package.
  *
  * Developed for the Vera C. Rubin Telescope and Site System.
  * This product includes software developed by the LSST Project
@@ -21,42 +21,41 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef ACCELEROMETER_H_
-#define ACCELEROMETER_H_
+#ifndef LSST_HEARTBEAT_H
+#define LSST_HEARTBEAT_H
+
+#include <chrono>
 
 #include <SAL_MTVMS.h>
-#include <Telemetry/PSD.h>
-#include <VMSApplicationSettings.h>
+
+#include <cRIO/Singleton.h>
 
 namespace LSST {
 namespace VMS {
+namespace Events {
 
 /**
- * VMS Accelerometer sampling.
+ * Wrapper object for MTM1M3_logevent_heartbeatStatusC.
  */
-class Accelerometer {
+class Heartbeat : public MTVMS_logevent_heartbeatC, public cRIO::Singleton<Heartbeat> {
 public:
-    Accelerometer(VMSApplicationSettings *vmsApplicationSettings);
-    virtual ~Accelerometer(void);
+    /**
+     * Construct new InterlockStatus
+     */
+    Heartbeat(token);
 
-    void enableAccelerometers();
-    void disableAccelerometers();
-
-    void sampleData();
+    /**
+     * Sets heartbeat, publish data if the last heartbeat was send more than 500ms
+     * in past.
+     */
+    void tryToggle();
 
 private:
-    enum { M1M3, M2, CameraRotator, TMA } _subsystem;
-
-    int _numberOfSensors;
-    int _dataIndex;
-    MTVMS_dataC *_sampleData;
-    Telemetry::PSD *_psds;
-    VMSApplicationSettings *_vmsApplicationSettings;
-
-    float _convert(uint32_t **data);
+    double _lastToggleTimestamp;
 };
 
-} /* namespace VMS */
-} /* namespace LSST */
+}  // namespace Events
+}  // namespace VMS
+}  // namespace LSST
 
-#endif /* ACCELEROMETER_H_ */
+#endif  // LSST_INTERLOCKSTATUS_H

@@ -1,10 +1,10 @@
 /*
  * EnterControl command.
  *
- * Developed for the Vera C. Rubin Observatory Telescope & Site Software Systems.
- * This product includes software developed by the Vera C.Rubin Observatory Project
- * (https://www.lsst.org). See the COPYRIGHT file at the top-level directory of
- * this distribution for details of code ownership.
+ * Developed for the Vera C. Rubin Observatory Telescope & Site Software
+ * Systems. This product includes software developed by the Vera C.Rubin
+ * Observatory Project (https://www.lsst.org). See the COPYRIGHT file at the
+ * top-level directory of this distribution for details of code ownership.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -23,9 +23,9 @@
 #ifndef _VMS_Command_EnterControl_
 #define _VMS_Command_ENterControl_
 
-#include <cRIO/Command.h>
 #include <SAL_MTVMS.h>
 #include <VMSPublisher.h>
+#include <cRIO/Command.h>
 
 #include <Events/SummaryState.h>
 

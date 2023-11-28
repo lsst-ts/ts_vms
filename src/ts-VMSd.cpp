@@ -23,22 +23,24 @@
 
 #include <chrono>
 
-#include <cRIO/ControllerThread.h>
+#include <SAL_MTVMS.h>
+
 #include <cRIO/CSC.h>
+#include <cRIO/ControllerThread.h>
 #include <cRIO/NiError.h>
 #include <cRIO/SALSink.h>
 #include <cRIO/Settings/Path.h>
 
+#include <Accelerometer.h>
+#include <Commands/EnterControl.h>
+#include <Commands/Update.h>
+#include <Events/FPGAState.h>
+#include <Events/Heartbeat.h>
+#include <FPGA.h>
+#include <FPGAAddresses.h>
 #include <SettingReader.h>
-#include <SAL_MTVMS.h>
 #include <VMSPublisher.h>
 #include <VMSSubscriber.h>
-#include <FPGA.h>
-#include <Accelerometer.h>
-#include <FPGAAddresses.h>
-#include <Commands/Update.h>
-#include <Commands/EnterControl.h>
-#include <Events/FPGAState.h>
 
 using namespace std::chrono;
 using namespace std::chrono_literals;
@@ -47,9 +49,9 @@ using namespace LSST::VMS;
 
 class MTVMSd : public LSST::cRIO::CSC {
 public:
-    MTVMSd(const char* name, const char* description) : CSC(name, description) {}
+    MTVMSd(const char *name, const char *description) : CSC(name, description) {}
 
-    cRIO::command_vec processArgs(int argc, char* const argv[]) override;
+    cRIO::command_vec processArgs(int argc, char *const argv[]) override;
 
 protected:
     void init() override;
@@ -62,15 +64,15 @@ private:
     // SAL object to receive all events from other VMS
     std::shared_ptr<SAL_MTVMS> _allvmsSAL;
 
-    Accelerometer* accelerometer;
+    Accelerometer *accelerometer;
 };
 
 SALSinkMacro(MTVMS);
 
 int getIndex(const std::string subsystem) {
-    const char* subsystems[] = {"M1M3", "M2", "CameraRotator", NULL};
+    const char *subsystems[] = {"M1M3", "M2", "CameraRotator", NULL};
     int index = 1;
-    for (const char** s = subsystems; *s != NULL; s++, index++) {
+    for (const char **s = subsystems; *s != NULL; s++, index++) {
         if (subsystem == *s) {
             return index;
         }
@@ -79,10 +81,12 @@ int getIndex(const std::string subsystem) {
     exit(EXIT_FAILURE);
 }
 
-cRIO::command_vec MTVMSd::processArgs(int argc, char* const argv[]) {
+cRIO::command_vec MTVMSd::processArgs(int argc, char *const argv[]) {
     auto ret = CSC::processArgs(argc, argv);
     if (ret.size() != 1) {
-        SPDLOG_CRITICAL("Subsystem (M1M3, M2 or CameraRotator) needs to be provided on command line");
+        SPDLOG_CRITICAL(
+                "Subsystem (M1M3, M2 or CameraRotator) needs to be "
+                "provided on command line");
         exit(EXIT_FAILURE);
     }
 
@@ -90,9 +94,9 @@ cRIO::command_vec MTVMSd::processArgs(int argc, char* const argv[]) {
     LSST::cRIO::Settings::Path::setRootPath(getConfigRoot());
 
 #ifdef SIMULATOR
-    SPDLOG_WARN("Starting ts-VMSd simulator");
+    SPDLOG_WARN("Starting ts-VMSd simulator. Version {}", VERSION);
 #else
-    SPDLOG_INFO("Starting ts-VMSd");
+    SPDLOG_INFO("Starting cRIO/real ts-VMSd. Version {}", VERSION);
 #endif
 
     SPDLOG_INFO("Main: Creating setting reader from {}", getConfigRoot());
@@ -171,17 +175,19 @@ int MTVMSd::runLoop() {
     accelerometer->sampleData();
     Events::FPGAState::instance().checkState();
 
+    Events::Heartbeat::instance().tryToggle();
+
     return LSST::cRIO::ControllerThread::exitRequested() ? 0 : 1;
 }
 
-int main(int argc, char* const argv[]) {
+int main(int argc, char *const argv[]) {
     MTVMSd csc("MTVMS", "Vibration Monitoring System CSC");
 
     csc.processArgs(argc, argv);
 
     try {
         csc.run(&(FPGA::instance()));
-    } catch (LSST::cRIO::NiError& nie) {
+    } catch (LSST::cRIO::NiError &nie) {
         SPDLOG_CRITICAL("Main: Error initializing VMS FPGA: {}", nie.what());
     }
 

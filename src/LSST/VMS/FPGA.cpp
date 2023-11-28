@@ -21,17 +21,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <spdlog/spdlog.h>
-#include <unistd.h>
 #include <chrono>
+#include <spdlog/spdlog.h>
 #include <thread>
+#include <unistd.h>
 
 #ifdef SIMULATOR
-#include <math.h>
 #include <Events/FPGAState.h>
+#include <math.h>
 #endif
 
-#include <cRIO/NiError.h>
 #include <Events/FPGAState.h>
 #include <FPGA.h>
 #include <FPGAAddresses.h>
@@ -42,6 +41,7 @@
 #include <NiFpga_VMS_CameraRotator.h>
 #include <VMSApplicationSettings.h>
 #include <VMSPublisher.h>
+#include <cRIO/NiError.h>
 
 namespace LSST {
 namespace VMS {

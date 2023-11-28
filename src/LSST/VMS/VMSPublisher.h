@@ -30,6 +30,7 @@ public:
 
     void setLogLevel(int newLevel);
 
+    void logHeartbeat(MTVMS_logevent_heartbeatC *data) { _vmsSAL->logEvent_heartbeat(data, 0); }
     void logSoftwareVersions();
     void logSimulationMode();
 

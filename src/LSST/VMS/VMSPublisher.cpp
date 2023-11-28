@@ -5,9 +5,9 @@
  *      Author: ccontaxis
  */
 
-#include <spdlog/spdlog.h>
 #include <SAL_MTVMS.h>
 #include <VMSPublisher.h>
+#include <spdlog/spdlog.h>
 
 namespace LSST {
 namespace VMS {

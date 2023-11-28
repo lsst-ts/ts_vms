@@ -23,7 +23,7 @@
 /**
  * The signature of the FPGA bitfile.
  */
-static const char* const NiFpga_VMS_6_Responder_Signature = "BF60D31B1858EEFD155660346089640D";
+static const char *const NiFpga_VMS_6_Responder_Signature = "BF60D31B1858EEFD155660346089640D";
 
 #if NiFpga_Cpp
 extern "C" {

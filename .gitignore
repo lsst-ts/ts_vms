@@ -8,3 +8,5 @@ ts-VMSd
 .isort.cfg
 .mypy.ini
 .ruff.toml
+src/version.c
+towncrier.toml

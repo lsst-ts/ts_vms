@@ -4,17 +4,18 @@
 Version History
 ===============
 
-v1.1.1
-======
+v1.2.0
+------
 
+* sends Heartbeat signals
 * updated build system
 
 v1.1.0
-======
+------
 
 * improved data readout - in-CSC PSD calculations
 
 v1.0.0
-=======
+------
 
 * First release of the Vibration Monitoring System CSC
