@@ -38,7 +38,6 @@
 #include <NiFpga_VMS_3_Responder.h>
 #include <NiFpga_VMS_6_Controller.h>
 #include <NiFpga_VMS_6_Responder.h>
-#include <NiFpga_VMS_CameraRotator.h>
 #include <VMSApplicationSettings.h>
 #include <VMSPublisher.h>
 #include <cRIO/NiError.h>
@@ -71,17 +70,15 @@ void FPGA::populate(VMSApplicationSettings *vmsApplicationSettings) {
     _vmsApplicationSettings = vmsApplicationSettings;
     session = 0;
     remaining = 0;
-    if (_vmsApplicationSettings->Subsystem == "CameraRotator") {
-        _channels = 3;
-        POPULATE_FPGA(CameraRotator);
-    } else if (_vmsApplicationSettings->Subsystem == "M2") {
+    if (_vmsApplicationSettings->Subsystem == "M2") {
         _channels = 6;
         if (_vmsApplicationSettings->IsController) {
             POPULATE_FPGA(6_Controller);
         } else {
             POPULATE_FPGA(6_Responder);
         }
-    } else if (_vmsApplicationSettings->Subsystem == "M1M3") {
+    } else if ((_vmsApplicationSettings->Subsystem == "M1M3") ||
+               (_vmsApplicationSettings->Subsystem == "CameraRotator")) {
         _channels = 3;
         if (_vmsApplicationSettings->IsController) {
             POPULATE_FPGA(3_Controller);
