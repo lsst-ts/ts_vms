@@ -27,7 +27,8 @@
 
 using namespace LSST::VMS::Commands;
 
-void Update::execute() {
+LSST::cRIO::task_return_t Update::run() {
     VMSPublisher::instance().putMiscellaneous(FPGA::instance().chassisTemperature(),
                                               FPGA::instance().chassisTicks());
+    return Task::DONT_RESCHEDULE;
 }

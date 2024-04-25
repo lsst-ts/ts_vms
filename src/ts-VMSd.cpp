@@ -142,7 +142,7 @@ void MTVMSd::init() {
     accelerometer->enableAccelerometers();
     std::this_thread::sleep_for(1000ms);
 
-    LSST::cRIO::ControllerThread::instance().enqueue(new Commands::EnterControl());
+    LSST::cRIO::ControllerThread::instance().enqueue(std::make_shared<Commands::EnterControl>());
 
     daemonOK();
 }
@@ -168,7 +168,7 @@ int MTVMSd::runLoop() {
     static auto last = steady_clock::now() - 10s;
     auto now = steady_clock::now();
     if (now - last > 1s) {
-        LSST::cRIO::ControllerThread::instance().enqueue(new Commands::Update());
+        LSST::cRIO::ControllerThread::instance().enqueue(std::make_shared<Commands::Update>());
         last = now;
     }
 
