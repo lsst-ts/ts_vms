@@ -90,9 +90,6 @@ cRIO::command_vec MTVMSd::processArgs(int argc, char *const argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    SPDLOG_INFO("Setting root path {}", getConfigRoot());
-    LSST::cRIO::Settings::Path::setRootPath(getConfigRoot());
-
 #ifdef SIMULATOR
     SPDLOG_WARN("Starting ts-VMSd simulator. Version {}", VERSION);
 #else

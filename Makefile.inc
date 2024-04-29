@@ -26,6 +26,14 @@ SAL_CPPFLAGS += $(PKG_CPPFLAGS) \
 	-I${SAL_WORK_DIR}/MTM1M3/cpp/src -I${SAL_WORK_DIR}/MTMount/cpp/src -I${SAL_WORK_DIR}/include \
 	-I${SAL_HOME}/include -I${LSST_SDK_INSTALL}/include
 
+LIBS := $(shell pkg-config yaml-cpp --libs $(silence)) \
+        $(shell pkg-config fmt --libs $(silence)) \
+        $(shell pkg-config fftw3 --libs $(silence)) \
+        -ldl -ldcpssacpp -ldcpsgapi -lddsuser -lddskernel \
+        -lpthread -lddsserialization -lddsconfparser -lddsconf \
+        -lddsdatabase -lddsutil -lddsos \
+        ${SAL_WORK_DIR}/lib/libSAL_MTVMS.a
+
 PKG_LIBS := \
 	$(shell pkg-config yaml-cpp --libs $(silence)) \
 	$(shell pkg-config fftw3 --libs $(silence)) \
