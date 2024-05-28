@@ -26,7 +26,7 @@
 
 #include <mutex>
 
-#include <cRIO/Command.h>
+#include <cRIO/Task.h>
 
 namespace LSST {
 namespace VMS {
@@ -36,12 +36,12 @@ namespace Commands {
  * This command is responsible for running a periodic update.
  * This is an internal command only and cannot be issued via SAL.
  */
-class Update : public cRIO::Command {
+class Update : public cRIO::Task {
 public:
     Update() {}
     virtual ~Update() {}
 
-    void execute() override;
+    cRIO::task_return_t run() override;
 };
 
 } /* namespace Commands */

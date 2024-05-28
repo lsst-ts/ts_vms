@@ -38,7 +38,8 @@
 #include <NiFpga_VMS_3_Responder.h>
 #include <NiFpga_VMS_6_Controller.h>
 #include <NiFpga_VMS_6_Responder.h>
-#include <NiFpga_VMS_CameraRotator.h>
+#include <NiFpga_VMS_CameraRotator_Controller.h>
+#include <NiFpga_VMS_CameraRotator_Responder.h>
 #include <VMSApplicationSettings.h>
 #include <VMSPublisher.h>
 #include <cRIO/NiError.h>
@@ -50,6 +51,7 @@ FPGA::FPGA(token) : SimpleFPGA(LSST::cRIO::VMS) {}
 
 #define NiFpga_VMS_6_Responder_ControlBool_Operate -1
 #define NiFpga_VMS_3_Responder_ControlBool_Operate -1
+#define NiFpga_VMS_CameraRotator_Responder_ControlBool_Operate -1
 
 #define POPULATE_FPGA(type)                                                                    \
     _bitFile = "/var/lib/MTVMS/" NiFpga_VMS_##type##_Bitfile;                                  \
@@ -71,9 +73,13 @@ void FPGA::populate(VMSApplicationSettings *vmsApplicationSettings) {
     _vmsApplicationSettings = vmsApplicationSettings;
     session = 0;
     remaining = 0;
-    if (_vmsApplicationSettings->Subsystem == "CameraRotator") {
+    if ((_vmsApplicationSettings->Subsystem == "M1M3")) {
         _channels = 3;
-        POPULATE_FPGA(CameraRotator);
+        if (_vmsApplicationSettings->IsController) {
+            POPULATE_FPGA(3_Controller);
+        } else {
+            POPULATE_FPGA(3_Responder);
+        }
     } else if (_vmsApplicationSettings->Subsystem == "M2") {
         _channels = 6;
         if (_vmsApplicationSettings->IsController) {
@@ -81,12 +87,12 @@ void FPGA::populate(VMSApplicationSettings *vmsApplicationSettings) {
         } else {
             POPULATE_FPGA(6_Responder);
         }
-    } else if (_vmsApplicationSettings->Subsystem == "M1M3") {
+    } else if ((_vmsApplicationSettings->Subsystem == "CameraRotator")) {
         _channels = 3;
         if (_vmsApplicationSettings->IsController) {
-            POPULATE_FPGA(3_Controller);
+            POPULATE_FPGA(CameraRotator_Controller);
         } else {
-            POPULATE_FPGA(3_Responder);
+            POPULATE_FPGA(CameraRotator_Responder);
         }
     }
 }

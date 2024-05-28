@@ -23,6 +23,7 @@
 #ifndef _VMS_Command_EnterControl_
 #define _VMS_Command_ENterControl_
 
+#include <cRIO/Task.h>
 #include <SAL_MTVMS.h>
 #include <VMSPublisher.h>
 #include <cRIO/Command.h>
@@ -33,13 +34,14 @@ namespace LSST {
 namespace VMS {
 namespace Commands {
 
-class EnterControl : public cRIO::Command {
+class EnterControl : public cRIO::Task {
 public:
-    void execute() override {
+    cRIO::task_return_t run() override {
         SPDLOG_DEBUG("EnterControl");
         VMSPublisher::instance().logSoftwareVersions();
         VMSPublisher::instance().logSimulationMode();
         Events::SummaryState::setState(MTVMS::MTVMS_shared_SummaryStates_StandbyState);
+        return Task::DONT_RESCHEDULE;
     }
 };
 

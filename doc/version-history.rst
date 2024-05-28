@@ -4,6 +4,11 @@
 Version History
 ===============
 
+v1.2.1
+------
+
+* New CameraRotator cRIO module
+
 v1.2.0
 ------
 
