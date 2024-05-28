@@ -25,9 +25,10 @@
 
 #include <cRIO/Task.h>
 #include <SAL_MTVMS.h>
-#include <VMSPublisher.h>
-#include <cRIO/Command.h>
 
+#include <cRIO/Task.h>
+
+#include <VMSPublisher.h>
 #include <Events/SummaryState.h>
 
 namespace LSST {
