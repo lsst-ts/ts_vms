@@ -20,9 +20,15 @@
  * this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <atomic>
+#include <csignal>
+#include <filesystem>
+
 #include <cRIO/Application.h>
 #include <cRIO/SimpleFPGACliApp.h>
 
+#include <Events/FPGAState.h>
+#include <FileAccelerometer.h>
 #include <FPGA.h>
 #include <SettingReader.h>
 #include <VMSApplicationSettings.h>
@@ -38,19 +44,26 @@ public:
     command_vec processArgs(int argc, char* const argv[]) override;
 
     int temperature(command_vec cmds);
+    int record(command_vec cmds);
 
 protected:
     virtual SimpleFPGA* newFPGA(const char* dir) override;
 
 private:
-    std::string subsystem = "";
+    std::string _subsystem = "";
+    VMSApplicationSettings _settings;
 };
 
 VMScli::VMScli(const char* name, const char* description) : SimpleFPGACliApp(name, description) {
+    Events::FPGAState::instance().setPublish(false);
+
     addArgument('c', "<configuration path> use given configuration directory", ':');
 
     addCommand("temperature", std::bind(&VMScli::temperature, this, std::placeholders::_1), "", NEED_FPGA,
                NULL, "Reads cRIO temperature");
+
+    addCommand("record", std::bind(&VMScli::record, this, std::placeholders::_1), "S", NEED_FPGA,
+               "<filename>", "Record VMS values to a file");
 }
 
 void VMScli::processArg(int opt, char* optarg) {
@@ -72,11 +85,11 @@ command_vec VMScli::processArgs(int argc, char* const argv[]) {
                 "provided on command line");
         exit(EXIT_FAILURE);
     }
-    subsystem = ret[0];
+    _subsystem = ret[0];
 #ifdef SIMULATOR
-    SPDLOG_INFO("Initiliaze simulator for {}", subsystem);
+    SPDLOG_INFO("Initiliaze simulator for {}", _subsystem);
 #else
-    SPDLOG_INFO("Initiliaze VMScli FPGA for {}", subsystem);
+    SPDLOG_INFO("Initiliaze VMScli FPGA for {}", _subsystem);
 #endif
     setDebugLevel(getDebugLevel());
     ret.erase(ret.begin());
@@ -89,10 +102,54 @@ int VMScli::temperature(command_vec cmds) {
     return 0;
 }
 
+std::atomic<bool> recordVMS = false;
+
+void sig_int(int signal) { recordVMS = false; }
+
+int VMScli::record(command_vec cmds) {
+    recordVMS = true;
+
+    std::filesystem::path file_path(cmds[0]);
+
+    std::cout << "Recording to " << file_path.string() << ", hit ctrl+c to end" << std::endl;
+
+    auto previous = signal(SIGINT, sig_int);
+
+    try {
+        FileAccelerometer filea(&_settings, file_path);
+        filea.enableAccelerometers();
+
+        int counter = 21;
+
+        while (recordVMS) {
+            if (counter > 10) {
+                std::cout << "Ticks: " << FPGA::instance().chassisTicks() << "\r";
+                std::cout.flush();
+                filea.flush();
+                counter = 0;
+            }
+            for (int i = 0; i < _settings.sensors; i++) {
+                filea.sampleData();
+            }
+            counter++;
+        }
+
+        filea.disableAccelerometers();
+
+    } catch (const std::ios_base::failure& e) {
+        std::cerr << std::endl << "Error writing to " << file_path.string() << ": " << e.what() << std::endl;
+    }
+
+    signal(SIGINT, previous);
+
+    return 0;
+}
+
 SimpleFPGA* VMScli::newFPGA(const char* dir) {
-    VMSApplicationSettings settings = SettingReader::instance().loadVMSApplicationSettings(subsystem);
+    _settings = SettingReader::instance().loadVMSApplicationSettings(_subsystem);
     SPDLOG_INFO("Creating FPGA");
-    FPGA::instance().populate(&settings);
+    FPGA::instance().populate(&_settings);
+
     return &FPGA::instance();
 }
 

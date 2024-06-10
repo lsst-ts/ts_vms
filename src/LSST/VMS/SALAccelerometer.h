@@ -21,34 +21,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef VMSAPPLICATIONSETTINGS_H_
-#define VMSAPPLICATIONSETTINGS_H_
+#ifndef __SAL_ACCELEROMETER_H_
+#define __SAL_ACCELEROMETER_H_
 
-#include <string>
-#include <vector>
+#include <SAL_MTVMS.h>
+
+#include <Accelerometer.h>
+#include <Telemetry/PSD.h>
+#include <VMSApplicationSettings.h>
 
 namespace LSST {
 namespace VMS {
 
-class VMSApplicationSettings {
+/**
+ * VMS SAL Accelerometer sampling.
+ */
+class SALAccelerometer : public Accelerometer {
 public:
-    std::string Subsystem;
-    bool IsController;
-    int32_t period;
-    int outputType;
-    int sensors;
-    std::string RIO;
-    std::vector<double> XCoefficients;
-    std::vector<double> YCoefficients;
-    std::vector<double> ZCoefficients;
-    std::vector<double> XOffsets;
-    std::vector<double> YOffsets;
-    std::vector<double> ZOffsets;
+    SALAccelerometer(VMSApplicationSettings *vmsApplicationSettings);
+    virtual ~SALAccelerometer(void);
 
-    void load(const std::string &filename);
+protected:
+    void processData(int sensor, float acc_x, float acc_y, float acc_z) override;
+
+private:
+    int _dataIndex;
+    MTVMS_dataC *_sampleData;
+    Telemetry::PSD *_psds;
 };
 
 } /* namespace VMS */
 } /* namespace LSST */
 
-#endif /* VMSAPPLICATIONSETTINGS_H_ */
+#endif /* __SAL_ACCELEROMETER_H_ */

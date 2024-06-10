@@ -2,6 +2,7 @@ Subsystem : "CameraRotator"
 IsController : true
 Period: 5
 OutputType: 3
+Sensors: 3
 XCoefficients : [1.0,1.0,1.0]
 YCoefficients : [1.0,1.0,1.0]
 ZCoefficients : [1.0,1.0,1.0]

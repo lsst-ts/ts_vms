@@ -38,6 +38,9 @@ FPGAState::FPGAState(token) {
 }
 
 void FPGAState::send() {
+    if (instance()._publish == false) {
+        return;
+    }
     salReturn ret = VMSPublisher::SAL()->putSample_logevent_fpgaState(&instance());
     if (ret != SAL__OK) {
         SPDLOG_WARN("Can not send fpgaState: {}", ret);

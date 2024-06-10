@@ -21,34 +21,35 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef VMSAPPLICATIONSETTINGS_H_
-#define VMSAPPLICATIONSETTINGS_H_
+#ifndef __FILE_ACCELEROMETER_H_
+#define __FILE_ACCELEROMETER_H_
 
-#include <string>
-#include <vector>
+#include <filesystem>
+#include <fstream>
+
+#include <Accelerometer.h>
 
 namespace LSST {
 namespace VMS {
 
-class VMSApplicationSettings {
+/**
+ * VMS File Accelerometer sampling.
+ */
+class FileAccelerometer : public Accelerometer {
 public:
-    std::string Subsystem;
-    bool IsController;
-    int32_t period;
-    int outputType;
-    int sensors;
-    std::string RIO;
-    std::vector<double> XCoefficients;
-    std::vector<double> YCoefficients;
-    std::vector<double> ZCoefficients;
-    std::vector<double> XOffsets;
-    std::vector<double> YOffsets;
-    std::vector<double> ZOffsets;
+    FileAccelerometer(VMSApplicationSettings *vmsApplicationSettings, std::filesystem::path file_path);
+    virtual ~FileAccelerometer(void);
 
-    void load(const std::string &filename);
+    void flush() { _ofile.flush(); }
+
+protected:
+    void processData(int sensor, float acc_x, float acc_y, float acc_z) override;
+
+private:
+    std::ofstream _ofile;
 };
 
 } /* namespace VMS */
 } /* namespace LSST */
 
-#endif /* VMSAPPLICATIONSETTINGS_H_ */
+#endif /* __FILE_ACCELEROMETER_H_ */

@@ -27,7 +27,6 @@
 #include <unistd.h>
 
 #ifdef SIMULATOR
-#include <Events/FPGAState.h>
 #include <math.h>
 #endif
 

@@ -21,15 +21,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef ACCELEROMETER_H_
-#define ACCELEROMETER_H_
+#ifndef __ACCELEROMETER_H_
+#define __ACCELEROMETER_H_
 
-#include <SAL_MTVMS.h>
-#include <Telemetry/PSD.h>
 #include <VMSApplicationSettings.h>
 
 namespace LSST {
 namespace VMS {
+
+constexpr static int AXIS_PER_SENSOR = 3;
 
 /**
  * VMS Accelerometer sampling.
@@ -44,14 +44,13 @@ public:
 
     void sampleData();
 
+protected:
+    VMSApplicationSettings *_vmsApplicationSettings;
+
+    virtual void processData(int sensor, float acc_x, float acc_y, float acc_z) = 0;
+
 private:
     enum { M1M3, M2, CameraRotator, TMA } _subsystem;
-
-    int _numberOfSensors;
-    int _dataIndex;
-    MTVMS_dataC *_sampleData;
-    Telemetry::PSD *_psds;
-    VMSApplicationSettings *_vmsApplicationSettings;
 
     float _convert(uint32_t **data);
 };
@@ -59,4 +58,4 @@ private:
 } /* namespace VMS */
 } /* namespace LSST */
 
-#endif /* ACCELEROMETER_H_ */
+#endif /* __ACCELEROMETER_H_ */
