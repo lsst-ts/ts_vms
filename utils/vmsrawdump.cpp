@@ -97,15 +97,6 @@ using namespace std::chrono;
 void dump_file(const char *filename) {
     std::ifstream file;
 
-    for (int i = 1; i <= 8; i++) {
-        std::cout << "Acc" << +i;
-        if (i < 8) {
-            std::cout << ",";
-        }
-    }
-
-    std::cout << std::endl;
-
     try {
         // auto file = std::ifstream(argv[i], std::ifstream::in |
         // std::fstream::binary);
@@ -128,6 +119,11 @@ void dump_file(const char *filename) {
 
         uint8_t sensors = subsystem[len - 1];
         subsystem[len - 1] = 0;
+
+        if (!(sensors == 3 || sensors == 6)) {
+            std::cerr << "Expect to see 3 or 6 sensors in " << filename << ", saw " << +sensors << "."
+                      << std::endl;
+        }
 
         std::cout << subsystem << " time (UTC)";
 

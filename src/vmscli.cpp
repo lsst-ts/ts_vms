@@ -47,7 +47,7 @@ public:
     int record(command_vec cmds);
 
 protected:
-    virtual SimpleFPGA* newFPGA(const char* dir) override;
+    virtual SimpleFPGA* newFPGA(const char* dir, bool& fpga_singleton) override;
 
 private:
     std::string _subsystem = "";
@@ -145,10 +145,11 @@ int VMScli::record(command_vec cmds) {
     return 0;
 }
 
-SimpleFPGA* VMScli::newFPGA(const char* dir) {
+SimpleFPGA* VMScli::newFPGA(const char* dir, bool& fpga_singleton) {
     _settings = SettingReader::instance().loadVMSApplicationSettings(_subsystem);
     SPDLOG_INFO("Creating FPGA");
     FPGA::instance().populate(&_settings);
+    fpga_singleton = true;
 
     return &FPGA::instance();
 }
