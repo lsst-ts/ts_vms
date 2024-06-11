@@ -4,6 +4,11 @@
 Version History
 ===============
 
+v1.2.2
+------
+
+* vmscli, vmsrawdump utilities
+
 v1.2.1
 ------
 

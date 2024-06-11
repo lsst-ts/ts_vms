@@ -6,7 +6,7 @@ include Makefile.inc
 #
 
 # All Target
-all: vmscli ts-VMSd
+all: vmscli utils/vmsrawdump ts-VMSd
 
 src/libVMS.a: FORCE
 	$(MAKE) -C src libVMS.a
@@ -19,6 +19,9 @@ ts-VMSd: src/ts-VMSd.cpp.o src/libVMS.a
 vmscli: src/vmscli.cpp.o src/libVMS.a
 	@echo '[LD ] $@'
 	${co}$(CPP) $(LIBS_FLAGS) -o $@ $^  ../ts_cRIOcpp/lib/libcRIOcpp.a $(LIBS) $(shell pkg-config --libs readline $(silence)) -lreadline
+
+utils/vmsrawdump: utils/vmsrawdump.cpp
+	@${MAKE} -C utils
 
 # Other Targets
 clean:
@@ -48,7 +51,7 @@ ipk: ts-VMS_$(VERSION)_x64.ipk
 
 TS_DDSCONFIG=../ts_ddsconfig
 
-ts-VMS_$(VERSION)_x64.ipk: ts-VMSd
+ts-VMS_$(VERSION)_x64.ipk: vmscli utils/vmsrawdump ts-VMSd
 	@echo '[MK ] ipk $@'
 	${co}mkdir -p ipk/data/usr/bin
 	${co}mkdir -p ipk/data/usr/sbin
@@ -57,6 +60,7 @@ ts-VMS_$(VERSION)_x64.ipk: ts-VMSd
 	${co}mkdir -p ipk/data/var/lib/MTVMS
 	${co}mkdir -p ipk/control
 	${co}cp vmscli ipk/data/usr/bin/
+	${co}cp utils/vmsrawdump ipk/data/usr/bin/
 	${co}cp ts-VMSd ipk/data/usr/sbin/
 	${co}cp init ipk/data/etc/init.d/ts-VMS
 	${co}cp default_ts-VMS ipk/data/etc/default/ts-VMS

@@ -97,8 +97,8 @@ command_vec VMScli::processArgs(int argc, char* const argv[]) {
 }
 
 int VMScli::temperature(command_vec cmds) {
-    std::cout << "cRIO temperature is " << std::setprecision(2) << FPGA::instance().chassisTemperature()
-              << "\u00b0C" << std::endl;
+    std::cout << "cRIO temperature is " << std::fixed << std::setprecision(2)
+              << FPGA::instance().chassisTemperature() << "\u00b0C" << std::endl;
     return 0;
 }
 
