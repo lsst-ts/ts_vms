@@ -31,13 +31,13 @@
 #include <cRIO/SALSink.h>
 #include <cRIO/Settings/Path.h>
 
-#include <Accelerometer.h>
 #include <Commands/EnterControl.h>
 #include <Commands/Update.h>
 #include <Events/FPGAState.h>
 #include <Events/Heartbeat.h>
 #include <FPGA.h>
 #include <FPGAAddresses.h>
+#include <SALAccelerometer.h>
 #include <SettingReader.h>
 #include <VMSPublisher.h>
 #include <VMSSubscriber.h>
@@ -64,7 +64,7 @@ private:
     // SAL object to receive all events from other VMS
     std::shared_ptr<SAL_MTVMS> _allvmsSAL;
 
-    Accelerometer *accelerometer;
+    SALAccelerometer *accelerometer;
 };
 
 SALSinkMacro(MTVMS);
@@ -124,7 +124,7 @@ void MTVMSd::init() {
 
     // spdlog::apply_all([&](std::shared_ptr<spdlog::logger> l) { l->flush(); });
 
-    accelerometer = new Accelerometer(&_vmsApplicationSettings);
+    accelerometer = new SALAccelerometer(&_vmsApplicationSettings);
 
     SPDLOG_INFO("Main: Setting publisher");
     VMSPublisher::instance().setSAL(_vmsSAL);

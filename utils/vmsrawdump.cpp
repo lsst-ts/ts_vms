@@ -138,9 +138,17 @@ void dump_file(const char *filename) {
         std::cout << std::endl;
 
         auto micros_d = duration_cast<microseconds>(system_clock::now().time_since_epoch()).count();
+        long int old_micros = 0;
 
         while (!file.eof()) {
             file.read(reinterpret_cast<char *>(&micros_d), sizeof(micros_d));
+
+            if (old_micros >= micros_d) {
+                std::cerr << "Recorded timestamps in file " << filename << " aren't increasing ("
+                          << old_micros << " >= " << micros_d << "), skipping rest of the file!" << std::endl;
+                return;
+            }
+
             microseconds micros(micros_d);
             seconds sec = duration_cast<seconds>(micros);
             micros -= sec;
@@ -159,6 +167,8 @@ void dump_file(const char *filename) {
             }
 
             std::cout << std::endl;
+
+            old_micros = micros_d;
         }
     } catch (const std::ios_base::failure &e) {
         if (file.eof()) {
