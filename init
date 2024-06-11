@@ -48,12 +48,12 @@ startdaemon(){
 	done
 	logger -t VMS_start -p user.info "Starting with IP $LSST_DDS_IP"
 	echo -n "Starting TS VMS $1:"
-	start-stop-daemon --start --oknodo --pidfile ${PIDFILE}_$1.pid --startas $DAEMON -- -p ${PIDFILE}_$1.pid -u vms:vms $1
+	start-stop-daemon --start --oknodo --pidfile ${PIDFILE}_$1.pid --exec $DAEMON -- -p ${PIDFILE}_$1.pid -u vms:vms $1
 	echo "done"
 }
 stopdaemon(){
 	echo -n "Stopping TS VMS $1:"
-	start-stop-daemon --stop --oknodo --remove-pidfile --retry 5 -p ${PIDFILE}_$1.pid
+	start-stop-daemon --stop --oknodo --remove-pidfile --user vms --retry 5 -p ${PIDFILE}_$1.pid
 	sudo -E -u vms -g vms LD_LIBRARY_PATH=$OSPL_HOME/lib PATH=$PATH:$OSPL_HOME/bin $OSPL_HOME/bin/ospl stop
 	echo "done"
 }
