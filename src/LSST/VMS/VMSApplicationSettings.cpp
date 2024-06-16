@@ -39,6 +39,7 @@ void VMSApplicationSettings::load(const std::string &filename) {
         IsController = doc["IsController"].as<bool>();
         period = doc["Period"].as<int32_t>(5);
         outputType = doc["OutputType"].as<int>(3);
+        sensors = doc["Sensors"].as<int>();
         RIO = doc["RIO"].as<std::string>("RIO0");
         XCoefficients = doc["XCoefficients"].as<std::vector<double>>();
         YCoefficients = doc["YCoefficients"].as<std::vector<double>>();

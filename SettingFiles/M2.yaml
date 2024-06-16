@@ -1,7 +1,8 @@
 Subsystem : "M2"
+IsController : true
 Period: 5
 OutputType: 3
-IsController : true
+Sensors: 6
 XCoefficients : [1.0,1.0,1.0]
 YCoefficients : [1.0,1.0,1.0]
 ZCoefficients : [1.0,1.0,1.0]

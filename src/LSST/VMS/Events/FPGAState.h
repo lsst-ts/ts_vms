@@ -46,6 +46,12 @@ public:
     void setMisc(bool newReady, bool newTimeouted, bool newStopped, bool newFIFOFull);
 
     /***
+     * Sets flag if state changes should be outpublished. Used to NOT publish
+     * from vmsclient, as vmsclient doesn't have any SAL connecton.
+     */
+    void setPublish(bool publish) { _publish = publish; }
+
+    /***
      * Readout state from FPGA, sends updates if data were changed
      */
     void checkState();
@@ -59,6 +65,7 @@ public:
 
 private:
     std::mutex _stateMutex;
+    bool _publish = true;
 };
 
 }  // namespace Events

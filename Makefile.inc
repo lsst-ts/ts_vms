@@ -54,7 +54,8 @@ endif
 LIBS += $(PKG_LIBS) -ldl -ldcpssacpp -ldcpsgapi -lddsuser -lddskernel \
 	-lpthread -lddsserialization -lddsconfparser -lddsconf \
 	-lddsdatabase -lddsutil -lddsos \
-	${SAL_WORK_DIR}/lib/libSAL_MTVMS.a
+	${SAL_WORK_DIR}/lib/libSAL_MTVMS.a \
+	-lstdc++fs
 
 LIBS_FLAGS += -L${OSPL_HOME}/lib -L${LSST_SDK_INSTALL}/lib
 

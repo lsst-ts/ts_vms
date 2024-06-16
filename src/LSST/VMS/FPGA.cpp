@@ -27,7 +27,6 @@
 #include <unistd.h>
 
 #ifdef SIMULATOR
-#include <Events/FPGAState.h>
 #include <math.h>
 #endif
 
@@ -44,8 +43,7 @@
 #include <VMSPublisher.h>
 #include <cRIO/NiError.h>
 
-namespace LSST {
-namespace VMS {
+using namespace LSST::VMS;
 
 FPGA::FPGA(token) : SimpleFPGA(LSST::cRIO::VMS) {}
 
@@ -259,6 +257,3 @@ void FPGA::readResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs) 
     }
 #endif
 }
-
-} /* namespace VMS */
-} /* namespace LSST */
