@@ -36,7 +36,7 @@ const NiFpga_FxpTypeInfo ResponseFxpTypeInfo = {1, 24, 8};
 
 class VMSApplicationSettings;
 
-/*!
+/***
  * The class used to communicate with the FPGA.
  */
 class FPGA : public LSST::cRIO::SimpleFPGA, public LSST::cRIO::Singleton<FPGA> {
@@ -69,13 +69,15 @@ private:
     uint8_t _channels;
     const char *_bitFile;
     const char *_signature;
-    uint32_t _responseFIFO;
+    uint32_t _averageFIFO;
+    uint32_t _minFIFO;
+    uint32_t _maxFIFO;
+    uint32_t _rawOutputFIFO;
     uint32_t _chasisTemperatureResource;
     NiFpga_FxpTypeInfo _chasisTemperatureTypeInfo;
     uint32_t _operateResource;
     uint32_t _readyResource;
     uint32_t _periodResource;
-    uint32_t _outputTypeResource;
     uint32_t _stoppedResource;
     uint32_t _timeoutedResource;
     uint32_t _fifoFullResource;

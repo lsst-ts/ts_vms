@@ -49,15 +49,16 @@ FPGA::FPGA(token) : SimpleFPGA(LSST::cRIO::VMS) {}
 
 #define NiFpga_VMS_6_Responder_ControlBool_Operate -1
 #define NiFpga_VMS_3_Responder_ControlBool_Operate -1
-#define NiFpga_VMS_CameraRotator_Responder_ControlBool_Operate -1
 
 #define POPULATE_FPGA(type)                                                                    \
     _bitFile = "/var/lib/MTVMS/" NiFpga_VMS_##type##_Bitfile;                                  \
     _signature = NiFpga_VMS_##type##_Signature;                                                \
-    _responseFIFO = NiFpga_VMS_##type##_TargetToHostFifoU32_ResponseFIFO;                      \
+    _averageFIFO = NiFpga_VMS_##type##_TargetToHostFifoSgl_Average;                            \
+    _minFIFO = NiFpga_VMS_##type##_TargetToHostFifoFxp_Min_Resource;                           \
+    _maxFIFO = NiFpga_VMS_##type##_TargetToHostFifoFxp_Max_Resource;                           \
+    _rawOutputFIFO = NiFpga_VMS_##type##_TargetToHostFifoFxp_RawOutput_Resource;               \
     _operateResource = NiFpga_VMS_##type##_ControlBool_Operate;                                \
     _periodResource = NiFpga_VMS_##type##_ControlU32_Periodms;                                 \
-    _outputTypeResource = NiFpga_VMS_##type##_ControlI16_Outputtype;                           \
     _readyResource = NiFpga_VMS_##type##_IndicatorBool_Ready;                                  \
     _stoppedResource = NiFpga_VMS_##type##_IndicatorBool_Stopped;                              \
     _timeoutedResource = NiFpga_VMS_##type##_IndicatorBool_Timeouted;                          \
@@ -71,7 +72,8 @@ void FPGA::populate(VMSApplicationSettings *vmsApplicationSettings) {
     _vmsApplicationSettings = vmsApplicationSettings;
     session = 0;
     remaining = 0;
-    if ((_vmsApplicationSettings->Subsystem == "M1M3")) {
+    if ((_vmsApplicationSettings->Subsystem == "M1M3" ||
+         _vmsApplicationSettings->Subsystem == "CameraRotator")) {
         _channels = 3;
         if (_vmsApplicationSettings->IsController) {
             POPULATE_FPGA(3_Controller);
@@ -85,13 +87,8 @@ void FPGA::populate(VMSApplicationSettings *vmsApplicationSettings) {
         } else {
             POPULATE_FPGA(6_Responder);
         }
-    } else if ((_vmsApplicationSettings->Subsystem == "CameraRotator")) {
-        _channels = 3;
-        if (_vmsApplicationSettings->IsController) {
-            POPULATE_FPGA(CameraRotator_Controller);
-        } else {
-            POPULATE_FPGA(CameraRotator_Responder);
-        }
+    } else {
+        throw std::runtime_error("Cannot create VMS for settings " + _vmsApplicationSettings->Subsystem);
     }
 }
 
@@ -160,7 +157,6 @@ void FPGA::setOperate(bool operate) {
 void FPGA::setPeriodOutputType(uint32_t period, int16_t outputType) {
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WriteU32(session, _periodResource, period));
-    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WriteI16(session, _outputTypeResource, outputType));
 #else
     // _ready = true;
 #endif
@@ -211,7 +207,7 @@ void FPGA::readResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs) 
     SPDLOG_TRACE("FPGA: readResponseFIFO({}, {})", length, timeoutInMs);
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_ReadFifoU32(session, _responseFIFO, data, length, timeoutInMs, &remaining));
+                       NiFpga_ReadFifoU32(session, _averageFIFO, data, length, timeoutInMs, &remaining));
 // enable this if you are looking for raw, at source accelerometers data
 #if 0
     size_t i = length;
