@@ -32,7 +32,6 @@
 
 #include <Events/FPGAState.h>
 #include <FPGA.h>
-#include <FPGAAddresses.h>
 #include <NiFpga_VMS_3_Controller.h>
 #include <NiFpga_VMS_3_Responder.h>
 #include <NiFpga_VMS_6_Controller.h>
@@ -157,8 +156,6 @@ void FPGA::setOperate(bool operate) {
 void FPGA::setPeriodOutputType(uint32_t period, int16_t outputType) {
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WriteU32(session, _periodResource, period));
-#else
-    // _ready = true;
 #endif
     Events::FPGAState::instance().setPeriodOutputType(period, outputType);
 }
@@ -203,7 +200,7 @@ bool FPGA::FIFOFull() {
 #endif
 }
 
-void FPGA::readResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs) {
+void FPGA::readResponseFIFOs(uint32_t *data, size_t length, int32_t timeoutInMs) {
     SPDLOG_TRACE("FPGA: readResponseFIFO({}, {})", length, timeoutInMs);
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__,
