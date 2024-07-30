@@ -25,7 +25,6 @@
 
 #include <Accelerometer.h>
 #include <FPGA.h>
-#include <FPGAAddresses.h>
 
 #define G2M_S_2(g) (g * 9.80665)
 
