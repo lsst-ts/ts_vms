@@ -1,7 +1,7 @@
 /*
- * FPGA Interface C API 23.0 source file.
+ * FPGA Interface C API 24.3 source file.
  *
- * Copyright (c) 2023,
+ * Copyright (c) 2024,
  * National Instruments Corporation.
  * All rights reserved.
  */
@@ -1108,6 +1108,22 @@ NiFpga_Status NiFpga_AcquireFifoReadElementsDbl(NiFpga_Session session, uint32_t
                    : NiFpga_Status_ResourceNotInitialized;
 }
 
+static NiFpga_Status(NiFpga_CCall* NiFpga_acquireFifoReadRegion)(
+        NiFpga_Session session, uint32_t fifo, void** region, void** elements, NiFpga_Bool isSigned,
+        uint32_t elementSizeBytes, size_t elementsRequested, uint32_t timeout, size_t* elementsAcquired,
+        size_t* elementsRemaining) = NULL;
+
+NiFpga_Status NiFpga_AcquireFifoReadRegion(NiFpga_Session session, uint32_t fifo, void** region,
+                                           void** elements, NiFpga_Bool isSigned, uint32_t elementSizeBytes,
+                                           size_t elementsRequested, uint32_t timeout,
+                                           size_t* elementsAcquired, size_t* elementsRemaining) {
+    return NiFpga_acquireFifoReadRegion
+                   ? NiFpga_acquireFifoReadRegion(session, fifo, region, elements, isSigned, elementSizeBytes,
+                                                  elementsRequested, timeout, elementsAcquired,
+                                                  elementsRemaining)
+                   : NiFpga_Status_VersionMismatch;
+}
+
 static NiFpga_Status(NiFpga_CCall* NiFpga_acquireFifoWriteElementsBool)(
         NiFpga_Session session, uint32_t fifo, NiFpga_Bool** elements, size_t elementsRequested,
         uint32_t timeout, size_t* elementsAcquired, size_t* elementsRemaining) = NULL;
@@ -1252,12 +1268,36 @@ NiFpga_Status NiFpga_AcquireFifoWriteElementsDbl(NiFpga_Session session, uint32_
                    : NiFpga_Status_ResourceNotInitialized;
 }
 
+static NiFpga_Status(NiFpga_CCall* NiFpga_acquireFifoWriteRegion)(
+        NiFpga_Session session, uint32_t fifo, void** region, void** elements, NiFpga_Bool isSigned,
+        uint32_t elementSizeBytes, size_t elementsRequested, uint32_t timeout, size_t* elementsAcquired,
+        size_t* elementsRemaining) = NULL;
+
+NiFpga_Status NiFpga_AcquireFifoWriteRegion(NiFpga_Session session, uint32_t fifo, void** region,
+                                            void** elements, NiFpga_Bool isSigned, uint32_t elementSizeBytes,
+                                            size_t elementsRequested, uint32_t timeout,
+                                            size_t* elementsAcquired, size_t* elementsRemaining) {
+    return NiFpga_acquireFifoWriteRegion
+                   ? NiFpga_acquireFifoWriteRegion(session, fifo, region, elements, isSigned,
+                                                   elementSizeBytes, elementsRequested, timeout,
+                                                   elementsAcquired, elementsRemaining)
+                   : NiFpga_Status_VersionMismatch;
+}
+
 static NiFpga_Status(NiFpga_CCall* NiFpga_releaseFifoElements)(NiFpga_Session session, uint32_t fifo,
                                                                size_t elements) = NULL;
 
 NiFpga_Status NiFpga_ReleaseFifoElements(NiFpga_Session session, uint32_t fifo, size_t elements) {
     return NiFpga_releaseFifoElements ? NiFpga_releaseFifoElements(session, fifo, elements)
                                       : NiFpga_Status_ResourceNotInitialized;
+}
+
+static NiFpga_Status(NiFpga_CCall* NiFpga_releaseFifoRegion)(NiFpga_Session session, uint32_t fifo,
+                                                             void* region) = NULL;
+
+NiFpga_Status NiFpga_ReleaseFifoRegion(NiFpga_Session session, uint32_t fifo, void* region) {
+    return NiFpga_releaseFifoRegion ? NiFpga_releaseFifoRegion(session, fifo, region)
+                                    : NiFpga_Status_VersionMismatch;
 }
 
 static NiFpga_Status(NiFpga_CCall* NiFpga_getPeerToPeerFifoEndpoint)(NiFpga_Session session, uint32_t fifo,
@@ -1528,6 +1568,7 @@ static const struct {
          1},
         {"NiFpgaDll_AcquireFifoReadElementsDbl", (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadElementsDbl,
          1},
+        {"NiFpgaDll_AcquireFifoReadRegion", (NiFpga_FunctionPointer*)&NiFpga_acquireFifoReadRegion, 0},
         {"NiFpgaDll_AcquireFifoWriteElementsBool",
          (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsBool, 1},
         {"NiFpgaDll_AcquireFifoWriteElementsI8", (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsI8,
@@ -1550,7 +1591,9 @@ static const struct {
          (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsSgl, 1},
         {"NiFpgaDll_AcquireFifoWriteElementsDbl",
          (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteElementsDbl, 1},
+        {"NiFpgaDll_AcquireFifoWriteRegion", (NiFpga_FunctionPointer*)&NiFpga_acquireFifoWriteRegion, 0},
         {"NiFpgaDll_ReleaseFifoElements", (NiFpga_FunctionPointer*)&NiFpga_releaseFifoElements, 1},
+        {"NiFpgaDll_ReleaseFifoRegion", (NiFpga_FunctionPointer*)&NiFpga_releaseFifoRegion, 0},
         {"NiFpgaDll_GetPeerToPeerFifoEndpoint", (NiFpga_FunctionPointer*)&NiFpga_getPeerToPeerFifoEndpoint,
          1},
         {"NiFpgaDll_MapP2PSinkFifo", (NiFpga_FunctionPointer*)&NiFpga_mapP2PSinkFifo, 0},
