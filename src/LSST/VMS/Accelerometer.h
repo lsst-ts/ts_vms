@@ -25,6 +25,7 @@
 #define __ACCELEROMETER_H_
 
 #include <VMSApplicationSettings.h>
+#include <RawRecord.h>
 
 namespace LSST {
 namespace VMS {
@@ -44,15 +45,16 @@ public:
 
     void sampleData();
 
+    void rawData(int length = 1000);
+
 protected:
     VMSApplicationSettings *_vmsApplicationSettings;
 
     virtual void processData(int sensor, float acc_x, float acc_y, float acc_z) = 0;
+    virtual void processRawData(int sensor, RawData &data) = 0;
 
 private:
     enum { M1M3, M2, CameraRotator, TMA } _subsystem;
-
-    float _convert(uint32_t **data);
 };
 
 } /* namespace VMS */

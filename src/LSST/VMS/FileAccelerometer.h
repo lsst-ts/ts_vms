@@ -44,6 +44,7 @@ public:
 
 protected:
     void processData(int sensor, float acc_x, float acc_y, float acc_z) override;
+    void processRawData(int sensor, RawData &data) override;
 
 private:
     std::ofstream _ofile;

@@ -21,37 +21,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SAL_ACCELEROMETER_H_
-#define __SAL_ACCELEROMETER_H_
+#include <RawRecord.h>
 
-#include <SAL_MTVMS.h>
-
-#include <Accelerometer.h>
-#include <Telemetry/PSD.h>
-#include <VMSApplicationSettings.h>
-
-namespace LSST {
-namespace VMS {
-
-/**
- * VMS SAL Accelerometer sampling.
- */
-class SALAccelerometer : public Accelerometer {
-public:
-    SALAccelerometer(VMSApplicationSettings *vmsApplicationSettings);
-    virtual ~SALAccelerometer(void);
-
-protected:
-    void processData(int sensor, float acc_x, float acc_y, float acc_z) override;
-    void processRawData(int sensor, RawData &data) override;
-
-private:
-    int _dataIndex;
-    MTVMS_dataC *_sampleData;
-    Telemetry::PSD *_psds;
-};
-
-} /* namespace VMS */
-} /* namespace LSST */
-
-#endif /* __SAL_ACCELEROMETER_H_ */
+using namespace LSST::VMS;

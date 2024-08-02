@@ -53,42 +53,51 @@ void Accelerometer::disableAccelerometers() {
 
 void Accelerometer::sampleData() {
     SPDLOG_TRACE("Accelerometer: sampleData()");
-    uint32_t buffer[_vmsApplicationSettings->sensors * AXIS_PER_SENSOR];
+    float average[_vmsApplicationSettings->sensors * AXIS_PER_SENSOR];
+    float max[_vmsApplicationSettings->sensors * AXIS_PER_SENSOR];
+    float min[_vmsApplicationSettings->sensors * AXIS_PER_SENSOR];
 
-    FPGA::instance().readResponseFIFO(buffer, _vmsApplicationSettings->sensors * AXIS_PER_SENSOR,
-                                      _vmsApplicationSettings->period * 2);
+    FPGA::instance().readResponseFIFOs(min, max, average, _vmsApplicationSettings->sensors * AXIS_PER_SENSOR,
+                                       _vmsApplicationSettings->period * 2);
 
-    uint32_t *dataBuffer = buffer;
+    float *dataBuffer = average;
     for (int s = 0; s < _vmsApplicationSettings->sensors; s++) {
-        float acc_x = _convert(&dataBuffer);
-        float acc_y = _convert(&dataBuffer);
-        float acc_z = _convert(&dataBuffer);
+        float acc_x = *dataBuffer;
+        dataBuffer++;
+        float acc_y = *dataBuffer;
+        dataBuffer++;
+        float acc_z = *dataBuffer;
+        dataBuffer++;
 
         processData(s, acc_x, acc_y, acc_z);
     }
 }
 
-float Accelerometer::_convert(uint32_t **data) {
-    union {
-        uint32_t i;
-        float f;
-    } u32float;
-    switch (_vmsApplicationSettings->outputType) {
-        case 1:
-        case 2:
-            u32float.f = G2M_S_2(NiFpga_ConvertFromFxpToFloat(ResponseFxpTypeInfo, **data));
-            ++*data;
-            return u32float.f;
-        case 3:
-            u32float.i = **data;
-            ++*data;
-            return u32float.f;
-        case 50:
-            *data += 3;
-            u32float.i = **data;
-            ++*data;
-            return u32float.f;
-        default:
-            return NAN;
+void Accelerometer::rawData(int length) {
+    SPDLOG_TRACE("Accelerometer: sampleData()");
+
+    float raw[_vmsApplicationSettings->sensors * AXIS_PER_SENSOR * length];
+
+    FPGA::instance().readRawFIFO(raw, _vmsApplicationSettings->sensors * AXIS_PER_SENSOR * length,
+                                 _vmsApplicationSettings->period);
+
+    RawData records[_vmsApplicationSettings->sensors];
+
+    float *dataBuffer = raw;
+    for (int i = 0; i < length; i++) {
+        for (int s = 0; s < _vmsApplicationSettings->sensors; s++) {
+            float acc_x = *dataBuffer;
+            dataBuffer++;
+            float acc_y = *dataBuffer;
+            dataBuffer++;
+            float acc_z = *dataBuffer;
+            dataBuffer++;
+
+            records[s].push_back(RawRecord(acc_x, acc_y, acc_z));
+        }
+    }
+
+    for (int s = 0; s < _vmsApplicationSettings->sensors; s++) {
+        processRawData(s, records[s]);
     }
 }
