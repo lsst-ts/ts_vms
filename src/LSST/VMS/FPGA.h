@@ -60,7 +60,8 @@ public:
     bool stopped();
     bool FIFOFull();
 
-    void readResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs);
+    void readResponseFIFOs(float *min, float *max, float *average, size_t length, int32_t timeoutInMs);
+    void readRawFIFO(float *raw, size_t length, int32_t timeoutInMs);
 
 private:
     VMSApplicationSettings *_vmsApplicationSettings;

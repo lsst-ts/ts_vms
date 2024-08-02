@@ -14,7 +14,7 @@ src/libVMS.a: FORCE
 # Tool invocations
 ts-VMSd: src/ts-VMSd.cpp.o src/libVMS.a
 	@echo '[LD ] $@'
-	${co}$(CPP) $(LIBS_FLAGS) -o $@ $^ ${CRIOCPP}/lib/libcRIOcpp.a $(LIBS)
+	${co}$(CPP) $(LIBS_FLAGS) -o $@ $^ ${CRIOCPP}/lib/libcRIOcpp.a $(LIBS) $(shell pkg-config --libs readline $(silence)) -lreadline
 
 vmscli: src/vmscli.cpp.o src/libVMS.a
 	@echo '[LD ] $@'

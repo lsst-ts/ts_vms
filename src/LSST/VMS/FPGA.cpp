@@ -185,7 +185,7 @@ bool FPGA::stopped() {
     NiFpga_Bool ret = false;
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_ReadBool(session, _stoppedResource, &ret));
     return ret;
-#else
+#
     return false;
 #endif
 }
@@ -200,24 +200,26 @@ bool FPGA::FIFOFull() {
 #endif
 }
 
-void FPGA::readResponseFIFOs(uint32_t *data, size_t length, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: readResponseFIFO({}, {})", length, timeoutInMs);
+void FPGA::readResponseFIFOs(float *min, float *max, float *average, size_t length, int32_t timeoutInMs) {
+    SPDLOG_TRACE("FPGA: readResponseFIFOs({}, {})", length, timeoutInMs);
 #ifndef SIMULATOR
-    cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_ReadFifoU32(session, _averageFIFO, data, length, timeoutInMs, &remaining));
-// enable this if you are looking for raw, at source accelerometers data
-#if 0
-    size_t i = length;
-    for (i = 0; i < length; i++) {
-        if (data[i] != 0) {
-            SPDLOG_INFO("readResponseFIFO {} {:.12f}", i, data[i]);
-            break;
+    uint64_t buffer[length];
+
+    auto fxpFifoToFloats = [&buffer, length, this, timeoutInMs](uint32_t resource, float *data) {
+        cRIO::NiThrowError(__PRETTY_FUNCTION__,
+                           NiFpga_ReadFifoU64(session, resource, buffer, length, timeoutInMs, &remaining));
+        for (size_t i = 0; i < length; i++) {
+            // the fixed point data are of the same, {1,24,4}, type
+            data[i] = NiFpga_ConvertFromFxpToFloat(NiFpga_VMS_3_Controller_TargetToHostFifoFxp_Min_TypeInfo,
+                                                   buffer[i]);
         }
-    }
-    if (i == length) {
-        SPDLOG_INFO("No data");
-    }
-#endif
+    };
+
+    fxpFifoToFloats(_minFIFO, min);
+    fxpFifoToFloats(_maxFIFO, max);
+
+    cRIO::NiThrowError(__PRETTY_FUNCTION__,
+                       NiFpga_ReadFifoSgl(session, _averageFIFO, average, length, timeoutInMs, &remaining));
 #else
     static long count = 0;
     static auto start = std::chrono::steady_clock::now();
@@ -238,7 +240,9 @@ void FPGA::readResponseFIFOs(uint32_t *data, size_t length, int32_t timeoutInMs)
                         3 * cos(frequency_to_period(17.5));
             float d = ((0.0002 * static_cast<double>(random()) / RAND_MAX) - 0.0001) + pv / 10.0;
             uint64_t fxp = NiFpga_ConvertFromFloatToFxp(ResponseFxpTypeInfo, d);
-            data[ch_index] = fxp;
+            min[ch_index] = fxp - 0.1;
+            average[ch_index] = fxp;
+            max[ch_index] = fxp + 0.1;
 #if 0
             std::cout << pv << " " << count << " ch_index " << ch_index << " " << fxp << " " << d << " "
                       << data[ch_index] << " " << Events::FPGAState::instance().getPeriod() << " "
@@ -248,5 +252,21 @@ void FPGA::readResponseFIFOs(uint32_t *data, size_t length, int32_t timeoutInMs)
         start += std::chrono::milliseconds(period);
         std::this_thread::sleep_until(start);
     }
+#endif
+}
+
+void FPGA::readRawFIFO(float *raw, size_t length, int32_t timeoutInMs) {
+    SPDLOG_TRACE("FPGA: readRawFIFO({}, {})", length, timeoutInMs);
+#ifndef SIMULATOR
+
+    uint64_t data[length];
+
+    cRIO::NiThrowError(__PRETTY_FUNCTION__,
+                       NiFpga_ReadFifoU64(session, _rawOutputFIFO, data, length, timeoutInMs, &remaining));
+
+    for (size_t i = 0; i < length; i++) {
+    };
+#else
+
 #endif
 }

@@ -21,37 +21,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SAL_ACCELEROMETER_H_
-#define __SAL_ACCELEROMETER_H_
+#ifndef __RAWRECORD_H_
+#define __RAWRECORD_H_
 
-#include <SAL_MTVMS.h>
-
-#include <Accelerometer.h>
-#include <Telemetry/PSD.h>
-#include <VMSApplicationSettings.h>
+#include <vector>
 
 namespace LSST {
 namespace VMS {
 
-/**
- * VMS SAL Accelerometer sampling.
- */
-class SALAccelerometer : public Accelerometer {
+struct RawRecord {
 public:
-    SALAccelerometer(VMSApplicationSettings *vmsApplicationSettings);
-    virtual ~SALAccelerometer(void);
+    RawRecord(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
 
-protected:
-    void processData(int sensor, float acc_x, float acc_y, float acc_z) override;
-    void processRawData(int sensor, RawData &data) override;
-
-private:
-    int _dataIndex;
-    MTVMS_dataC *_sampleData;
-    Telemetry::PSD *_psds;
+    float x;
+    float y;
+    float z;
 };
 
-} /* namespace VMS */
-} /* namespace LSST */
+class RawData : public std::vector<RawRecord> {
+public:
+    RawData() {}
+};
 
-#endif /* __SAL_ACCELEROMETER_H_ */
+}  // namespace VMS
+}  // namespace LSST
+
+#endif

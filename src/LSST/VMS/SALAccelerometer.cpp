@@ -82,3 +82,5 @@ void SALAccelerometer::processData(int sensor, float acc_x, float acc_y, float a
         }
     }
 }
+
+void SALAccelerometer::processRawData(int sensor, RawData &data) {}
