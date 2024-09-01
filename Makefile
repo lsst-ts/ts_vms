@@ -33,13 +33,13 @@ src/%.cpp.o: src/%.cpp
 	$(MAKE) -C src $(patsubst src/%,%,$@)
 
 tests: tests/Makefile tests/*.cpp
-	@${MAKE} -C SIMULATOR=1 tests
+	@${MAKE} -C tests SIMULATOR=1
 
 run_tests: tests
 	@${MAKE} -C tests run
 
 junit: tests
-	@${MAKE} -C SIMULATOR=1 tests junit
+	@${MAKE} -C tests junit SIMULATOR=1
 
 doc:
 	${co}doxygen Doxyfile
