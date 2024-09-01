@@ -36,7 +36,6 @@
 #include <Events/FPGAState.h>
 #include <Events/Heartbeat.h>
 #include <FPGA.h>
-#include <FPGAAddresses.h>
 #include <SALAccelerometer.h>
 #include <SettingReader.h>
 #include <VMSPublisher.h>

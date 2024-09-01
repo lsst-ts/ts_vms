@@ -32,7 +32,6 @@
 
 #include <Events/FPGAState.h>
 #include <FPGA.h>
-#include <FPGAAddresses.h>
 #include <NiFpga_VMS_3_Controller.h>
 #include <NiFpga_VMS_3_Responder.h>
 #include <NiFpga_VMS_6_Controller.h>
@@ -49,15 +48,16 @@ FPGA::FPGA(token) : SimpleFPGA(LSST::cRIO::VMS) {}
 
 #define NiFpga_VMS_6_Responder_ControlBool_Operate -1
 #define NiFpga_VMS_3_Responder_ControlBool_Operate -1
-#define NiFpga_VMS_CameraRotator_Responder_ControlBool_Operate -1
 
 #define POPULATE_FPGA(type)                                                                    \
     _bitFile = "/var/lib/MTVMS/" NiFpga_VMS_##type##_Bitfile;                                  \
     _signature = NiFpga_VMS_##type##_Signature;                                                \
-    _responseFIFO = NiFpga_VMS_##type##_TargetToHostFifoU32_ResponseFIFO;                      \
+    _averageFIFO = NiFpga_VMS_##type##_TargetToHostFifoSgl_Average;                            \
+    _minFIFO = NiFpga_VMS_##type##_TargetToHostFifoFxp_Min_Resource;                           \
+    _maxFIFO = NiFpga_VMS_##type##_TargetToHostFifoFxp_Max_Resource;                           \
+    _rawOutputFIFO = NiFpga_VMS_##type##_TargetToHostFifoFxp_RawOutput_Resource;               \
     _operateResource = NiFpga_VMS_##type##_ControlBool_Operate;                                \
     _periodResource = NiFpga_VMS_##type##_ControlU32_Periodms;                                 \
-    _outputTypeResource = NiFpga_VMS_##type##_ControlI16_Outputtype;                           \
     _readyResource = NiFpga_VMS_##type##_IndicatorBool_Ready;                                  \
     _stoppedResource = NiFpga_VMS_##type##_IndicatorBool_Stopped;                              \
     _timeoutedResource = NiFpga_VMS_##type##_IndicatorBool_Timeouted;                          \
@@ -71,7 +71,8 @@ void FPGA::populate(VMSApplicationSettings *vmsApplicationSettings) {
     _vmsApplicationSettings = vmsApplicationSettings;
     session = 0;
     remaining = 0;
-    if ((_vmsApplicationSettings->Subsystem == "M1M3")) {
+    if ((_vmsApplicationSettings->Subsystem == "M1M3" ||
+         _vmsApplicationSettings->Subsystem == "CameraRotator")) {
         _channels = 3;
         if (_vmsApplicationSettings->IsController) {
             POPULATE_FPGA(3_Controller);
@@ -85,13 +86,8 @@ void FPGA::populate(VMSApplicationSettings *vmsApplicationSettings) {
         } else {
             POPULATE_FPGA(6_Responder);
         }
-    } else if ((_vmsApplicationSettings->Subsystem == "CameraRotator")) {
-        _channels = 3;
-        if (_vmsApplicationSettings->IsController) {
-            POPULATE_FPGA(CameraRotator_Controller);
-        } else {
-            POPULATE_FPGA(CameraRotator_Responder);
-        }
+    } else {
+        throw std::runtime_error("Cannot create VMS for settings " + _vmsApplicationSettings->Subsystem);
     }
 }
 
@@ -160,9 +156,6 @@ void FPGA::setOperate(bool operate) {
 void FPGA::setPeriodOutputType(uint32_t period, int16_t outputType) {
 #ifndef SIMULATOR
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WriteU32(session, _periodResource, period));
-    cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_WriteI16(session, _outputTypeResource, outputType));
-#else
-    // _ready = true;
 #endif
     Events::FPGAState::instance().setPeriodOutputType(period, outputType);
 }
@@ -192,7 +185,7 @@ bool FPGA::stopped() {
     NiFpga_Bool ret = false;
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_ReadBool(session, _stoppedResource, &ret));
     return ret;
-#else
+#
     return false;
 #endif
 }
@@ -207,24 +200,26 @@ bool FPGA::FIFOFull() {
 #endif
 }
 
-void FPGA::readResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs) {
-    SPDLOG_TRACE("FPGA: readResponseFIFO({}, {})", length, timeoutInMs);
+void FPGA::readResponseFIFOs(float *min, float *max, float *average, size_t length, int32_t timeoutInMs) {
+    SPDLOG_TRACE("FPGA: readResponseFIFOs({}, {})", length, timeoutInMs);
 #ifndef SIMULATOR
-    cRIO::NiThrowError(__PRETTY_FUNCTION__,
-                       NiFpga_ReadFifoU32(session, _responseFIFO, data, length, timeoutInMs, &remaining));
-// enable this if you are looking for raw, at source accelerometers data
-#if 0
-    size_t i = length;
-    for (i = 0; i < length; i++) {
-        if (data[i] != 0) {
-            SPDLOG_INFO("readResponseFIFO {} {:.12f}", i, data[i]);
-            break;
+    uint64_t buffer[length];
+
+    auto fxpFifoToFloats = [&buffer, length, this, timeoutInMs](uint32_t resource, float *data) {
+        cRIO::NiThrowError(__PRETTY_FUNCTION__,
+                           NiFpga_ReadFifoU64(session, resource, buffer, length, timeoutInMs, &remaining));
+        for (size_t i = 0; i < length; i++) {
+            // the fixed point data are of the same, {1,24,4}, type
+            data[i] = NiFpga_ConvertFromFxpToFloat(NiFpga_VMS_3_Controller_TargetToHostFifoFxp_Min_TypeInfo,
+                                                   buffer[i]);
         }
-    }
-    if (i == length) {
-        SPDLOG_INFO("No data");
-    }
-#endif
+    };
+
+    fxpFifoToFloats(_minFIFO, min);
+    fxpFifoToFloats(_maxFIFO, max);
+
+    cRIO::NiThrowError(__PRETTY_FUNCTION__,
+                       NiFpga_ReadFifoSgl(session, _averageFIFO, average, length, timeoutInMs, &remaining));
 #else
     static long count = 0;
     static auto start = std::chrono::steady_clock::now();
@@ -245,7 +240,9 @@ void FPGA::readResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs) 
                         3 * cos(frequency_to_period(17.5));
             float d = ((0.0002 * static_cast<double>(random()) / RAND_MAX) - 0.0001) + pv / 10.0;
             uint64_t fxp = NiFpga_ConvertFromFloatToFxp(ResponseFxpTypeInfo, d);
-            data[ch_index] = fxp;
+            min[ch_index] = fxp - 0.1;
+            average[ch_index] = fxp;
+            max[ch_index] = fxp + 0.1;
 #if 0
             std::cout << pv << " " << count << " ch_index " << ch_index << " " << fxp << " " << d << " "
                       << data[ch_index] << " " << Events::FPGAState::instance().getPeriod() << " "
@@ -255,5 +252,21 @@ void FPGA::readResponseFIFO(uint32_t *data, size_t length, int32_t timeoutInMs) 
         start += std::chrono::milliseconds(period);
         std::this_thread::sleep_until(start);
     }
+#endif
+}
+
+void FPGA::readRawFIFO(float *raw, size_t length, int32_t timeoutInMs) {
+    SPDLOG_TRACE("FPGA: readRawFIFO({}, {})", length, timeoutInMs);
+#ifndef SIMULATOR
+
+    uint64_t data[length];
+
+    cRIO::NiThrowError(__PRETTY_FUNCTION__,
+                       NiFpga_ReadFifoU64(session, _rawOutputFIFO, data, length, timeoutInMs, &remaining));
+
+    for (size_t i = 0; i < length; i++) {
+    };
+#else
+
 #endif
 }

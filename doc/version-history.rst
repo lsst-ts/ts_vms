@@ -4,6 +4,11 @@
 Version History
 ===============
 
+v1.3.0
+------
+
+* true raw output
+
 v1.2.2
 ------
 
