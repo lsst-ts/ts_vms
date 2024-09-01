@@ -97,7 +97,7 @@ void PSD::configure(short int sensorId, size_t dataPoints, float samplingPeriod)
     }
 }
 
-void PSD::append(float x, float y, float z) {
+void PSD::append(float x, float y, float z, bool publish) {
     if (_cache[0] == NULL) {
         throw std::runtime_error(fmt::format("unconfigured PSD for sensor {}", sensor));
     }
@@ -121,7 +121,9 @@ void PSD::append(float x, float y, float z) {
             }
         }
 
-        VMSPublisher::instance().putPsd(this);
+        if (publish) {
+            VMSPublisher::instance().putPsd(this);
+        }
         _clearPSDs();
 
         _cache_size = 0;

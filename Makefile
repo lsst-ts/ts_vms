@@ -36,7 +36,7 @@ tests: tests/Makefile tests/*.cpp
 	@${MAKE} -C tests SIMULATOR=1
 
 run_tests: tests
-	@${MAKE} -C tests run
+	@${MAKE} -C tests run SIMULATOR=1
 
 junit: tests
 	@${MAKE} -C tests junit SIMULATOR=1
