@@ -107,9 +107,13 @@ void PSD::append(float x, float y, float z) {
 
     _cache_size++;
 
-    if (_cache_size >= static_cast<size_t>(numDataPoints) * 2) {
-        float *tels[3] = {accelerationPSDX, accelerationPSDY, accelerationPSDZ};
 
+    if (_cache_size >= static_cast<size_t>(numDataPoints) * 2) {
+#ifdef WITH_SAL_KAFKA
+        float *tels[3] = {accelerationPSDX.data(), accelerationPSDY.data(), accelerationPSDZ.data()};
+#else
+        float *tels[3] = {accelerationPSDX, accelerationPSDY, accelerationPSDZ};
+#endif
         for (int i = 0; i < 3; i++) {
             fftw_execute(_plans[i]);
 
@@ -126,6 +130,7 @@ void PSD::append(float x, float y, float z) {
 
         _cache_size = 0;
     }
+
 }
 
 float PSD::frequency(size_t index) { return index * (1 / (2.0f * _samplingPeriod)) / numDataPoints; }
