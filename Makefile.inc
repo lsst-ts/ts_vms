@@ -30,7 +30,7 @@ ifdef WITH_SAL_KAFKA
 	-I${SAL_WORK_DIR}/MTVMS/cpp/src -I${SAL_WORK_DIR}/include -I${CRIOCPP} \
 	-I${SAL_HOME}/include -I${LSST_SDK_INSTALL}/include -I${SAL_HOME}/include -I${LSST_SAL_PREFIX}/include -I${LSST_SAL_PREFIX}/include/avro
   LIBS += $(PKG_LIBS) -ldl -lpthread -L/usr/lib64/boost${BOOST_RELEASE} -lboost_filesystem -lboost_iostreams \
-	-lboost_program_options -lboost_system \
+	-lboost_program_options -lboost_system ../ts_cRIOcpp/lib/libcRIOcpp.a \
 	-L${LSST_SAL_PREFIX}/lib -lcurl -lrdkafka++ -lrdkafka -lavrocpp -lavro -ljansson -lserdes++ -lserdes ${LSST_SAL_PREFIX}/lib/libSAL_MTVMS.a -lstdc++fs
   LIBS_FLAGS += -L${LSST_SAL_PREFIX}/lib
 else
