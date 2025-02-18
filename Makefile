@@ -51,7 +51,6 @@ ipk: ts-VMS_$(VERSION)_x64.ipk
 
 TS_DDSCONFIG=../ts_ddsconfig
 
-ifdef WITH_SAL_KAFKA
 ts-VMS_$(VERSION)_x64.ipk: vmscli utils/vmsrawdump ts-VMSd
 	@echo '[MK ] ipk $@'
 	${co}mkdir -p ipk/data/usr/bin
@@ -74,30 +73,3 @@ ts-VMS_$(VERSION)_x64.ipk: vmscli utils/vmsrawdump ts-VMSd
 	${co}tar czf ipk/data.tar.gz -P --transform "s#^ipk/data#.#" --owner=0 --group=0 ipk/data
 	${co}tar czf ipk/control.tar.gz -P --transform "s#^ipk/control#.#" --owner=0 --group=0 ipk/control
 	${co}ar r $@ ipk/control.tar.gz ipk/data.tar.gz ipk/debian-binary
-else
-ts-VMS_$(VERSION)_x64.ipk: vmscli utils/vmsrawdump ts-VMSd
-	@echo '[MK ] ipk $@'
-	${co}mkdir -p ipk/data/usr/bin
-	${co}mkdir -p ipk/data/usr/sbin
-	${co}mkdir -p ipk/data/etc/init.d
-	${co}mkdir -p ipk/data/etc/default
-	${co}mkdir -p ipk/data/var/lib/MTVMS
-	${co}mkdir -p ipk/control
-	${co}cp vmscli ipk/data/usr/bin/
-	${co}cp utils/vmsrawdump ipk/data/usr/bin/
-	${co}cp ts-VMSd ipk/data/usr/sbin/
-	${co}cp init ipk/data/etc/init.d/ts-VMS
-	${co}cp default_ts-VMS ipk/data/etc/default/ts-VMS
-	${co}cp -r SettingFiles/* ipk/data/var/lib/MTVMS
-	${co}cp -r Bitfiles/* ipk/data/var/lib/MTVMS
-	${co}cp -r ${TS_DDSCONFIG}/python/lsst/ts/ddsconfig/data/config/ospl-embedded-shmem.xml ipk/data/var/lib/MTVMS || echo "Cannot find ${TS_DDSCONFIG} ospl-embedded-shmem.xml - check it out?"
-	${co}cp -r ${TS_DDSCONFIG}/python/lsst/ts/ddsconfig/data/qos/QoS.xml ipk/data/var/lib/MTVMS || echo "Cannot find ${TS_DDSCONFIG} QoS.xml - check it out?"
-	${co}sed s?@VERSION@?$(VERSION)?g control.ipk.in > ipk/control/control
-	${co}cp postinst prerm postrm ipk/control
-	${co}echo -e "/etc/default/ts-VMS\n/var/lib/MTVMS/M1M3.yaml\n/var/lib/MTVMS/M2.yaml\n/var/lib/MTVMS/CameraRotator.yaml\n/var/lib/MTVMS/ospl-embedded-shmem.xml\n/var/lib/MTVMS/QoS.xml" > ipk/control/conffiles
-	${co}echo "2.0" > ipk/debian-binary
-	${co}tar czf ipk/data.tar.gz -P --transform "s#^ipk/data#.#" --owner=0 --group=0 ipk/data
-	${co}tar czf ipk/control.tar.gz -P --transform "s#^ipk/control#.#" --owner=0 --group=0 ipk/control
-	${co}ar r $@ ipk/control.tar.gz ipk/data.tar.gz ipk/debian-binary
-endif
-
