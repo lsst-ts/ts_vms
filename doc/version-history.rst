@@ -4,6 +4,11 @@
 Version History
 ===============
 
+v1.3.0
+------
+
+* support for Kafka interface
+
 v1.2.2
 ------
 

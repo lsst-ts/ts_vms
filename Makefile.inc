@@ -1,9 +1,12 @@
 # define to "" to produce verbose output
+#define VERBOSE ""
+
 ifndef VERBOSE
   co := @
   silence := --silence-errors
 endif
 
+# change as needed
 c_opts := -DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE
 
 ifdef DEBUG
@@ -15,49 +18,36 @@ endif
 
 CRIOCPP := ../ts_cRIOcpp/
 
-PKG_CPPFLAGS := \
-	$(shell pkg-config yaml-cpp --cflags $(silence)) \
-	$(shell pkg-config spdlog --cflags $(silence)) \
-	$(shell pkg-config fmt --cflags $(silence)) \
-	$(shell pkg-config fftw3 --cflags $(silence))
+PKG_CPPFLAGS := $(shell pkg-config yaml-cpp spdlog fmt fftw3 --cflags $(silence))
 
-SAL_CPPFLAGS += $(PKG_CPPFLAGS) \
-	-I${OSPL_HOME}/include -I${OSPL_HOME}/include/sys -I${OSPL_HOME}/include/dcps/C++/SACPP \
-	-I${SAL_WORK_DIR}/MTM1M3/cpp/src -I${SAL_WORK_DIR}/MTMount/cpp/src -I${SAL_WORK_DIR}/include \
-	-I${SAL_HOME}/include -I${LSST_SDK_INSTALL}/include
+SAL_CPPFLAGS += $(PKG_CPPFLAGS)  \
+	-I${SAL_WORK_DIR}/MTVMS/cpp/src \
+	-I${SAL_WORK_DIR}/include -I${CRIOCPP} -I. \
+	-I${SAL_HOME}/include -I${LSST_SDK_INSTALL}/include -I${SAL_HOME}/include -I${LSST_SAL_PREFIX}/include -I${LSST_SAL_PREFIX}/include/avro
+LIBS += $(PKG_LIBS) -ldl -lpthread -L/usr/lib64/boost${BOOST_RELEASE} -lboost_filesystem -lboost_iostreams \
+	-lboost_program_options -lboost_system ../ts_cRIOcpp/lib/libcRIOcpp.a \
+	${SAL_WORK_DIR}/lib/libSAL_MTVMS.a \
+	-L${LSST_SAL_PREFIX}/lib -L${SAL_WORK_DIR}/lib -lcurl -lrdkafka++ -lrdkafka -lavrocpp -lavro -ljansson -lserdes++ -lserdes -lsasl2
+LIBS_FLAGS += -L${LSST_SAL_PREFIX}/lib
 
-LIBS := $(shell pkg-config yaml-cpp --libs $(silence)) \
-        $(shell pkg-config fmt --libs $(silence)) \
-        $(shell pkg-config fftw3 --libs $(silence)) \
-        -ldl -ldcpssacpp -ldcpsgapi -lddsuser -lddskernel \
-        -lpthread -lddsserialization -lddsconfparser -lddsconf \
-        -lddsdatabase -lddsutil -lddsos \
-        ${SAL_WORK_DIR}/lib/libSAL_MTVMS.a
-
-PKG_LIBS := \
-	$(shell pkg-config yaml-cpp --libs $(silence)) \
-	$(shell pkg-config fftw3 --libs $(silence)) \
+PKG_LIBS := $(shell pkg-config yaml-cpp fftw3 --libs $(silence)) 
 
 CPP := g++ -std=c++17 -Wall -fPIE ${c_opts}
 
+# compile x86 simulator or real cRIO stuff
 ifdef SIMULATOR
   C := gcc -Wall ${c_opts}
-  CPP += -pedantic -DSIMULATOR
+  CPP += -DSIMULATOR
   PKG_LIBS += $(shell pkg-config spdlog --libs $(silence))
 else
   C := gcc -Wall -fmessage-length=0 ${c_opts}
   CPP += -fmessage-length=0
-  # static linkage for cRIO binary
-  PKG_LIBS += $(shell pkg-config spdlog --libs $(silence) | sed -E 's/-l([a-z0-9]*)/-l:lib\1.a/g')
+  PKG_LIBS += $(shell pkg-config spdlog --libs $(silence))
 endif
 
-LIBS += $(PKG_LIBS) -ldl -ldcpssacpp -ldcpsgapi -lddsuser -lddskernel \
-	-lpthread -lddsserialization -lddsconfparser -lddsconf \
-	-lddsdatabase -lddsutil -lddsos \
-	${SAL_WORK_DIR}/lib/libSAL_MTVMS.a \
-	-lstdc++fs
-
-LIBS_FLAGS += -L${OSPL_HOME}/lib -L${LSST_SDK_INSTALL}/lib
+LIBS += $(PKG_LIBS) -ldl -lpthread -L/usr/lib64/boost${BOOST_RELEASE} -lboost_filesystem -lboost_iostreams \
+	-lboost_program_options -lboost_system \
+	-L${LSST_SAL_PREFIX}/lib -lcurl -lrdkafka++ -lrdkafka -lavrocpp -lavro -ljansson
 
 VERSION := $(shell git describe --tags --dirty 2>/dev/null || echo "unknown:non-git")
 GIT_HASH := $(shell git rev-parse HEAD 2>/dev/null || echo "unknown-non-git")

@@ -108,8 +108,7 @@ void PSD::append(float x, float y, float z) {
     _cache_size++;
 
     if (_cache_size >= static_cast<size_t>(numDataPoints) * 2) {
-        float *tels[3] = {accelerationPSDX, accelerationPSDY, accelerationPSDZ};
-
+        float *tels[3] = {accelerationPSDX.data(), accelerationPSDY.data(), accelerationPSDZ.data()};
         for (int i = 0; i < 3; i++) {
             fftw_execute(_plans[i]);
 
