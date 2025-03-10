@@ -4,6 +4,11 @@
 Version History
 ===============
 
+v1.3.1
+------
+
+* Simplified init script
+
 v1.3.0
 ------
 

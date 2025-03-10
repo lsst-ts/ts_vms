@@ -31,19 +31,6 @@ if [ -z "$VMS" ]; then
 fi
 
 startdaemon(){
-	# make sure network is up and running
-	attemps=0
-	export LSST_DDS_IP=`ip route get 1 | awk '{print $7;exit}'`
-	while [ -z $LSST_DDS_IP ]; do
-		sleep 1
-		export LSST_DDS_IP=`ip route get 1 | awk '{print $7;exit}'`
-		let attemps+=1
-		if [ $attemps -gt 60 ]; then
-			logger -t VMS_start -p user.error "Timeouted waiting for interface"
-			exit 1
-		fi
-	done
-	logger -t VMS_start -p user.info "Starting with IP $LSST_DDS_IP"
 	echo -n "Starting TS VMS $1:"
 	start-stop-daemon --start --oknodo --pidfile ${PIDFILE}_$1.pid --exec $DAEMON -- -p ${PIDFILE}_$1.pid -u vms:vms $1
 	echo "done"
