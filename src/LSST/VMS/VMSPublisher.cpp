@@ -49,7 +49,6 @@ void VMSPublisher::logSoftwareVersions() {
     MTVMS_logevent_softwareVersionsC versions;
     versions.salVersion = SAL_MTVMS::getSALVersion();
     versions.xmlVersion = SAL_MTVMS::getXMLVersion();
-    versions.openSpliceVersion = SAL_MTVMS::getOSPLVersion();
     versions.cscVersion = VERSION;
     versions.subsystemVersions = "";
     _vmsSAL->logEvent_softwareVersions(&versions, 0);
