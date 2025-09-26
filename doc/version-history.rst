@@ -8,6 +8,7 @@ v1.3.1
 ------
 
 * Simplified init script
+* Removed openSpliceVersion
 
 v1.3.0
 ------
