@@ -41,7 +41,7 @@ public:
         SPDLOG_DEBUG("EnterControl");
         VMSPublisher::instance().logSoftwareVersions();
         VMSPublisher::instance().logSimulationMode();
-        Events::SummaryState::setState(MTVMS::MTVMS_shared_SummaryStates_StandbyState);
+        Events::SummaryState::set_state(MTVMS::MTVMS_shared_SummaryStates_StandbyState);
         return Task::DONT_RESCHEDULE;
     }
 };

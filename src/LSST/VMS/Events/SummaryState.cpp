@@ -45,23 +45,23 @@ void SummaryState::send() {
 }
 
 bool SummaryState::active() {
-    std::lock_guard<std::mutex> lockG(_stateMutex);
+    std::lock_guard<std::mutex> lockG(_state_mutex);
     return summaryState == MTVMS_shared_SummaryStates_DisabledState ||
            summaryState == MTVMS_shared_SummaryStates_EnabledState;
 }
 
 bool SummaryState::enabled() {
-    std::lock_guard<std::mutex> lockG(_stateMutex);
+    std::lock_guard<std::mutex> lockG(_state_mutex);
     return summaryState == MTVMS_shared_SummaryStates_EnabledState;
 }
 
-void SummaryState::_switchState(int newState) {
-    std::lock_guard<std::mutex> lockG(_stateMutex);
-    SPDLOG_TRACE("SummaryState::_switchState from {} to {}", summaryState, newState);
-    if (summaryState == newState) {
-        throw std::runtime_error(fmt::format("Already in {} state", newState));
+void SummaryState::_switch_state(int new_state) {
+    std::lock_guard<std::mutex> lockG(_state_mutex);
+    SPDLOG_TRACE("SummaryState::_switch_state from {} to {}", summaryState, new_state);
+    if (summaryState == new_state) {
+        throw std::runtime_error(fmt::format("Already in {} state", new_state));
     }
-    switch (newState) {
+    switch (new_state) {
         case MTVMS_shared_SummaryStates_DisabledState:
             if (summaryState != MTVMS_shared_SummaryStates_StandbyState &&
                 summaryState != MTVMS_shared_SummaryStates_EnabledState) {
@@ -87,9 +87,9 @@ void SummaryState::_switchState(int newState) {
             }
             break;
         default:
-            throw std::runtime_error(fmt::format("Invalid target state: {}", newState));
+            throw std::runtime_error(fmt::format("Invalid target state: {}", new_state));
     }
     instance()._updated = true;
-    summaryState = newState;
+    summaryState = new_state;
     send();
 }

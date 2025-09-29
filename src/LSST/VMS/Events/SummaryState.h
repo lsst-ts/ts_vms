@@ -63,17 +63,20 @@ public:
     bool enabled();
 
     /**
+     * Chanegs CSC state.
+     *
+     * @param new_state New CSC state.
      *
      * @multithreading safe
      */
-    static void setState(int newState) { instance()._switchState(newState); }
+    static void set_state(int new_state) { instance()._switch_state(new_state); }
     static void send();
 
 private:
-    void _switchState(int newState);
+    void _switch_state(int new_state);
     bool _updated;
 
-    std::mutex _stateMutex;
+    std::mutex _state_mutex;
 };
 
 }  // namespace Events

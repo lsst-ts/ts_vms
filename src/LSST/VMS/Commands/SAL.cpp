@@ -36,24 +36,24 @@ using namespace MTVMS;
 void SAL_start::execute() {
     SPDLOG_INFO("Starting, settings={}", params.configurationOverride);
 
-    Events::SummaryState::setState(MTVMS_shared_SummaryStates_DisabledState);
+    Events::SummaryState::set_state(MTVMS_shared_SummaryStates_DisabledState);
     ackComplete();
     SPDLOG_INFO("Started");
 }
 
 void SAL_enable::execute() {
-    Events::SummaryState::setState(MTVMS_shared_SummaryStates_EnabledState);
+    Events::SummaryState::set_state(MTVMS_shared_SummaryStates_EnabledState);
     ackComplete();
     SPDLOG_INFO("Enabled");
 }
 
 void SAL_disable::execute() {
-    Events::SummaryState::setState(MTVMS_shared_SummaryStates_DisabledState);
+    Events::SummaryState::set_state(MTVMS_shared_SummaryStates_DisabledState);
     ackComplete();
 }
 
 void SAL_standby::execute() {
-    Events::SummaryState::setState(MTVMS_shared_SummaryStates_StandbyState);
+    Events::SummaryState::set_state(MTVMS_shared_SummaryStates_StandbyState);
     ackComplete();
     SPDLOG_INFO("Standby");
 }
