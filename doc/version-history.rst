@@ -4,6 +4,11 @@
 Version History
 ===============
 
+v1.3.2
+------
+
+* Transition to Offline state on CSC exit
+
 v1.3.1
 ------
 

@@ -1,4 +1,4 @@
-FROM lsstts/develop-env:develop as crio-develop
+FROM lsstts/salobj:develop as crio-develop
 
 USER root
 RUN chmod a+rwX -R /home/saluser/
@@ -13,7 +13,7 @@ RUN source ~/.setup.sh \
     && echo > .crio_setup.sh -e \
 echo "Configuring cRIO development environment" \\n\
 export SHELL=bash \\n\
-source /home/saluser/.setup_salobj.sh \\n\
+source /home/saluser/repos/ts_sal/setupKafka.env \\n\
 export PATH=\$CONDA_PREFIX/bin:\$PATH \\n\
 export LIBS="-L\$CONDA_PREFIX/lib" \\n\
 export CPP_FLAGS="-I\$CONDA_PREFIX/include" \\n
@@ -24,7 +24,7 @@ RUN source ~/.crio_setup.sh && cd repos/ts_sal \
 
 RUN source ~/.crio_setup.sh && cd $TS_XML_DIR \
     && git fetch && git checkout $XML_BRANCH && git pull \
-    && salgenerator generate cpp MTVMS
+    && salgeneratorKafka generate cpp MTVMS
 
 FROM crio-develop
 

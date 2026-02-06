@@ -145,6 +145,8 @@ void MTVMSd::init() {
 }
 
 void MTVMSd::done() {
+    Events::SummaryState::set_state(MTVMS::MTVMS_shared_SummaryStates_OfflineState);
+
     accelerometer->disableAccelerometers();
 
     LSST::cRIO::ControllerThread::instance().stop();
