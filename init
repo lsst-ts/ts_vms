@@ -63,7 +63,10 @@ case "$1" in
 	startall
 	;;
   status)
-	status $DAEMON
+	for v in $VMS; do
+		echo -n $v" "
+		status -p ${PIDFILE}_$v.pid $DAEMON
+	done
 	exit $?
 	;;
   *)
