@@ -40,7 +40,7 @@ public:
     virtual ~VMSSubscriber();
 
 protected:
-    void run(std::unique_lock<std::mutex> &lock) override;
+    void run(std::unique_lock<std::mutex>& lock) override;
 
 private:
     std::map<std::string, std::function<void(void)>> _commands;

@@ -48,9 +48,9 @@ using namespace LSST::VMS;
 
 class MTVMSd : public LSST::cRIO::CSC {
 public:
-    MTVMSd(const char *name, const char *description) : CSC(name, description) {}
+    MTVMSd(const char* name, const char* description) : CSC(name, description) {}
 
-    cRIO::command_vec processArgs(int argc, char *const argv[]) override;
+    cRIO::command_vec processArgs(int argc, char* const argv[]) override;
 
 protected:
     void init() override;
@@ -63,15 +63,15 @@ private:
     // SAL object to receive all events from other VMS
     std::shared_ptr<SAL_MTVMS> _allvmsSAL;
 
-    SALAccelerometer *accelerometer;
+    SALAccelerometer* accelerometer;
 };
 
 SALSinkMacro(MTVMS);
 
 int getIndex(const std::string subsystem) {
-    const char *subsystems[] = {"M1M3", "M2", "CameraRotator", NULL};
+    const char* subsystems[] = {"M1M3", "M2", "CameraRotator", NULL};
     int index = 1;
-    for (const char **s = subsystems; *s != NULL; s++, index++) {
+    for (const char** s = subsystems; *s != NULL; s++, index++) {
         if (subsystem == *s) {
             return index;
         }
@@ -80,7 +80,7 @@ int getIndex(const std::string subsystem) {
     exit(EXIT_FAILURE);
 }
 
-cRIO::command_vec MTVMSd::processArgs(int argc, char *const argv[]) {
+cRIO::command_vec MTVMSd::processArgs(int argc, char* const argv[]) {
     auto ret = CSC::processArgs(argc, argv);
     if (ret.size() != 1) {
         SPDLOG_CRITICAL(
@@ -178,14 +178,14 @@ int MTVMSd::runLoop() {
     return LSST::cRIO::ControllerThread::exitRequested() ? 0 : 1;
 }
 
-int main(int argc, char *const argv[]) {
+int main(int argc, char* const argv[]) {
     MTVMSd csc("MTVMS", "Vibration Monitoring System CSC");
 
     csc.processArgs(argc, argv);
 
     try {
         csc.run(&(FPGA::instance()));
-    } catch (LSST::cRIO::NiError &nie) {
+    } catch (LSST::cRIO::NiError& nie) {
         SPDLOG_CRITICAL("Main: Error initializing VMS FPGA: {}", nie.what());
     }
 

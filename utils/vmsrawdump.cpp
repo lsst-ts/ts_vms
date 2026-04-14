@@ -94,7 +94,7 @@
 
 using namespace std::chrono;
 
-void dump_file(const char *filename) {
+void dump_file(const char* filename) {
     std::ifstream file;
 
     try {
@@ -141,7 +141,7 @@ void dump_file(const char *filename) {
         long int old_micros = 0;
 
         while (!file.eof()) {
-            file.read(reinterpret_cast<char *>(&micros_d), sizeof(micros_d));
+            file.read(reinterpret_cast<char*>(&micros_d), sizeof(micros_d));
 
             if (old_micros >= micros_d) {
                 std::cerr << "Recorded timestamps in file " << filename << " aren't increasing ("
@@ -162,7 +162,7 @@ void dump_file(const char *filename) {
 
             for (i = 0; i < sensors * 3; i++) {
                 float value;
-                file.read(reinterpret_cast<char *>(&value), sizeof(value));
+                file.read(reinterpret_cast<char*>(&value), sizeof(value));
                 std::cout << ", " << value;
             }
 
@@ -170,7 +170,7 @@ void dump_file(const char *filename) {
 
             old_micros = micros_d;
         }
-    } catch (const std::ios_base::failure &e) {
+    } catch (const std::ios_base::failure& e) {
         if (file.eof()) {
             return;
         }
@@ -178,7 +178,7 @@ void dump_file(const char *filename) {
     }
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     if (argc == 1) {
         std::cerr << "Decodes raw VMS accelerometer output. Needs at least one file "
                      "as an argument."

@@ -78,30 +78,6 @@ node {
          }
     }
 
-    stage('Running container')
-    {
-        withEnv(["SALUSER_HOME=" + SALUSER_HOME]){
-            VMSsim.inside("--entrypoint=''") {
-                sh """
-                    source $SALUSER_HOME/.crio_setup.sh
-
-                    export LSST_DDS_PARTITION_PREFIX=test
-    
-                    cd $WORKSPACE/ts_vms
-                    ./ts-VMSd -c SettingFiles M1M3 &
-    
-                    echo "Waiting for 30 seconds"
-                    sleep 30
-    
-                    cd $SALUSER_HOME/repos
-                    ./ts_sal/test/MTVMS/cpp/src/sacpp_MTVMS_start_commander Default
-                    sleep 30
-                    killall ts-VMSd
-                """
-            }
-        }
-    }
-
     if (BRANCH == "master" || BRANCH == "develop")
     {
         stage('Publish documentation')

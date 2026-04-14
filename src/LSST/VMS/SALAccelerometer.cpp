@@ -33,7 +33,7 @@
 
 using namespace LSST::VMS;
 
-SALAccelerometer::SALAccelerometer(VMSApplicationSettings *vmsApplicationSettings)
+SALAccelerometer::SALAccelerometer(VMSApplicationSettings* vmsApplicationSettings)
         : Accelerometer(vmsApplicationSettings) {
     SPDLOG_DEBUG("Accelerometer::Accelerometer()");
 
@@ -83,4 +83,4 @@ void SALAccelerometer::processData(int sensor, float acc_x, float acc_y, float a
     }
 }
 
-void SALAccelerometer::processRawData(int sensor, RawData &data) {}
+void SALAccelerometer::processRawData(int sensor, RawData& data) {}

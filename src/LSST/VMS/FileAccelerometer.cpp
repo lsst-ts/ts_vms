@@ -33,7 +33,7 @@
 
 using namespace LSST::VMS;
 
-FileAccelerometer::FileAccelerometer(VMSApplicationSettings *vmsApplicationSettings,
+FileAccelerometer::FileAccelerometer(VMSApplicationSettings* vmsApplicationSettings,
                                      std::filesystem::path file_path)
         : Accelerometer(vmsApplicationSettings) {
     SPDLOG_DEBUG("FlleAccelerometer::FileAccelerometer({})", file_path.string());
@@ -49,10 +49,10 @@ FileAccelerometer::FileAccelerometer(VMSApplicationSettings *vmsApplicationSetti
     // some magic string to identify a file
     _ofile.write("VMS", 3);
     uint8_t d = _vmsApplicationSettings->Subsystem.length() + 1;
-    _ofile.write(reinterpret_cast<char *>(&d), 1);
+    _ofile.write(reinterpret_cast<char*>(&d), 1);
     _ofile.write(_vmsApplicationSettings->Subsystem.c_str(), d - 1);
     d = _vmsApplicationSettings->sensors;
-    _ofile.write(reinterpret_cast<char *>(&d), 1);
+    _ofile.write(reinterpret_cast<char*>(&d), 1);
 }
 
 FileAccelerometer::~FileAccelerometer(void) { _ofile.close(); }
@@ -63,15 +63,15 @@ void FileAccelerometer::processData(int sensor, float acc_x, float acc_y, float 
     if (sensor == 0) {
         auto now = std::chrono::system_clock::now();
         auto micros = std::chrono::duration_cast<std::chrono::microseconds>(now.time_since_epoch()).count();
-        _ofile.write(reinterpret_cast<char *>(&micros), sizeof(micros));
+        _ofile.write(reinterpret_cast<char*>(&micros), sizeof(micros));
     }
 
-    _ofile.write(reinterpret_cast<char *>(&acc_x), sizeof(acc_x));
-    _ofile.write(reinterpret_cast<char *>(&acc_y), sizeof(acc_x));
-    _ofile.write(reinterpret_cast<char *>(&acc_z), sizeof(acc_x));
+    _ofile.write(reinterpret_cast<char*>(&acc_x), sizeof(acc_x));
+    _ofile.write(reinterpret_cast<char*>(&acc_y), sizeof(acc_x));
+    _ofile.write(reinterpret_cast<char*>(&acc_z), sizeof(acc_x));
 }
 
-void FileAccelerometer::processRawData(int sensor, RawData &data) {
+void FileAccelerometer::processRawData(int sensor, RawData& data) {
     for (size_t i = 0; i < data.size(); i++) {
         std::cout << +sensor << " " << data[i].x << ", " << data[i].y << ", " << data[i].z << std::endl;
     }

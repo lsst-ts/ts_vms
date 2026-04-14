@@ -7,7 +7,7 @@ ifndef VERBOSE
 endif
 
 # change as needed
-c_opts := -DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE
+c_opts := -DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE 
 
 ifdef DEBUG
   c_opts += -g
@@ -18,19 +18,19 @@ endif
 
 CRIOCPP := ../ts_cRIOcpp/
 
-PKG_CPPFLAGS := $(shell pkg-config yaml-cpp spdlog fmt fftw3 --cflags $(silence))
+PKG_CPPFLAGS := $(shell pkg-config yaml-cpp spdlog fmt avro-cpp --cflags $(silence))
 
 SAL_CPPFLAGS += $(PKG_CPPFLAGS)  \
 	-I${SAL_WORK_DIR}/MTVMS/cpp/src \
 	-I${SAL_WORK_DIR}/include -I${CRIOCPP} -I. \
-	-I${SAL_HOME}/include -I${LSST_SDK_INSTALL}/include -I${SAL_HOME}/include -I${LSST_SAL_PREFIX}/include -I${LSST_SAL_PREFIX}/include/avro
+	-I${SAL_HOME}/include -I${LSST_SDK_INSTALL}/include -I${SAL_HOME}/include -I${LSST_SAL_PREFIX}/include 
 LIBS += $(PKG_LIBS) -ldl -lpthread -L/usr/lib64/boost${BOOST_RELEASE} -lboost_filesystem -lboost_iostreams \
-	-lboost_program_options -lboost_system ../ts_cRIOcpp/lib/libcRIOcpp.a \
+	-lboost_program_options -lboost_system \
 	${SAL_WORK_DIR}/lib/libSAL_MTVMS.a \
 	-L${LSST_SAL_PREFIX}/lib -L${SAL_WORK_DIR}/lib -lcurl -lrdkafka++ -lrdkafka -lavrocpp -lavro -ljansson -lserdes++ -lserdes -lsasl2
 LIBS_FLAGS += -L${LSST_SAL_PREFIX}/lib
 
-PKG_LIBS := $(shell pkg-config yaml-cpp fftw3 --libs $(silence)) 
+PKG_LIBS := $(shell pkg-config yaml-cpp fftw3 --libs $(silence))
 
 CPP := g++ -std=c++17 -Wall -fPIE ${c_opts}
 
@@ -38,7 +38,7 @@ CPP := g++ -std=c++17 -Wall -fPIE ${c_opts}
 ifdef SIMULATOR
   C := gcc -Wall ${c_opts}
   CPP += -DSIMULATOR
-  PKG_LIBS += $(shell pkg-config spdlog --libs $(silence))
+  PKG_LIBS += $(shell pkg-config spdlog avro-cpp --libs $(silence))
 else
   C := gcc -Wall -fmessage-length=0 ${c_opts}
   CPP += -fmessage-length=0

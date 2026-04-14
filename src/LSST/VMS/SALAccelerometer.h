@@ -38,17 +38,17 @@ namespace VMS {
  */
 class SALAccelerometer : public Accelerometer {
 public:
-    SALAccelerometer(VMSApplicationSettings *vmsApplicationSettings);
+    SALAccelerometer(VMSApplicationSettings* vmsApplicationSettings);
     virtual ~SALAccelerometer(void);
 
 protected:
     void processData(int sensor, float acc_x, float acc_y, float acc_z) override;
-    void processRawData(int sensor, RawData &data) override;
+    void processRawData(int sensor, RawData& data) override;
 
 private:
     int _dataIndex;
-    MTVMS_dataC *_sampleData;
-    Telemetry::PSD *_psds;
+    MTVMS_dataC* _sampleData;
+    Telemetry::PSD* _psds;
 };
 
 } /* namespace VMS */

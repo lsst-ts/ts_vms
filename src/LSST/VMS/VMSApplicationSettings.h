@@ -45,7 +45,7 @@ public:
     std::vector<double> YOffsets;
     std::vector<double> ZOffsets;
 
-    void load(const std::string &filename);
+    void load(const std::string& filename);
 };
 
 } /* namespace VMS */

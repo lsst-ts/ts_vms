@@ -24,17 +24,17 @@ void VMSPublisher::setSAL(std::shared_ptr<SAL_MTVMS> sal) {
     _vmsSAL = sal;
 
     SPDLOG_DEBUG("VMSPublisher: Initializing SAL Telemetry");
-    _vmsSAL->salTelemetryPub((char *)"MTVMS_data");
-    _vmsSAL->salTelemetryPub((char *)"MTVMS_miscellaneous");
-    _vmsSAL->salTelemetryPub((char *)"MTVMS_psd");
+    _vmsSAL->salTelemetryPub((char*)"MTVMS_data");
+    _vmsSAL->salTelemetryPub((char*)"MTVMS_miscellaneous");
+    _vmsSAL->salTelemetryPub((char*)"MTVMS_psd");
 
     SPDLOG_DEBUG("VMSPublisher: Initializing SAL Events");
-    _vmsSAL->salEventPub((char *)"MTVMS_logevent_heartbeat");
-    _vmsSAL->salEventPub((char *)"MTVMS_logevent_logLevel");
-    _vmsSAL->salEventPub((char *)"MTVMS_logevent_summaryState");
-    _vmsSAL->salEventPub((char *)"MTVMS_logevent_softwareVersions");
-    _vmsSAL->salEventPub((char *)"MTVMS_logevent_simulationMode");
-    _vmsSAL->salEventPub((char *)"MTVMS_logevent_fpgaState");
+    _vmsSAL->salEventPub((char*)"MTVMS_logevent_heartbeat");
+    _vmsSAL->salEventPub((char*)"MTVMS_logevent_logLevel");
+    _vmsSAL->salEventPub((char*)"MTVMS_logevent_summaryState");
+    _vmsSAL->salEventPub((char*)"MTVMS_logevent_softwareVersions");
+    _vmsSAL->salEventPub((char*)"MTVMS_logevent_simulationMode");
+    _vmsSAL->salEventPub((char*)"MTVMS_logevent_fpgaState");
 }
 
 void VMSPublisher::setLogLevel(int newLevel) {

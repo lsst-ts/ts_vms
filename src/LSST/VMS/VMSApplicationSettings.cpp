@@ -30,7 +30,7 @@
 namespace LSST {
 namespace VMS {
 
-void VMSApplicationSettings::load(const std::string &filename) {
+void VMSApplicationSettings::load(const std::string& filename) {
     SPDLOG_TRACE("VMSApplicationSettings({})", filename);
     try {
         YAML::Node doc = YAML::LoadFile(filename);
@@ -47,12 +47,12 @@ void VMSApplicationSettings::load(const std::string &filename) {
         XOffsets = doc["XOffsets"].as<std::vector<double>>();
         YOffsets = doc["YOffsets"].as<std::vector<double>>();
         ZOffsets = doc["ZOffsets"].as<std::vector<double>>();
-    } catch (YAML::Exception &ex) {
+    } catch (YAML::Exception& ex) {
         SPDLOG_CRITICAL("YAML Loading {}: {}", filename, ex.what());
         exit(EXIT_FAILURE);
     }
 
-    auto check_vector = [](const char *name, std::vector<double> vec) {
+    auto check_vector = [](const char* name, std::vector<double> vec) {
         if (vec.size() != 3) {
             SPDLOG_CRITICAL("Invalid array {} length: {}, expected 3", name, vec.size());
             exit(EXIT_FAILURE);

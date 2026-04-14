@@ -37,7 +37,7 @@ constexpr static int AXIS_PER_SENSOR = 3;
  */
 class Accelerometer {
 public:
-    Accelerometer(VMSApplicationSettings *vmsApplicationSettings);
+    Accelerometer(VMSApplicationSettings* vmsApplicationSettings);
     virtual ~Accelerometer(void);
 
     void enableAccelerometers();
@@ -48,10 +48,10 @@ public:
     void rawData(int length = 1000);
 
 protected:
-    VMSApplicationSettings *_vmsApplicationSettings;
+    VMSApplicationSettings* _vmsApplicationSettings;
 
     virtual void processData(int sensor, float acc_x, float acc_y, float acc_z) = 0;
-    virtual void processRawData(int sensor, RawData &data) = 0;
+    virtual void processRawData(int sensor, RawData& data) = 0;
 
 private:
     enum { M1M3, M2, CameraRotator, TMA } _subsystem;

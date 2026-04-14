@@ -43,7 +43,7 @@ class FPGA : public LSST::cRIO::SimpleFPGA, public LSST::cRIO::Singleton<FPGA> {
 public:
     FPGA(token);
 
-    void populate(VMSApplicationSettings *vmsApplicationSettings);
+    void populate(VMSApplicationSettings* vmsApplicationSettings);
 
     void initialize() override;
     void open() override;
@@ -60,16 +60,16 @@ public:
     bool stopped();
     bool FIFOFull();
 
-    void readResponseFIFOs(float *min, float *max, float *average, size_t length, int32_t timeoutInMs);
-    void readRawFIFO(float *raw, size_t length, int32_t timeoutInMs);
+    void readResponseFIFOs(float* min, float* max, float* average, size_t length, int32_t timeoutInMs);
+    void readRawFIFO(float* raw, size_t length, int32_t timeoutInMs);
 
 private:
-    VMSApplicationSettings *_vmsApplicationSettings;
+    VMSApplicationSettings* _vmsApplicationSettings;
     uint32_t session;
     size_t remaining;
     uint8_t _channels;
-    const char *_bitFile;
-    const char *_signature;
+    const char* _bitFile;
+    const char* _signature;
     uint32_t _averageFIFO;
     uint32_t _minFIFO;
     uint32_t _maxFIFO;

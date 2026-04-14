@@ -30,7 +30,7 @@
 
 using namespace LSST::VMS;
 
-Accelerometer::Accelerometer(VMSApplicationSettings *vmsApplicationSettings) {
+Accelerometer::Accelerometer(VMSApplicationSettings* vmsApplicationSettings) {
     SPDLOG_DEBUG("Accelerometer::Accelerometer()");
 
     _vmsApplicationSettings = vmsApplicationSettings;
@@ -60,7 +60,7 @@ void Accelerometer::sampleData() {
     FPGA::instance().readResponseFIFOs(min, max, average, _vmsApplicationSettings->sensors * AXIS_PER_SENSOR,
                                        _vmsApplicationSettings->period * 2);
 
-    float *dataBuffer = average;
+    float* dataBuffer = average;
     for (int s = 0; s < _vmsApplicationSettings->sensors; s++) {
         float acc_x = *dataBuffer;
         dataBuffer++;
@@ -83,7 +83,7 @@ void Accelerometer::rawData(int length) {
 
     RawData records[_vmsApplicationSettings->sensors];
 
-    float *dataBuffer = raw;
+    float* dataBuffer = raw;
     for (int i = 0; i < length; i++) {
         for (int s = 0; s < _vmsApplicationSettings->sensors; s++) {
             float acc_x = *dataBuffer;

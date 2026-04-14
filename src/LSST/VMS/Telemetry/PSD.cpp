@@ -108,13 +108,13 @@ void PSD::append(float x, float y, float z, bool publish) {
     _cache_size++;
 
     if (_cache_size >= static_cast<size_t>(numDataPoints) * 2) {
-        float *tels[3] = {accelerationPSDX.data(), accelerationPSDY.data(), accelerationPSDZ.data()};
+        float* tels[3] = {accelerationPSDX.data(), accelerationPSDY.data(), accelerationPSDZ.data()};
         for (int i = 0; i < 3; i++) {
             fftw_execute(_plans[i]);
 
-            float *tel_out = tels[i];
+            float* tel_out = tels[i];
 
-            fftw_complex *cur_out = _output[i];
+            fftw_complex* cur_out = _output[i];
             for (int j = 0; j < numDataPoints; j++, cur_out++, tel_out++) {
                 *tel_out = std::norm(std::complex<double>((*cur_out)[0], (*cur_out)[1]));
             }

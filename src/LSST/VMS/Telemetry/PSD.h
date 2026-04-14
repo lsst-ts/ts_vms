@@ -82,8 +82,8 @@ private:
     float _samplingPeriod;
     // axis cache
     size_t _cache_size;
-    double *_cache[3];
-    fftw_complex *_output[3];
+    double* _cache[3];
+    fftw_complex* _output[3];
     fftw_plan _plans[3];
 
     void _clearPSDs();
