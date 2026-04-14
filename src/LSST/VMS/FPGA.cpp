@@ -66,7 +66,7 @@ FPGA::FPGA(token) : SimpleFPGA(LSST::cRIO::VMS) {}
     _chasisTemperatureTypeInfo = NiFpga_VMS_##type##_IndicatorFxp_ChassisTemperature_TypeInfo; \
     _ticksResource = NiFpga_VMS_##type##_IndicatorU64_Ticks;
 
-void FPGA::populate(VMSApplicationSettings *vmsApplicationSettings) {
+void FPGA::populate(VMSApplicationSettings* vmsApplicationSettings) {
     SPDLOG_TRACE("FPGA::FPGA()");
     _vmsApplicationSettings = vmsApplicationSettings;
     session = 0;
@@ -185,7 +185,7 @@ bool FPGA::stopped() {
     NiFpga_Bool ret = false;
     cRIO::NiThrowError(__PRETTY_FUNCTION__, NiFpga_ReadBool(session, _stoppedResource, &ret));
     return ret;
-#
+#else
     return false;
 #endif
 }
@@ -200,12 +200,12 @@ bool FPGA::FIFOFull() {
 #endif
 }
 
-void FPGA::readResponseFIFOs(float *min, float *max, float *average, size_t length, int32_t timeoutInMs) {
+void FPGA::readResponseFIFOs(float* min, float* max, float* average, size_t length, int32_t timeoutInMs) {
     SPDLOG_TRACE("FPGA: readResponseFIFOs({}, {})", length, timeoutInMs);
 #ifndef SIMULATOR
     uint64_t buffer[length];
 
-    auto fxpFifoToFloats = [&buffer, length, this, timeoutInMs](uint32_t resource, float *data) {
+    auto fxpFifoToFloats = [&buffer, length, this, timeoutInMs](uint32_t resource, float* data) {
         cRIO::NiThrowError(__PRETTY_FUNCTION__,
                            NiFpga_ReadFifoU64(session, resource, buffer, length, timeoutInMs, &remaining));
         for (size_t i = 0; i < length; i++) {
@@ -255,7 +255,7 @@ void FPGA::readResponseFIFOs(float *min, float *max, float *average, size_t leng
 #endif
 }
 
-void FPGA::readRawFIFO(float *raw, size_t length, int32_t timeoutInMs) {
+void FPGA::readRawFIFO(float* raw, size_t length, int32_t timeoutInMs) {
     SPDLOG_TRACE("FPGA: readRawFIFO({}, {})", length, timeoutInMs);
 #ifndef SIMULATOR
 

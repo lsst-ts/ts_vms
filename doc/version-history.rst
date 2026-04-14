@@ -9,6 +9,7 @@ v1.3.2
 
 * Transition to Offline state on CSC exit.
 * Fix omission in init.d status command.
+* Fix build, C++ errors.
 
 v1.3.1
 ------

@@ -37,14 +37,14 @@ namespace VMS {
  */
 class FileAccelerometer : public Accelerometer {
 public:
-    FileAccelerometer(VMSApplicationSettings *vmsApplicationSettings, std::filesystem::path file_path);
+    FileAccelerometer(VMSApplicationSettings* vmsApplicationSettings, std::filesystem::path file_path);
     virtual ~FileAccelerometer(void);
 
     void flush() { _ofile.flush(); }
 
 protected:
     void processData(int sensor, float acc_x, float acc_y, float acc_z) override;
-    void processRawData(int sensor, RawData &data) override;
+    void processRawData(int sensor, RawData& data) override;
 
 private:
     std::ofstream _ofile;

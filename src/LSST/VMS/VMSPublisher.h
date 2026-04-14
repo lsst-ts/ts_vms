@@ -30,14 +30,14 @@ public:
 
     void setLogLevel(int newLevel);
 
-    void logHeartbeat(MTVMS_logevent_heartbeatC *data) { _vmsSAL->logEvent_heartbeat(data, 0); }
+    void logHeartbeat(MTVMS_logevent_heartbeatC* data) { _vmsSAL->logEvent_heartbeat(data, 0); }
     void logSoftwareVersions();
     void logSimulationMode();
 
     double getTimestamp();
 
-    void putData(MTVMS_dataC *data) { _vmsSAL->putSample_data(data); }
-    void putPsd(MTVMS_psdC *psd) { _vmsSAL->putSample_psd(psd); }
+    void putData(MTVMS_dataC* data) { _vmsSAL->putSample_data(data); }
+    void putPsd(MTVMS_psdC* psd) { _vmsSAL->putSample_psd(psd); }
 
     void putMiscellaneous(float chassisTemperature, int64_t ticks) {
         _miscellaneous.chassisTemperature = chassisTemperature;
