@@ -19,6 +19,7 @@ v1.3.0
 ------
 
 * support for Kafka interface
+* true raw output
 
 v1.2.2
 ------

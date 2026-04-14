@@ -21,10 +21,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
 #include <chrono>
 #include <cstring>
 #include <filesystem>
+#include <iostream>
+#include <stdio.h>
 
 #include <spdlog/spdlog.h>
 
@@ -68,4 +69,10 @@ void FileAccelerometer::processData(int sensor, float acc_x, float acc_y, float 
     _ofile.write(reinterpret_cast<char *>(&acc_x), sizeof(acc_x));
     _ofile.write(reinterpret_cast<char *>(&acc_y), sizeof(acc_x));
     _ofile.write(reinterpret_cast<char *>(&acc_z), sizeof(acc_x));
+}
+
+void FileAccelerometer::processRawData(int sensor, RawData &data) {
+    for (size_t i = 0; i < data.size(); i++) {
+        std::cout << +sensor << " " << data[i].x << ", " << data[i].y << ", " << data[i].z << std::endl;
+    }
 }

@@ -24,7 +24,6 @@
 #include <spdlog/spdlog.h>
 
 #include <FPGA.h>
-#include <FPGAAddresses.h>
 #include <SALAccelerometer.h>
 #include <VMSPublisher.h>
 
@@ -83,3 +82,5 @@ void SALAccelerometer::processData(int sensor, float acc_x, float acc_y, float a
         }
     }
 }
+
+void SALAccelerometer::processRawData(int sensor, RawData &data) {}

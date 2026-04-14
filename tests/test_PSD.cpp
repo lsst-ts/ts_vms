@@ -36,13 +36,13 @@ using namespace LSST::VMS::Telemetry;
 void test_peaks(std::vector<float> vec, std::vector<int> peaks, float margin = 10e-3, float min_psd = 1000) {
     for (auto p : peaks) {
         auto m = std::max_element(vec.begin(), vec.end());
-        REQUIRE(*m > min_psd);
-        REQUIRE(std::distance(vec.begin(), m) == p);
+        CHECK(*m > min_psd);
+        CHECK(std::distance(vec.begin(), m) == p);
         *m = 0.0;
     }
 
     for (auto v : vec) {
-        REQUIRE(v == Approx(0).margin(margin));
+        CHECK(v == Approx(0).margin(margin));
     }
 }
 
@@ -50,20 +50,20 @@ TEST_CASE("Calculate PSD @ 200 Hz sampling", "[PSD]") {
     PSD psd;
     psd.configure(1, 100, 0.005);
 
-    REQUIRE(psd.frequency(0) == 0);
-    REQUIRE(psd.frequency(50) == 100.0);
-    REQUIRE(psd.frequency(100) == 200.0);
+    CHECK(psd.frequency(0) == 0);
+    CHECK(psd.frequency(50) == 100.0);
+    CHECK(psd.frequency(100) == 200.0);
 
     for (size_t i = 0; i < 50; i++) {
-        REQUIRE(isnan(psd.accelerationPSDX[i]));
-        REQUIRE(isnan(psd.accelerationPSDY[i]));
-        REQUIRE(isnan(psd.accelerationPSDZ[i]));
+        CHECK(isnan(psd.accelerationPSDX[i]));
+        CHECK(isnan(psd.accelerationPSDY[i]));
+        CHECK(isnan(psd.accelerationPSDZ[i]));
     }
 
     for (float i = 0; i < psd.numDataPoints * 2; i++) {
         double theta = 2 * M_PI * i / psd.numDataPoints;
         psd.append(1.0 * sin(5 * theta) + 0.5 * cos(13 * theta), 1.0 * cos(40 * theta) + 0.5 * sin(2 * theta),
-                   1.0 * sin(13.6 * theta) + 0.5 * cos(10.2 * theta) + 0.4 * sin(22 * theta));
+                   1.0 * sin(13.6 * theta) + 0.5 * cos(10.2 * theta) + 0.4 * sin(22 * theta), false);
     }
 
     test_peaks(std::vector<float>(std::begin(psd.accelerationPSDX),
@@ -81,21 +81,21 @@ TEST_CASE("Calculate PSD @ 50 Hz sampling", "[PSD]") {
     PSD psd;
     psd.configure(1, 200, 0.02);
 
-    REQUIRE(psd.frequency(0) == 0);
-    REQUIRE(psd.frequency(1) == 0.25);
-    REQUIRE(psd.frequency(20) == 5);
-    REQUIRE(psd.frequency(200) == 50);
+    CHECK(psd.frequency(0) == 0);
+    CHECK(psd.frequency(1) == 0.25);
+    CHECK(psd.frequency(20) == 5);
+    CHECK(psd.frequency(200) == 50);
 
     for (size_t i = 0; i < 50; i++) {
-        REQUIRE(isnan(psd.accelerationPSDX[i]));
-        REQUIRE(isnan(psd.accelerationPSDY[i]));
-        REQUIRE(isnan(psd.accelerationPSDZ[i]));
+        CHECK(isnan(psd.accelerationPSDX[i]));
+        CHECK(isnan(psd.accelerationPSDY[i]));
+        CHECK(isnan(psd.accelerationPSDZ[i]));
     }
 
     for (float i = 0; i < psd.numDataPoints * 2; i++) {
         double theta = M_PI * i * 0.02;
         psd.append(1.0 * sin(5 * theta) + 0.5 * cos(13 * theta), 1.0 * cos(40 * theta) + 0.5 * sin(2 * theta),
-                   1.0 * sin(13.6 * theta) + 0.5 * cos(10.2 * theta) + 0.4 * sin(22 * theta));
+                   1.0 * sin(13.6 * theta) + 0.5 * cos(10.2 * theta) + 0.4 * sin(22 * theta), false);
     }
 
     test_peaks(std::vector<float>(std::begin(psd.accelerationPSDX),

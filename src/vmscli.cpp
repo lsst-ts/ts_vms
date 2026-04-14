@@ -45,6 +45,7 @@ public:
 
     int temperature(command_vec cmds);
     int record(command_vec cmds);
+    int raw(command_vec cmds);
 
 protected:
     virtual SimpleFPGA* newFPGA(const char* dir, bool& fpga_singleton) override;
@@ -64,6 +65,9 @@ VMScli::VMScli(const char* name, const char* description) : SimpleFPGACliApp(nam
 
     addCommand("record", std::bind(&VMScli::record, this, std::placeholders::_1), "S", NEED_FPGA,
                "<filename>", "Record VMS values to a file");
+
+    addCommand("raw", std::bind(&VMScli::raw, this, std::placeholders::_1), "S", NEED_FPGA, "<filename>",
+               "Dump raw VMS values to a file");
 }
 
 void VMScli::processArg(int opt, char* optarg) {
@@ -123,13 +127,54 @@ int VMScli::record(command_vec cmds) {
 
         while (recordVMS) {
             if (counter > 10) {
-                std::cout << "Ticks: " << FPGA::instance().chassisTicks() << "\r";
+                std::cout << "Ticks: " << FPGA::instance().chassisTicks()
+                          << " Temperature: " << FPGA::instance().chassisTemperature() << "\r";
                 std::cout.flush();
                 filea.flush();
                 counter = 0;
             }
             for (int i = 0; i < _settings.sensors; i++) {
                 filea.sampleData();
+            }
+            counter++;
+        }
+
+        filea.disableAccelerometers();
+
+    } catch (const std::ios_base::failure& e) {
+        std::cerr << std::endl << "Error writing to " << file_path.string() << ": " << e.what() << std::endl;
+    }
+
+    signal(SIGINT, previous);
+
+    return 0;
+}
+
+int VMScli::raw(command_vec cmds) {
+    recordVMS = true;
+
+    std::filesystem::path file_path(cmds[0]);
+
+    std::cout << "Recording to " << file_path.string() << ", hit ctrl+c to end" << std::endl;
+
+    auto previous = signal(SIGINT, sig_int);
+
+    try {
+        FileAccelerometer filea(&_settings, file_path);
+        filea.enableAccelerometers();
+
+        int counter = 21;
+
+        while (recordVMS) {
+            if (counter > 10) {
+                std::cout << "Ticks: " << FPGA::instance().chassisTicks()
+                          << " Temperature: " << FPGA::instance().chassisTemperature() << "\r";
+                std::cout.flush();
+                filea.flush();
+                counter = 0;
+            }
+            for (int i = 0; i < _settings.sensors; i++) {
+                filea.rawData();
             }
             counter++;
         }

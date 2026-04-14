@@ -65,8 +65,9 @@ public:
      * @param x measured X acceleration
      * @param y measured Y acceleration
      * @param z measured Z acceleration
+     * @param publish if true, data will be published
      */
-    void append(float x, float y, float z);
+    void append(float x, float y, float z, bool publish = true);
 
     /**
      * Calculate frequency from given index in the PSD array.

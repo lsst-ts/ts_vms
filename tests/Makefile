@@ -13,7 +13,7 @@ ifneq ($(MAKECMDGOALS),clean)
     -include $(DEPS)
 endif
 
-LIBS += $(shell pkg-config catch2-with-main --libs) -l history -l readline
+LIBS += $(shell pkg-config spdlog catch2-with-main --libs) -l history -l readline
 
 VMS_CPPFLAGS := -I"../$(CRIOCPP)/include" \
 	$(shell pkg-config catch2-with-main --cflags) \

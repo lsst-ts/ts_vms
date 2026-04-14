@@ -14,7 +14,7 @@ src/libVMS.a: FORCE
 # Tool invocations
 ts-VMSd: src/ts-VMSd.cpp.o src/libVMS.a
 	@echo '[LD ] $@'
-	${co}$(CPP) $(LIBS_FLAGS) -o $@ $^ ${CRIOCPP}/lib/libcRIOcpp.a $(LIBS)
+	${co}$(CPP) $(LIBS_FLAGS) -o $@ $^ ${CRIOCPP}/lib/libcRIOcpp.a $(LIBS) $(shell pkg-config --libs readline $(silence)) -lreadline
 
 vmscli: src/vmscli.cpp.o src/libVMS.a
 	@echo '[LD ] $@'
@@ -33,13 +33,13 @@ src/%.cpp.o: src/%.cpp
 	$(MAKE) -C src $(patsubst src/%,%,$@)
 
 tests: tests/Makefile tests/*.cpp
-	@${MAKE} -C SIMULATOR=1 tests
+	@${MAKE} -C tests SIMULATOR=1
 
 run_tests: tests
-	@${MAKE} -C tests run
+	@${MAKE} -C tests run SIMULATOR=1
 
 junit: tests
-	@${MAKE} -C SIMULATOR=1 tests junit
+	@${MAKE} -C tests junit SIMULATOR=1
 
 doc:
 	${co}doxygen Doxyfile
