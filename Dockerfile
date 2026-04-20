@@ -1,4 +1,4 @@
-FROM lsstts/develop-env:develop AS crio-develop
+FROM lsstts/develop-env:c0044.000 AS crio-develop
 
 USER root
 
@@ -57,7 +57,7 @@ export LSST_KAFKA_LOCAL_SCHEMAS=$SAL_WORK_DIR\\n\
 \\n\
 export TS_CONFIG_OCS_DIR=/lsst/ts_config_ocs/\\n\
 \\n\
-export PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig\\n\
+export PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig\\n\
 \\n\
 export LIBRARY_PATH=/usr/local/lib64:/usr/local/lib:/opt/lsst/tssw/ts_sal/lib\\n\
 \\n\

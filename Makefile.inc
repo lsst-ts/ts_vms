@@ -18,7 +18,7 @@ endif
 
 CRIOCPP := ../ts_cRIOcpp/
 
-PKG_CPPFLAGS := $(shell pkg-config yaml-cpp spdlog fmt avro-cpp --cflags $(silence))
+PKG_CPPFLAGS := $(shell pkg-config yaml-cpp spdlog fmt avro-cpp serdes serdes++ --cflags $(silence))
 
 SAL_CPPFLAGS += $(PKG_CPPFLAGS)  \
 	-I${SAL_WORK_DIR}/MTVMS/cpp/src \
@@ -38,7 +38,7 @@ CPP := g++ -std=c++17 -Wall -fPIE ${c_opts}
 ifdef SIMULATOR
   C := gcc -Wall ${c_opts}
   CPP += -DSIMULATOR
-  PKG_LIBS += $(shell pkg-config spdlog avro-cpp --libs $(silence))
+  PKG_LIBS += $(shell pkg-config spdlog serdes serdes++ avro-cpp --libs $(silence))
 else
   C := gcc -Wall -fmessage-length=0 ${c_opts}
   CPP += -fmessage-length=0

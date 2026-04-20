@@ -38,7 +38,9 @@ node {
 
     stage('Building dev container')
     {
-        VMSsim = docker.build("lsstts/vms_sim:" + env.BRANCH_NAME.replace("/", "_"), "--target crio-develop --build-arg XML_BRANCH=$XML_BRANCH " + (params.noCache ? "--no-cache " : " ") + "$WORKSPACE/ts_vms")
+        VMSsim = docker.build("lsstts/vms_sim:" + env.BRANCH_NAME.replace("/", "_"),
+        "--target crio-develop --build-arg XML_BRANCH=$XML_BRANCH "
+        + (params.noCache ? "--no-cache " : " ") + "$WORKSPACE/ts_vms")
     }
 
     stage("Running tests")
@@ -65,6 +67,8 @@ node {
                  """
              }
         }
+
+        junit 'ts_vms/tests/*.xml'
     }
 
     stage('Build documentation')
