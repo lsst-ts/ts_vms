@@ -1,12 +1,12 @@
 /*
- * Generated with the FPGA Interface C API Generator 23.0
- * for NI-RIO 23.0 or later.
+ * Generated with the FPGA Interface C API Generator 24.3
+ * for NI-RIO 24.3 or later.
  */
 #ifndef __NiFpga_VMS_CameraRotator_Responder_h__
 #define __NiFpga_VMS_CameraRotator_Responder_h__
 
 #ifndef NiFpga_Version
-#define NiFpga_Version 230
+#define NiFpga_Version 243
 #endif
 
 #include "NiFpga.h"
@@ -23,14 +23,14 @@
 /**
  * The signature of the FPGA bitfile.
  */
-static const char* const NiFpga_VMS_CameraRotator_Responder_Signature = "7DE6F668C4E3253A35E00FFC6AA3703F";
+static const char* const NiFpga_VMS_CameraRotator_Responder_Signature = "3576FAB2037BE018AB36339CDB1092B1";
 
 #if NiFpga_Cpp
 extern "C" {
 #endif
 
 typedef enum {
-    NiFpga_VMS_CameraRotator_Responder_IndicatorBool_FIFOfull = 0x18032,
+    NiFpga_VMS_CameraRotator_Responder_IndicatorBool_FIFOfull = 0x1802E,
     NiFpga_VMS_CameraRotator_Responder_IndicatorBool_Ready = 0x18026,
     NiFpga_VMS_CameraRotator_Responder_IndicatorBool_Stopped = 0x1801A,
     NiFpga_VMS_CameraRotator_Responder_IndicatorBool_Timeouted = 0x1801E
@@ -41,23 +41,40 @@ typedef enum {
 } NiFpga_VMS_CameraRotator_Responder_IndicatorU64;
 
 typedef enum {
-    NiFpga_VMS_CameraRotator_Responder_ControlI16_Outputtype = 0x1802E
-} NiFpga_VMS_CameraRotator_Responder_ControlI16;
-
-typedef enum {
     NiFpga_VMS_CameraRotator_Responder_ControlU32_Periodms = 0x18028
 } NiFpga_VMS_CameraRotator_Responder_ControlU32;
 
 typedef enum {
-    NiFpga_VMS_CameraRotator_Responder_TargetToHostFifoU32_ResponseFIFO = 0
-} NiFpga_VMS_CameraRotator_Responder_TargetToHostFifoU32;
+    NiFpga_VMS_CameraRotator_Responder_TargetToHostFifoSgl_Average = 3
+} NiFpga_VMS_CameraRotator_Responder_TargetToHostFifoSgl;
 
 /* Indicator: ChassisTemperature */
 static const NiFpga_FxpTypeInfo NiFpga_VMS_CameraRotator_Responder_IndicatorFxp_ChassisTemperature_TypeInfo =
         {1, 32, 16};
 
 /* Use NiFpga_ReadU32() to access ChassisTemperature */
-static const uint32_t NiFpga_VMS_CameraRotator_Responder_IndicatorFxp_ChassisTemperature_Resource = 0x18034;
+static const uint32_t NiFpga_VMS_CameraRotator_Responder_IndicatorFxp_ChassisTemperature_Resource = 0x18030;
+
+/* FIFO: Max */
+static const NiFpga_FxpTypeInfo NiFpga_VMS_CameraRotator_Responder_TargetToHostFifoFxp_Max_TypeInfo = {1, 24,
+                                                                                                       4};
+
+/* Use NiFpga_ReadFifoU64() to access Max */
+static const uint32_t NiFpga_VMS_CameraRotator_Responder_TargetToHostFifoFxp_Max_Resource = 2;
+
+/* FIFO: Min */
+static const NiFpga_FxpTypeInfo NiFpga_VMS_CameraRotator_Responder_TargetToHostFifoFxp_Min_TypeInfo = {1, 24,
+                                                                                                       4};
+
+/* Use NiFpga_ReadFifoU64() to access Min */
+static const uint32_t NiFpga_VMS_CameraRotator_Responder_TargetToHostFifoFxp_Min_Resource = 1;
+
+/* FIFO: RawOutput */
+static const NiFpga_FxpTypeInfo NiFpga_VMS_CameraRotator_Responder_TargetToHostFifoFxp_RawOutput_TypeInfo = {
+        1, 24, 4};
+
+/* Use NiFpga_ReadFifoU64() to access RawOutput */
+static const uint32_t NiFpga_VMS_CameraRotator_Responder_TargetToHostFifoFxp_RawOutput_Resource = 0;
 
 #if NiFpga_Cpp
 }
