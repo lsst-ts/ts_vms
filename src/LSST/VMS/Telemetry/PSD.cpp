@@ -122,14 +122,13 @@ void PSD::append(float x, float y, float z, bool publish) {
 
         if (publish) {
             VMSPublisher::instance().putPsd(this);
+            _clearPSDs();
         }
-        _clearPSDs();
-
         _cache_size = 0;
     }
 }
 
-float PSD::frequency(size_t index) { return index * (1 / (2.0f * _samplingPeriod)) / numDataPoints; }
+float PSD::frequency(size_t index) { return index * (1.0f / _samplingPeriod) / numDataPoints; }
 
 void PSD::_clearPSDs() {
     for (size_t i = 0; i < MAX_DATAPOINTS; i++) {
