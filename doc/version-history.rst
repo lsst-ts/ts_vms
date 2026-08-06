@@ -4,6 +4,11 @@
 Version History
 ===============
 
+v1.3.3
+------
+
+* Use NI-9232 modules for CameraRotator.
+
 v1.3.2
 ------
 
