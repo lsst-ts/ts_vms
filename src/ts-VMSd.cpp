@@ -46,6 +46,8 @@ using namespace std::chrono_literals;
 using namespace LSST;
 using namespace LSST::VMS;
 
+extern const char* VERSION;
+
 class MTVMSd : public LSST::cRIO::CSC {
 public:
     MTVMSd(const char* name, const char* description) : CSC(name, description) {}
@@ -113,7 +115,13 @@ void MTVMSd::init() {
                  _vmsApplicationSettings.RIO);
 
     SPDLOG_INFO("Initializing MTVMS SAL");
-    _vmsSAL = std::make_shared<SAL_MTVMS>(index);
+    try {
+        _vmsSAL = std::make_shared<SAL_MTVMS>(index);
+    } catch (std::runtime_error& er) {
+        SPDLOG_CRITICAL("Cannot initialize SAL: {}", er.what());
+        throw er;
+    }
+
     _vmsSAL->setDebugLevel(getDebugLevelSAL());
 
     _allvmsSAL = std::make_shared<SAL_MTVMS>(0);

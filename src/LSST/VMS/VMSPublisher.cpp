@@ -9,8 +9,9 @@
 #include <VMSPublisher.h>
 #include <spdlog/spdlog.h>
 
-namespace LSST {
-namespace VMS {
+using namespace LSST::VMS;
+
+extern const char* VERSION;
 
 VMSPublisher::VMSPublisher(token) {
     SPDLOG_DEBUG("VMSPublisher: VMSPublisher()");
@@ -65,6 +66,3 @@ void VMSPublisher::logSimulationMode() {
 }
 
 double VMSPublisher::getTimestamp() { return _vmsSAL->getCurrentTime(); }
-
-} /* namespace VMS */
-} /* namespace LSST */

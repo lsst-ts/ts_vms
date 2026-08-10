@@ -4,13 +4,20 @@ all: libVMS.a
 
 .PHONY: DEPS clean force
 
-VERSION := $(shell git describe --tags --dirty 2>/dev/null || echo "unknown:non-git")
-GIT_HASH := $(shell git rev-parse HEAD 2>/dev/null || echo "unknown-non-git")
-
 version.c: force
-	${co}grep -qsF "VERSION=\"$(VERSION)\"" version.c \
-	|| echo "[VER] version $(VERSION) git hash $(GIT_HASH)" && \
-	printf >version.c 'const char *VERSION="%s";\nconst char *GIT_HASH="%s";' $(VERSION) $(GIT_HASH)
+	${co}(grep -qsF "VERSION=\"$(VERSION)\"" version.c == 0 && echo "[VER] version.c $(VERSION) OK") || \
+	( \
+	   echo "[VER] version $(VERSION) git hash $(GIT_HASH)" && \
+	   printf >version.c 'const char *VERSION="%s";\nconst char *GIT_HASH="%s";\nconst char *CONFIG_URL="https://github.com/lsst-ts/ts_config_mttcs/MTM1M3TS/v1";\nconst char *CONFIG_SCHEMA_VERSION="v1";' $(VERSION) $(GIT_HASH) \
+        )
+
+CPPFLAGS += -I. \
+	-I"../$(CRIOCPP)/include" \
+	-I"LSST/VMS" \
+	-I"LSST/VMS/Include" \
+	-I"LSST/VMS/Logging" \
+	-I"LSST/VMS/Utility" \
+	-I"NiFpga"
 
 C_SRCS = $(shell find LSST NiFpga -name '*.c')
 CPP_SRCS = $(shell find LSST NiFpga -name '*.cpp')
@@ -23,16 +30,6 @@ CPP_DEPS = $(patsubst %.cpp,%.cpp.d,$(CPP_SRCS))
 ifneq ($(MAKECMDGOALS),clean)
   -include ${C_DEPS} ${CPP_DEPS}
 endif
-
-CPPFLAGS += -I. \
-	-I"../$(CRIOCPP)/include" \
-	-I"LSST/VMS" \
-	-I"LSST/VMS/Include" \
-	-I"LSST/VMS/Logging" \
-	-I"LSST/VMS/Utility" \
-	-I"NiFpga" \
-	-DVERSION="\"$(VERSION)\""
-
 
 libVMS.a: $(OBJS)
 	@echo '[AR ] $@'
